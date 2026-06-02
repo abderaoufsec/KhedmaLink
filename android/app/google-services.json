@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "610587226212",
+    "project_id": "trustlocal-f3743",
+    "storage_bucket": "trustlocal-f3743.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610587226212:android:0542bd9d77e4582bae2f71",
+        "android_client_info": {
+          "package_name": "com.example.trustlocal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChruKw0YXXwz9see-yyt_wGbiO3-mwfDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
