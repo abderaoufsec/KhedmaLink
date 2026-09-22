@@ -9,6 +9,9 @@ import '../../features/provider/screens/categories_list_screen.dart';
 import '../../features/provider/screens/providers_list_screen.dart';
 import '../../features/provider/screens/provider_detail_screen.dart';
 import '../../features/provider/screens/provider_profile_management_screen.dart';
+import '../../features/request/screens/create_request_screen.dart';
+import '../../features/request/screens/request_list_screen.dart';
+import '../../features/request/screens/request_detail_screen.dart';
 
 /// Application router configuration
 ///
@@ -146,6 +149,30 @@ class AppRouter {
         path: '/provider/profile',
         name: 'provider_profile',
         builder: (context, state) => const ProviderProfileManagementScreen(),
+      ),
+
+      // Request list (protected)
+      GoRoute(
+        path: '/requests',
+        name: 'requests',
+        builder: (context, state) => const RequestListScreen(),
+      ),
+
+      // Create request (protected)
+      GoRoute(
+        path: '/requests/create',
+        name: 'create_request',
+        builder: (context, state) => const CreateRequestScreen(),
+      ),
+
+      // Request detail (protected)
+      GoRoute(
+        path: '/requests/:requestId',
+        name: 'request_detail',
+        builder: (context, state) {
+          final requestId = state.pathParameters['requestId']!;
+          return RequestDetailScreen(requestId: requestId);
+        },
       ),
     ],
   );
