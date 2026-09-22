@@ -51,7 +51,9 @@ class AppConfig {
       case 'staging':
         return 'https://staging-api.khedmalink.com';
       default:
-        return 'http://10.0.2.2:8000'; // Android emulator localhost
+        // Development mode - use actual network IP for Android emulator
+        // Change this to your actual network IP if needed
+        return 'http://192.168.1.6:8000'; // Your network IP address
     }
   }
 

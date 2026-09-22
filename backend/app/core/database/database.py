@@ -20,15 +20,27 @@ logger = get_logger(__name__)
 # DATABASE ENGINE AND SESSION
 # =============================================================================
 
-# Create async engine for PostgreSQL
-engine = create_async_engine(
-    settings.get_database_url(),
-    echo=settings.DEBUG,  # Log SQL queries in debug mode
-    future=True,
-    pool_size=20,
-    max_overflow=10,
-    pool_pre_ping=True,  # Verify connections before using
-)
+# Check if using SQLite (which doesn't support connection pooling)
+is_sqlite = "sqlite" in settings.get_database_url().lower()
+
+# Create async engine with appropriate configuration
+if is_sqlite:
+    # SQLite doesn't support connection pooling
+    engine = create_async_engine(
+        settings.get_database_url(),
+        echo=settings.DEBUG,  # Log SQL queries in debug mode
+        future=True,
+    )
+else:
+    # PostgreSQL with connection pooling
+    engine = create_async_engine(
+        settings.get_database_url(),
+        echo=settings.DEBUG,  # Log SQL queries in debug mode
+        future=True,
+        pool_size=20,
+        max_overflow=10,
+        pool_pre_ping=True,  # Verify connections before using
+    )
 
 # Create async session factory
 AsyncSessionLocal = async_sessionmaker(

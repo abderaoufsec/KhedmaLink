@@ -3,8 +3,8 @@ Application Settings Configuration
 Manages all environment variables and application configuration using Pydantic Settings
 """
 
-from typing import List
-from pydantic import Field
+from typing import List, Union
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -63,6 +63,14 @@ class Settings(BaseSettings):
     # =============================================================================
     # CORS SETTINGS
     # =============================================================================
+
+    @field_validator('CORS_ORIGINS', mode='before')
+    @classmethod
+    def parse_cors_origins(cls, v):
+        """Parse CORS origins from comma-separated string or list"""
+        if isinstance(v, str):
+            return [origin.strip() for origin in v.split(",")]
+        return v
 
     CORS_ORIGINS: List[str] = Field(
         default=["http://localhost:3000", "http://localhost:8080"],

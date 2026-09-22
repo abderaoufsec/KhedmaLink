@@ -24,8 +24,8 @@ from app.core.database import Base
 config = context.config
 
 # Interpret the config file for Python logging
-if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+# if config.config_file_name is not None:
+#     fileConfig(config.config_file_name)
 
 # Add your model's MetaData object here for 'autogenerate' support
 target_metadata = Base.metadata

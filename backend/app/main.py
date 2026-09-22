@@ -29,15 +29,23 @@ async def lifespan(app: FastAPI):
     logger.info(f"{settings.APP_NAME} v{settings.APP_VERSION} starting up")
     logger.info(f"Environment: {settings.ENVIRONMENT}")
     logger.info(f"API prefix: {settings.API_V1_PREFIX}")
-    await init_db()
-    logger.info("Database initialized successfully")
+    
+    # Try to initialize database, but don't fail if it's not available
+    try:
+        await init_db()
+        logger.info("Database initialized successfully")
+    except Exception as e:
+        logger.warning(f"Database initialization failed (continuing without DB): {e}")
 
     yield
 
     # Shutdown
     logger.info(f"{settings.APP_NAME} shutting down")
-    await close_db()
-    logger.info("Database connections closed")
+    try:
+        await close_db()
+        logger.info("Database connections closed")
+    except Exception as e:
+        logger.warning(f"Database shutdown failed: {e}")
 
 
 # Create FastAPI application
