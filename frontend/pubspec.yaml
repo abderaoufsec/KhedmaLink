@@ -49,9 +49,8 @@ dependencies:
   # Local storage
   shared_preferences: ^2.2.0
   
-  # State management (to be determined in future milestones)
-  # provider: ^6.1.0
-  # riverpod: ^2.5.0
+  # State management
+  flutter_riverpod: ^2.5.0
   
   # Networking (to be added in backend milestone)
   # dio: ^5.4.0

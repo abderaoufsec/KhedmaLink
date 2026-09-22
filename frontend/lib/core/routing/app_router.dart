@@ -5,6 +5,10 @@ import '../config/app_config.dart';
 import '../services/auth_service.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
+import '../../features/provider/screens/categories_list_screen.dart';
+import '../../features/provider/screens/providers_list_screen.dart';
+import '../../features/provider/screens/provider_detail_screen.dart';
+import '../../features/provider/screens/provider_profile_management_screen.dart';
 
 /// Application router configuration
 ///
@@ -102,6 +106,46 @@ class AppRouter {
         path: '/onboarding',
         name: 'onboarding',
         builder: (context, state) => const _PlaceholderScreen('Onboarding'),
+      ),
+
+      // Categories list (protected)
+      GoRoute(
+        path: '/categories',
+        name: 'categories',
+        builder: (context, state) => const CategoriesListScreen(),
+      ),
+
+      // Providers list (protected)
+      GoRoute(
+        path: '/providers',
+        name: 'providers',
+        builder: (context, state) {
+          final categoryId = state.uri.queryParameters['category_id'];
+          final city = state.uri.queryParameters['city'];
+          final wilaya = state.uri.queryParameters['wilaya'];
+          return ProvidersListScreen(
+            categoryId: categoryId,
+            city: city,
+            wilaya: wilaya,
+          );
+        },
+      ),
+
+      // Provider detail (protected)
+      GoRoute(
+        path: '/providers/:providerId',
+        name: 'provider_detail',
+        builder: (context, state) {
+          final providerId = state.pathParameters['providerId']!;
+          return ProviderDetailScreen(providerId: providerId);
+        },
+      ),
+
+      // Provider profile management (protected)
+      GoRoute(
+        path: '/provider/profile',
+        name: 'provider_profile',
+        builder: (context, state) => const ProviderProfileManagementScreen(),
       ),
     ],
   );
