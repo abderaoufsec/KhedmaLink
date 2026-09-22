@@ -37,6 +37,7 @@ from app.core.security.dependencies import (
     require_provider,
     require_admin,
 )
+from app.api.v1.endpoints.reviews import calculate_provider_reputation
 
 # Create router for provider endpoints
 router = APIRouter()
@@ -102,6 +103,11 @@ async def list_providers(
     result = await db.execute(query)
     providers = result.scalars().all()
 
+    # Add reputation badges to each provider
+    for provider in providers:
+        reputation = await calculate_provider_reputation(db, provider.user_id)
+        provider.badges = reputation.badges
+
     return providers
 
 
@@ -133,6 +139,10 @@ async def get_provider_profile(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Provider profile not found"
         )
+
+    # Calculate reputation and add badges
+    reputation = await calculate_provider_reputation(db, provider.user_id)
+    provider.badges = reputation.badges
 
     return provider
 

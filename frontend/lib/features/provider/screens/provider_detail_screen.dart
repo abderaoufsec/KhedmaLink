@@ -114,7 +114,7 @@ class _ProviderDetailScreenState extends State<ProviderDetailScreen> {
             children: [
               Expanded(
                 child: Text(
-                  _provider!.businessName,
+                  _provider!.businessName ?? 'Unknown',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -177,10 +177,10 @@ class _ProviderDetailScreenState extends State<ProviderDetailScreen> {
                 const Icon(Icons.star, size: 20, color: Colors.amber),
                 const SizedBox(width: 8),
                 Text(
-                  _provider!.averageRating?.toStringAsFixed(1) ?? 'N/A',
+                  _provider!.averageRating.toStringAsFixed(1),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                if (_provider!.totalReviews != null && _provider!.totalReviews! > 0) ...[
+                if (_provider!.totalReviews > 0) ...[
                   const SizedBox(width: 8),
                   Text(
                     '(${_provider!.totalReviews} reviews)',

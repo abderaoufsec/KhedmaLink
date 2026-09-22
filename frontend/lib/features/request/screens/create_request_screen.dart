@@ -349,7 +349,7 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: 'Failed to create request: $e',
+            content: Text('Failed to create request: $e'),
             backgroundColor: Colors.red,
           ),
         );

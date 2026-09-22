@@ -6,6 +6,7 @@ import 'core/theme/app_theme.dart';
 import 'core/localization/app_localization.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 /// Main entry point for the KhedmaLink Flutter application
 ///

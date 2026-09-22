@@ -191,7 +191,7 @@ class _ProviderCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      provider.businessName,
+                      provider.businessName ?? 'Unknown',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -240,10 +240,10 @@ class _ProviderCard extends StatelessWidget {
                   const Icon(Icons.star, size: 16, color: Colors.amber),
                   const SizedBox(width: 4),
                   Text(
-                    provider.averageRating?.toStringAsFixed(1) ?? 'N/A',
+                    provider.averageRating.toStringAsFixed(1),
                     style: theme.textTheme.bodySmall,
                   ),
-                  if (provider.totalReviews != null && provider.totalReviews! > 0) ...[
+                  if (provider.totalReviews > 0) ...[
                     const SizedBox(width: 4),
                     Text(
                       '(${provider.totalReviews})',

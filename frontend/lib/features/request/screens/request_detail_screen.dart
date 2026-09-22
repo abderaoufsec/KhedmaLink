@@ -2,6 +2,7 @@
 // Displays details of a service request
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:khedmalink/core/models/request_models.dart';
 import 'package:khedmalink/core/services/request_service.dart' as api;
 import 'package:khedmalink/core/analytics/app_logger.dart';
@@ -285,6 +286,20 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                   color: Colors.grey,
                 ),
           ),
+          const SizedBox(height: 24),
+          // View quotes button
+          if (_request!.status == 'open' || _request!.status == 'draft')
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  context.pushNamed('quote_list', pathParameters: {'requestId': widget.requestId});
+                },
+                child: Text(
+                  language == 'ar' ? 'عرض العروض' : 'Voir les devis',
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -342,7 +357,7 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: 'Failed to delete attachment: $e',
+            content: Text('Failed to delete attachment: $e'),
             backgroundColor: Colors.red,
           ),
         );

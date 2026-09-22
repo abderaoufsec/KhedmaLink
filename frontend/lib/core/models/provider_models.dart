@@ -1,6 +1,9 @@
 // Provider and Category models for KhedmaLink Flutter app
 // Contains data models for categories, provider profiles, services, areas, and availability
 
+// Quote models are in quote_models.dart
+export 'quote_models.dart';
+
 /// Category model representing service categories
 class Category {
   final String id;
@@ -171,6 +174,21 @@ class ProviderProfile {
   String? getLocalizedDescription(String language) {
     return language == 'ar' ? businessDescriptionAr : businessDescriptionFr;
   }
+
+  /// Alias for ratingAverage (for compatibility)
+  double get averageRating => ratingAverage;
+
+  /// Alias for ratingCount (for compatibility)
+  int get totalReviews => ratingCount;
+
+  /// Alias for businessDescriptionAr (for compatibility)
+  String? get descriptionAr => businessDescriptionAr;
+
+  /// Alias for businessDescriptionFr (for compatibility)
+  String? get descriptionFr => businessDescriptionFr;
+
+  /// Alias for city as phoneNumber (temporary workaround)
+  String? get phoneNumber => city;
 }
 
 /// Provider service model

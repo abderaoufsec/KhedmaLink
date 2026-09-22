@@ -1,6 +1,27 @@
 // Service request models for KhedmaLink Flutter app
 // Contains data models for customer service requests and attachments
 
+// Quote models are in quote_models.dart
+export 'quote_models.dart';
+
+// Booking models are in booking_models.dart
+export 'booking_models.dart';
+
+// Message and notification models are in message_models.dart
+export 'message_models.dart';
+
+// Review models are in review_models.dart
+export 'review_models.dart';
+
+// Admin models are in admin_models.dart
+export 'admin_models.dart';
+
+// Dispute models are in dispute_models.dart
+export 'dispute_models.dart';
+
+// Payment models are in payment_models.dart
+export 'payment_models.dart';
+
 /// Service request model
 class ServiceRequest {
   final String id;

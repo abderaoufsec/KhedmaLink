@@ -12,6 +12,22 @@ import '../../features/provider/screens/provider_profile_management_screen.dart'
 import '../../features/request/screens/create_request_screen.dart';
 import '../../features/request/screens/request_list_screen.dart';
 import '../../features/request/screens/request_detail_screen.dart';
+import '../../features/quote/screens/quote_list_screen.dart';
+import '../../features/quote/screens/quote_creation_screen.dart';
+import '../../features/quote/screens/eligible_requests_screen.dart';
+import '../../features/booking/screens/booking_list_screen.dart';
+import '../../features/booking/screens/booking_detail_screen.dart';
+import '../../features/messaging/screens/messaging_screen.dart';
+import '../../features/messaging/screens/notifications_screen.dart';
+import '../../features/review/screens/review_creation_screen.dart';
+import '../../features/review/screens/provider_reviews_screen.dart';
+import '../../features/dispute/screens/dispute_creation_screen.dart';
+import '../../features/dispute/screens/dispute_list_screen.dart';
+import '../../features/payment/screens/payment_list_screen.dart';
+import '../../features/admin/screens/admin_dashboard_screen.dart';
+import '../../features/admin/screens/admin_users_screen.dart';
+import '../../features/admin/screens/admin_verification_screen.dart';
+import '../../features/admin/screens/admin_audit_logs_screen.dart';
 
 /// Application router configuration
 ///
@@ -173,6 +189,145 @@ class AppRouter {
           final requestId = state.pathParameters['requestId']!;
           return RequestDetailScreen(requestId: requestId);
         },
+      ),
+
+      // Quote list for a request (protected)
+      GoRoute(
+        path: '/requests/:requestId/quotes',
+        name: 'quote_list',
+        builder: (context, state) {
+          final requestId = state.pathParameters['requestId']!;
+          return QuoteListScreen(requestId: requestId);
+        },
+      ),
+
+      // Create quote for a request (protected)
+      GoRoute(
+        path: '/requests/:requestId/quotes/create',
+        name: 'quote_creation',
+        builder: (context, state) {
+          final requestId = state.pathParameters['requestId']!;
+          return QuoteCreationScreen(requestId: requestId);
+        },
+      ),
+
+      // Eligible requests for providers (protected)
+      GoRoute(
+        path: '/eligible-requests',
+        name: 'eligible_requests',
+        builder: (context, state) {
+          return const EligibleRequestsScreen();
+        },
+      ),
+
+      // Booking list (protected)
+      GoRoute(
+        path: '/bookings',
+        name: 'booking_list',
+        builder: (context, state) {
+          return const BookingListScreen();
+        },
+      ),
+
+      // Booking detail (protected)
+      GoRoute(
+        path: '/bookings/:bookingId',
+        name: 'booking_detail',
+        builder: (context, state) {
+          final bookingId = state.pathParameters['bookingId']!;
+          return BookingDetailScreen(bookingId: bookingId);
+        },
+      ),
+
+      // Messaging (protected)
+      GoRoute(
+        path: '/bookings/:bookingId/messages',
+        name: 'messaging',
+        builder: (context, state) {
+          final bookingId = state.pathParameters['bookingId']!;
+          return MessagingScreen(bookingId: bookingId);
+        },
+      ),
+
+      // Notifications (protected)
+      GoRoute(
+        path: '/notifications',
+        name: 'notifications',
+        builder: (context, state) {
+          return const NotificationsScreen();
+        },
+      ),
+
+      // Review creation (protected)
+      GoRoute(
+        path: '/bookings/:bookingId/review',
+        name: 'review_creation',
+        builder: (context, state) {
+          final bookingId = state.pathParameters['bookingId']!;
+          return ReviewCreationScreen(bookingId: bookingId);
+        },
+      ),
+
+      // Provider reviews (public)
+      GoRoute(
+        path: '/providers/:providerId/reviews',
+        name: 'provider_reviews',
+        builder: (context, state) {
+          final providerId = state.pathParameters['providerId']!;
+          return ProviderReviewsScreen(providerId: providerId);
+        },
+      ),
+
+      // Admin dashboard (protected, admin only)
+      GoRoute(
+        path: '/admin',
+        name: 'admin_dashboard',
+        builder: (context, state) => const AdminDashboardScreen(),
+      ),
+
+      // Admin users list (protected, admin only)
+      GoRoute(
+        path: '/admin/users',
+        name: 'admin_users',
+        builder: (context, state) => const AdminUsersScreen(),
+      ),
+
+      // Admin verification queue (protected, admin only)
+      GoRoute(
+        path: '/admin/verification',
+        name: 'admin_verification',
+        builder: (context, state) => const AdminVerificationScreen(),
+      ),
+
+      // Admin audit logs (protected, admin only)
+      GoRoute(
+        path: '/admin/audit-logs',
+        name: 'admin_audit_logs',
+        builder: (context, state) => const AdminAuditLogsScreen(),
+      ),
+
+      // Dispute list (protected)
+      GoRoute(
+        path: '/disputes',
+        name: 'dispute_list',
+        builder: (context, state) => const DisputeListScreen(),
+      ),
+
+      // Dispute creation (protected)
+      GoRoute(
+        path: '/bookings/:bookingId/dispute',
+        name: 'dispute_creation',
+        builder: (context, state) {
+          final bookingId = state.pathParameters['bookingId']!;
+          return DisputeCreationScreen(bookingId: bookingId);
+        },
+      ),
+
+      // Payment list (protected)
+      GoRoute(
+        path: '/payments',
+        name: 'payment_list',
+        builder: (context, state) => const PaymentListScreen(),
       ),
     ],
   );

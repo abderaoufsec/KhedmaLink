@@ -140,7 +140,7 @@ class _ProviderProfileManagementScreenState
         children: [
           // Business name
           Text(
-            _profile!.businessName,
+            _profile!.businessName ?? 'Unknown',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -198,10 +198,10 @@ class _ProviderProfileManagementScreenState
                 const Icon(Icons.star, size: 20, color: Colors.amber),
                 const SizedBox(width: 8),
                 Text(
-                  _profile!.averageRating?.toStringAsFixed(1) ?? 'N/A',
+                  _profile!.averageRating.toStringAsFixed(1),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                if (_profile!.totalReviews != null && _profile!.totalReviews! > 0) ...[
+                if (_profile!.totalReviews > 0) ...[
                   const SizedBox(width: 8),
                   Text(
                     '(${_profile!.totalReviews} reviews)',

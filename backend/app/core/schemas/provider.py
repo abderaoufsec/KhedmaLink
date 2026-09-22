@@ -176,6 +176,7 @@ class ProviderProfilePublic(BaseModel):
     rating_average: float = Field(..., description="Average rating")
     rating_count: int = Field(..., description="Number of ratings")
     completed_jobs: int = Field(..., description="Number of completed jobs")
+    badges: list = Field(default_factory=list, description="Earned badges")
 
     model_config = ConfigDict(from_attributes=True)
 

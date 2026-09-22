@@ -86,7 +86,15 @@ async def create_service_request(
     - **request_data**: Service request creation data
 
     Creates a new service request for the authenticated user
+    Suspended users cannot create new requests
     """
+    # Check if user is suspended
+    if current_user.status != "active":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Suspended users cannot create new requests",
+        )
+
     # Check if category exists
     from app.core.models.provider import Category
 
