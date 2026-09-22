@@ -126,7 +126,7 @@ async def get_current_verified_user(
     return current_user
 
 
-async def require_role(required_role: str):
+def require_role(required_role: str):
     """
     Dependency factory to require a specific role
 
@@ -177,7 +177,7 @@ async def require_role(required_role: str):
     return role_checker
 
 
-async def require_any_role(*required_roles: str):
+def require_any_role(*required_roles: str):
     """
     Dependency factory to require any of the specified roles
 
