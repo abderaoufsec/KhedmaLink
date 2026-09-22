@@ -1,0 +1,81 @@
+# KhedmaLink Docker Compose Configuration
+# Local development environment with PostgreSQL database
+
+version: '3.8'
+
+services:
+  # =============================================================================
+  # POSTGRESQL DATABASE
+  # =============================================================================
+  
+  postgres:
+    image: postgres:14-alpine
+    container_name: khedmalink_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: khedmalink_user
+      POSTGRES_PASSWORD: khedmalink_password
+      POSTGRES_DB: khedmalink
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U khedmalink_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - khedmalink_network
+
+  # =============================================================================
+  # BACKEND APPLICATION
+  # =============================================================================
+  
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: khedmalink_backend
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://khedmalink_user:khedmalink_password@postgres:5432/khedmalink
+      - POSTGRES_USER=khedmalink_user
+      - POSTGRES_PASSWORD=khedmalink_password
+      - POSTGRES_DB=khedmalink
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=text
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - backend_uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - khedmalink_network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+# =============================================================================
+# VOLUMES
+# =============================================================================
+
+volumes:
+  postgres_data:
+    driver: local
+  backend_uploads:
+    driver: local
+
+# =============================================================================
+# NETWORKS
+# =============================================================================
+
+networks:
+  khedmalink_network:
+    driver: bridge
