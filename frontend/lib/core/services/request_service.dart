@@ -4,7 +4,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:khedmalink/core/config/app_config.dart';
 import 'package:khedmalink/core/analytics/app_logger.dart';
 import 'package:khedmalink/core/models/request_models.dart';

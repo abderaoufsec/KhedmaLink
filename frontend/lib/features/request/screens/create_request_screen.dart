@@ -26,11 +26,11 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
 
   String? _selectedCategory;
   DateTime? _preferredDate;
-  String? _preferredTimeStart;
-  String? _preferredTimeEnd;
   bool _isFlexible = false;
   String _urgency = 'medium';
   bool _isLoading = false;
+
+  String get language => 'ar'; // Will be from localization provider
 
   @override
   void dispose() {
@@ -46,8 +46,6 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final language = 'ar'; // Will be from localization provider
-
     return Scaffold(
       appBar: AppBar(
         title: Text(

@@ -2,33 +2,57 @@
 // Displays all service categories with localized names and descriptions
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khedmalink/core/models/provider_models.dart';
 import 'package:khedmalink/core/services/provider_service.dart' as api;
 import 'package:khedmalink/core/analytics/app_logger.dart';
-import 'package:khedmalink/shared/widgets/loading_states.dart';
-import 'package:khedmalink/shared/widgets/error_states.dart';
-import 'package:khedmalink/shared/widgets/empty_states.dart';
-
-/// Provider for categories data
-final categoriesProvider = FutureProvider<List<Category>>((ref) async {
-  final providerService = api.ProviderApiService();
-  // Try to get cached categories first
-  final cached = await providerService.getCachedCategories();
-  if (cached != null) {
-    return cached;
-  }
-  // Fetch from API if no cache
-  return await providerService.listCategories();
-});
 
 /// Categories list screen
-class CategoriesListScreen extends ConsumerWidget {
+class CategoriesListScreen extends StatefulWidget {
   const CategoriesListScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Watch language from app config (simulated for now)
+  State<CategoriesListScreen> createState() => _CategoriesListScreenState();
+}
+
+class _CategoriesListScreenState extends State<CategoriesListScreen> {
+  final api.ProviderApiService _providerService = api.ProviderApiService();
+  List<Category> _categories = [];
+  bool _isLoading = true;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final categories = await _providerService.listCategories();
+      if (mounted) {
+        setState(() {
+          _categories = categories;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      AppLogger.error('Load categories error: $e');
+      if (mounted) {
+        setState(() {
+          _errorMessage = e.toString();
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final language = 'ar'; // Will be from localization provider
 
     return Scaffold(
@@ -38,83 +62,82 @@ class CategoriesListScreen extends ConsumerWidget {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _loadCategories,
+          ),
+        ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          // Invalidate cache and refetch
-          ref.invalidate(categoriesProvider);
-        },
-        child: Consumer(
-          builder: (context, ref, child) {
-            final categoriesAsync = ref.watch(categoriesProvider);
-
-            return categoriesAsync.when(
-              data: (categories) {
-                if (categories.isEmpty) {
-                  return EmptyState(
-                    icon: Icons.category_outlined,
-                    title: language == 'ar'
-                        ? 'لا توجد فئات'
-                        : 'Aucune catégorie',
-                    subtitle: language == 'ar'
-                        ? 'لم يتم العثور على فئات في الوقت الحالي'
-                        : 'Aucune catégorie trouvée pour le moment',
-                  );
-                }
-
-                return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final category = categories[index];
-                    return _CategoryCard(
-                      category: category,
-                      language: language,
-                      onTap: () {
-                        // Navigate to providers list for this category
-                        _navigateToProviders(context, category.id, language);
-                      },
-                    );
-                  },
-                );
-              },
-              loading: () => const FullScreenLoading(),
-              error: (error, stack) {
-                AppLogger.error('Categories load error: $error');
-                return ErrorState(
-                  title: language == 'ar'
-                      ? 'خطأ في التحميل'
-                      : 'Erreur de chargement',
-                  subtitle: language == 'ar'
-                      ? 'فشل تحميل الفئات. حاول مرة أخرى.'
-                      : 'Échec du chargement des catégories. Réessayez.',
-                  onRetry: () {
-                    ref.invalidate(categoriesProvider);
-                  },
-                );
-              },
-            );
-          },
-        ),
-      ),
+      body: _buildBody(context, language),
     );
   }
 
-  /// Navigate to providers list for selected category
-  void _navigateToProviders(
-    BuildContext context,
-    String categoryId,
-    String language,
-  ) {
-    // TODO: Navigate to providers list screen with category filter
-    // This will be implemented when we add routing
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          language == 'ar'
-              ? 'سيتم عرض مقدمي الخدمات لهذه الفئة قريبًا'
-              : 'Les fournisseurs pour cette catégorie seront bientôt disponibles',
+  Widget _buildBody(BuildContext context, String language) {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (_errorMessage != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(
+              'Error: $_errorMessage',
+              style: const TextStyle(color: Colors.red),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _loadCategories,
+              child: const Text('Retry'),
+            ),
+          ],
         ),
+      );
+    }
+
+    if (_categories.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.category_outlined,
+              size: 64,
+              color: Colors.grey[400],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              language == 'ar' ? 'لا توجد فئات' : 'Aucune catégorie',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: _loadCategories,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: _categories.length,
+        itemBuilder: (context, index) {
+          final category = _categories[index];
+          return _CategoryCard(
+            category: category,
+            language: language,
+            onTap: () {
+              // Navigate to providers for this category
+              // context.go('/providers?category_id=${category.id}');
+            },
+          );
+        },
       ),
     );
   }
@@ -158,7 +181,7 @@ class _CategoryCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
-                  _getCategoryIcon(category.icon),
+                  Icons.category,
                   size: 28,
                   color: theme.colorScheme.primary,
                 ),
@@ -202,42 +225,5 @@ class _CategoryCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  /// Get icon for category
-  IconData _getCategoryIcon(String? icon) {
-    // Default icons based on category name if no custom icon
-    if (icon != null && icon.isNotEmpty) {
-      // In a real app, you might use a custom icon package
-      return Icons.category;
-    }
-
-    // Return appropriate icon based on category name
-    final nameAr = category.nameAr.toLowerCase();
-    final nameFr = category.nameFr.toLowerCase();
-
-    if (nameAr.contains('إصلاح') ||
-        nameFr.contains('réparation') ||
-        nameFr.contains('réparateur')) {
-      return Icons.build;
-    } else if (nameAr.contains('تكييف') ||
-        nameFr.contains('climatisation') ||
-        nameFr.contains('climat')) {
-      return Icons.ac_unit;
-    } else if (nameAr.contains('تنظيف') ||
-        nameFr.contains('nettoyage') ||
-        nameFr.contains('nettoyage')) {
-      return Icons.cleaning_services;
-    } else if (nameAr.contains('صيانة') ||
-        nameFr.contains('maintenance') ||
-        nameFr.contains('bricoleur')) {
-      return Icons.handyman;
-    } else if (nameAr.contains('سباكة') ||
-        nameFr.contains('plomberie') ||
-        nameFr.contains('plombier')) {
-      return Icons.plumbing;
-    }
-
-    return Icons.category;
   }
 }

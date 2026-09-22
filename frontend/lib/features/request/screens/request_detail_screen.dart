@@ -23,6 +23,8 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
   bool _isLoading = true;
   String? _errorMessage;
 
+  String get language => 'ar'; // Will be from localization provider
+
   @override
   void initState() {
     super.initState();
@@ -59,8 +61,6 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final language = 'ar'; // Will be from localization provider
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
