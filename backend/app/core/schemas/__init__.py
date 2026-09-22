@@ -36,6 +36,14 @@ from .provider import (
     VerificationCaseResponse,
     VerificationCaseAdminUpdate,
 )
+from .request import (
+    ServiceRequestCreate,
+    ServiceRequestUpdate,
+    ServiceRequestResponse,
+    ServiceRequestPublic,
+    RequestAttachmentCreate,
+    RequestAttachmentResponse,
+)
 
 __all__ = [
     "UserRegister",
@@ -67,4 +75,10 @@ __all__ = [
     "VerificationCaseCreate",
     "VerificationCaseResponse",
     "VerificationCaseAdminUpdate",
+    "ServiceRequestCreate",
+    "ServiceRequestUpdate",
+    "ServiceRequestResponse",
+    "ServiceRequestPublic",
+    "RequestAttachmentCreate",
+    "RequestAttachmentResponse",
 ]

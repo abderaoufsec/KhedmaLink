@@ -12,6 +12,7 @@ from .provider import (
     AvailabilityRule,
     VerificationCase,
 )
+from .request import ServiceRequest, RequestAttachment
 
 __all__ = [
     "User",
@@ -23,4 +24,6 @@ __all__ = [
     "ServiceArea",
     "AvailabilityRule",
     "VerificationCase",
+    "ServiceRequest",
+    "RequestAttachment",
 ]
