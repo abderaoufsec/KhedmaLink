@@ -3,4 +3,6 @@ Services package for KhedmaLink backend
 Contains business logic and service layer
 """
 
-__all__ = []
+from .auth import AuthService
+
+__all__ = ["AuthService"]

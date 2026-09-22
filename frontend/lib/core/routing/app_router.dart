@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../config/app_config.dart';
+import '../services/auth_service.dart';
+import '../../features/auth/screens/login_screen.dart';
+import '../../features/auth/screens/register_screen.dart';
 
 /// Application router configuration
 ///
@@ -23,8 +26,28 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     // Navigator keys
     navigatorKey: rootNavigatorKey,
-    initialLocation: '/',
+    initialLocation: '/login',
     debugLogDiagnostics: AppConfig.enableDebugLogging,
+
+    // Redirect unauthenticated users to login
+    redirect: (context, state) async {
+      final authService = AuthService();
+      final isAuthenticated = await authService.isAuthenticated();
+
+      // Public routes that don't require authentication
+      final publicRoutes = ['/login', '/register'];
+
+      if (!isAuthenticated && !publicRoutes.contains(state.uri.toString())) {
+        return '/login';
+      }
+
+      // Redirect authenticated users away from login/register
+      if (isAuthenticated && publicRoutes.contains(state.uri.toString())) {
+        return '/home';
+      }
+
+      return null;
+    },
 
     // Error builder for unknown routes
     errorBuilder: (context, state) => Scaffold(
@@ -55,25 +78,30 @@ class AppRouter {
 
     // Route configuration
     routes: [
-      // Home route
+      // Authentication routes
       GoRoute(
-        path: '/',
+        path: '/login',
+        name: 'login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/register',
+        name: 'register',
+        builder: (context, state) => const RegisterScreen(),
+      ),
+
+      // Home route (protected)
+      GoRoute(
+        path: '/home',
         name: 'home',
         builder: (context, state) => const _PlaceholderScreen('Home'),
       ),
 
-      // Onboarding route
+      // Onboarding route (protected)
       GoRoute(
         path: '/onboarding',
         name: 'onboarding',
         builder: (context, state) => const _PlaceholderScreen('Onboarding'),
-      ),
-
-      // Authentication routes
-      GoRoute(
-        path: '/auth',
-        name: 'auth',
-        builder: (context, state) => const _PlaceholderScreen('Auth'),
       ),
     ],
   );

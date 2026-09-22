@@ -61,6 +61,9 @@ class AppConfig {
   /// Full API endpoint base URL
   static String get apiEndpoint => '$apiBaseUrl/api/$apiVersion';
 
+  /// API base URL for direct use (without version prefix)
+  static String get apiBaseUrlDirect => apiBaseUrl;
+
   /// WebSocket endpoint for real-time features
   static String get wsEndpoint => apiBaseUrl.replaceFirst('http', 'ws');
 

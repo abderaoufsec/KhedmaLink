@@ -43,6 +43,12 @@ dependencies:
     sdk: flutter
   intl: ^0.20.3
   
+  # Networking
+  http: ^1.2.0
+  
+  # Local storage
+  shared_preferences: ^2.2.0
+  
   # State management (to be determined in future milestones)
   # provider: ^6.1.0
   # riverpod: ^2.5.0
