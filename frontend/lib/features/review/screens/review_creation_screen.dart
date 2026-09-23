@@ -2,7 +2,6 @@
 // Allows customers to review completed bookings
 
 import 'package:flutter/material.dart';
-import 'package:khedmalink/core/models/review_models.dart';
 import 'package:khedmalink/core/services/review_service.dart' as api;
 import 'package:khedmalink/core/analytics/app_logger.dart';
 

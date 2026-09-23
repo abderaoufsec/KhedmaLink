@@ -1,8 +1,6 @@
 // Admin models for KhedmaLink Flutter app
 // Contains data models for admin operations and audit logs
 
-import 'package:khedmalink/core/config/app_config.dart';
-
 /// Audit action type enum
 enum AuditActionType {
   verificationApproved,

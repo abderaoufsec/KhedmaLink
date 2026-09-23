@@ -41,7 +41,7 @@ class AppConfig {
   /// Base API URL
   ///
   /// Uses different URLs based on environment:
-  /// - Development: Localhost (10.0.2.2 for Android emulator)
+  /// - Development: Localhost (10.0.2.2 for Android emulator, or network IP)
   /// - Staging: Staging server
   /// - Production: Production server
   static String get apiBaseUrl {
@@ -51,9 +51,10 @@ class AppConfig {
       case 'staging':
         return 'https://staging-api.khedmalink.com';
       default:
-        // Development mode - use actual network IP for Android emulator
-        // Change this to your actual network IP if needed
+        // Development mode - use network IP for actual device testing
+        // Comment out the emulator IP and use network IP for real device testing
         return 'http://192.168.1.6:8000'; // Your network IP address
+        // return 'http://10.0.2.2:8000'; // Android emulator localhost
     }
   }
 

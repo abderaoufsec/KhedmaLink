@@ -1,7 +1,6 @@
 // Dispute models for KhedmaLink Flutter app
 // Contains data models for disputes and dispute evidence
 
-import 'package:khedmalink/core/config/app_config.dart';
 
 /// Dispute status enum
 enum DisputeStatus {

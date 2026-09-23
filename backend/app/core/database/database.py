@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
 )
 from sqlalchemy.orm import declarative_base
+from sqlalchemy import text
 
 from app.core.config import settings
 from app.core.logging import get_logger
@@ -68,11 +69,19 @@ async def init_db() -> None:
     try:
         # Test database connection
         async with engine.begin() as conn:
-            await conn.execute("SELECT 1")
+            if is_sqlite:
+                # SQLite connection test
+                await conn.execute(text("SELECT 1"))
+            else:
+                # PostgreSQL connection test
+                await conn.execute(text("SELECT 1"))
 
         logger.info("Database connection established successfully")
-        logger.info(f"Database: {settings.POSTGRES_DB}")
-        logger.info(f"Host: {settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}")
+        if not is_sqlite:
+            logger.info(f"Database: {settings.POSTGRES_DB}")
+            logger.info(f"Host: {settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}")
+        else:
+            logger.info("Using SQLite database for development")
 
     except Exception as e:
         logger.error(f"Failed to initialize database: {e}")
