@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io' show Platform;
 
 /// Application configuration constants and settings
 ///
@@ -48,7 +50,7 @@ class AppConfig {
   /// - Production: Production server via --dart-define
   static String get apiBaseUrl {
     // Check for dart-define first (highest priority)
-    final definedUrl = String.fromEnvironment('API_BASE_URL');
+    const definedUrl = String.fromEnvironment('API_BASE_URL');
     if (definedUrl.isNotEmpty) {
       return definedUrl;
     }
@@ -153,14 +155,27 @@ class AppConfig {
   // =============================================================================
 
   /// Whether running on web platform
-  static bool get isWeb =>
-      identical(0, 0.0); // Will be replaced by platform check
+  static bool get isWeb => kIsWeb;
 
   /// Whether running on Android
-  static bool get isAndroid => false; // Will be replaced by platform check
+  static bool get isAndroid {
+    try {
+      return Platform.isAndroid;
+    } catch (e) {
+      // Platform not available on web
+      return false;
+    }
+  }
 
   /// Whether running on iOS
-  static bool get isIOS => false; // Will be replaced by platform check
+  static bool get isIOS {
+    try {
+      return Platform.isIOS;
+    } catch (e) {
+      // Platform not available on web
+      return false;
+    }
+  }
 
   // =============================================================================
   // VALIDATION RULES
