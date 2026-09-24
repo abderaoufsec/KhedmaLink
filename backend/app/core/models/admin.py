@@ -1,9 +1,9 @@
 # Admin models for KhedmaLink backend
 # Contains audit log model for tracking admin and privileged actions
 
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import UUID, uuid4
-from sqlalchemy import Column, String, DateTime, ForeignKey, Text, Enum as SQLEnum
+from sqlalchemy import Column, String, DateTime, ForeignKey, Text, Enum as SQLEnum, func
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import relationship
 import enum
@@ -74,7 +74,7 @@ class AuditLog(Base):
 
     # Timestamps
     created_at = Column(
-        DateTime(timezone=True), default=datetime.utcnow, nullable=False, index=True
+        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False, index=True
     )
 
     # Relationships

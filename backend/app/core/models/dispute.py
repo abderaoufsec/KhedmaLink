@@ -1,9 +1,9 @@
 # Dispute models for KhedmaLink backend
 # Contains database models for disputes and dispute evidence
 
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import UUID, uuid4
-from sqlalchemy import Column, String, DateTime, ForeignKey, Text, Enum as SQLEnum
+from sqlalchemy import Column, String, DateTime, ForeignKey, Text, Enum as SQLEnum, func
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import relationship
 import enum
@@ -64,12 +64,12 @@ class Dispute(Base):
 
     # Timestamps
     created_at = Column(
-        DateTime(timezone=True), default=datetime.utcnow, nullable=False, index=True
+        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False, index=True
     )
     updated_at = Column(
         DateTime(timezone=True),
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
 
@@ -118,7 +118,7 @@ class DisputeEvidence(Base):
 
     # Timestamps
     created_at = Column(
-        DateTime(timezone=True), default=datetime.utcnow, nullable=False
+        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False
     )
 
     # Relationships
