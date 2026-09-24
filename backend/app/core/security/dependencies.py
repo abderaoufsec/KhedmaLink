@@ -11,7 +11,7 @@ from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.security import verify_token
-from app.core.models.user import User, Role
+from app.core.models.user import User, Role, user_roles
 from app.core.logging import get_logger
 
 logger = get_logger(__name__)
@@ -154,9 +154,9 @@ def require_role(required_role: str):
         Raises:
             HTTPException: If user doesn't have the required role
         """
-        # Query user's roles
+        # Query user's roles explicitly to avoid lazy loading
         result = await db.execute(
-            select(Role).join(User.roles).where(User.id == current_user.id)
+            select(Role).join(user_roles).where(user_roles.c.user_id == current_user.id)
         )
         roles = result.scalars().all()
 
@@ -205,9 +205,9 @@ def require_any_role(*required_roles: str):
         Raises:
             HTTPException: If user doesn't have any of the required roles
         """
-        # Query user's roles
+        # Query user's roles explicitly to avoid lazy loading
         result = await db.execute(
-            select(Role).join(User.roles).where(User.id == current_user.id)
+            select(Role).join(user_roles).where(user_roles.c.user_id == current_user.id)
         )
         roles = result.scalars().all()
 

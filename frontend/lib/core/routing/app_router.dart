@@ -335,8 +335,8 @@ class AppRouter {
 
 /// Placeholder screen for routes not yet implemented
 ///
-/// This will be replaced with actual screens as features are implemented
-/// in subsequent milestones.
+/// This screen is used for features that are intentionally not yet implemented.
+/// Status: NOT IMPLEMENTED - This is a placeholder, not a bug.
 class _PlaceholderScreen extends StatelessWidget {
   final String routeName;
 
@@ -358,7 +358,7 @@ class _PlaceholderScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'This screen will be implemented in a future milestone',
+              'NOT IMPLEMENTED - This feature is not yet available',
               style: Theme.of(context).textTheme.bodyMedium
                   ?.copyWith(color: Colors.grey[600]),
             ),

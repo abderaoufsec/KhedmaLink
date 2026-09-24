@@ -28,8 +28,8 @@ void main() {
     });
 
     test('api base URL should use localhost in development', () {
-      // Accept both Android emulator IP and network IP for testing
-      final validUrls = ['http://10.0.2.2:8000', 'http://192.168.1.6:8000'];
+      // Accept localhost, emulator IP, and network IP for testing
+      final validUrls = ['http://localhost:8000', 'http://10.0.2.2:8000', 'http://192.168.1.6:8000'];
       expect(validUrls.contains(AppConfig.apiBaseUrl), true);
     });
 
@@ -38,8 +38,8 @@ void main() {
     });
 
     test('api endpoint should include version', () {
-      // Accept both Android emulator IP and network IP for testing
-      final validEndpoints = ['http://10.0.2.2:8000/api/v1', 'http://192.168.1.6:8000/api/v1'];
+      // Accept localhost, emulator IP, and network IP for testing
+      final validEndpoints = ['http://localhost:8000/api/v1', 'http://10.0.2.2:8000/api/v1', 'http://192.168.1.6:8000/api/v1'];
       expect(validEndpoints.contains(AppConfig.apiEndpoint), true);
     });
 

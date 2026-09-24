@@ -122,3 +122,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
             raise
         finally:
             await session.close()
+
+
+# Export components for direct use if needed
+__all__ = ["engine", "Base", "AsyncSessionLocal", "init_db", "close_db", "get_db"]

@@ -1,8 +1,6 @@
 # KhedmaLink Docker Compose Configuration
 # Local development environment with PostgreSQL database
 
-version: '3.8'
-
 services:
   # =============================================================================
   # POSTGRESQL DATABASE
@@ -10,7 +8,6 @@ services:
   
   postgres:
     image: postgres:14-alpine
-    container_name: khedmalink_postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: khedmalink_user
@@ -35,9 +32,8 @@ services:
   
   backend:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
-    container_name: khedmalink_backend
     restart: unless-stopped
     environment:
       - DATABASE_URL=postgresql+asyncpg://khedmalink_user:khedmalink_password@postgres:5432/khedmalink

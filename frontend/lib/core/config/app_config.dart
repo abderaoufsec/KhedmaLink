@@ -40,21 +40,34 @@ class AppConfig {
 
   /// Base API URL
   ///
-  /// Uses different URLs based on environment:
-  /// - Development: Localhost (10.0.2.2 for Android emulator, or network IP)
-  /// - Staging: Staging server
-  /// - Production: Production server
+  /// Uses different URLs based on environment and platform:
+  /// - Development: Uses --dart-define API_BASE_URL if provided
+  /// - Web default: http://localhost:8000
+  /// - Android emulator default: http://10.0.2.2:8000
+  /// - Physical Android: Requires network IP via --dart-define
+  /// - Production: Production server via --dart-define
   static String get apiBaseUrl {
+    // Check for dart-define first (highest priority)
+    final definedUrl = String.fromEnvironment('API_BASE_URL');
+    if (definedUrl.isNotEmpty) {
+      return definedUrl;
+    }
+    
+    // Environment-based fallbacks
     switch (environment) {
       case 'production':
         return 'https://api.khedmalink.com';
       case 'staging':
         return 'https://staging-api.khedmalink.com';
       default:
-        // Development mode - use network IP for actual device testing
-        // Comment out the emulator IP and use network IP for real device testing
-        return 'http://192.168.1.6:8000'; // Your network IP address
-        // return 'http://10.0.2.2:8000'; // Android emulator localhost
+        // Development platform detection
+        if (isWeb) {
+          return 'http://localhost:8000';
+        } else if (isAndroid) {
+          // Default to emulator, can be overridden with --dart-define
+          return 'http://10.0.2.2:8000';
+        }
+        return 'http://localhost:8000';
     }
   }
 

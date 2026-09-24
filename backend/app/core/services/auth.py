@@ -3,13 +3,14 @@ Authentication service layer
 Handles business logic for user registration, login, and authentication
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
+from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, insert
 from fastapi import HTTPException, status
 
-from app.core.models.user import User, Role
+from app.core.models.user import User, Role, user_roles
 from app.core.security import (
     get_password_hash,
     verify_password,
@@ -42,6 +43,8 @@ class AuthService:
         Raises:
             HTTPException: If email or phone already exists
         """
+        logger.info(f"Starting registration for email: {user_data.email}")
+        
         # Check if email already exists
         result = await db.execute(select(User).where(User.email == user_data.email))
         existing_user = result.scalar_one_or_none()
@@ -85,36 +88,38 @@ class AuthService:
         db.add(new_user)
         await db.commit()
         await db.refresh(new_user)
+        
+        logger.info(f"User created with ID: {new_user.id}")
 
         # Assign default customer role
+        logger.info(f"Assigning customer role to user {new_user.id}")
         await AuthService._assign_role(db, new_user.id, "customer")
 
-        logger.info(f"New user registered: {new_user.id} ({new_user.email})")
+        logger.info(f"User registration complete: {new_user.id} ({new_user.email})")
 
         return new_user
 
     @staticmethod
-    async def _assign_role(db: AsyncSession, user_id: str, role_name: str) -> None:
+    async def _assign_role(db: AsyncSession, user_id: UUID, role_name: str) -> None:
         """
         Assign a role to a user
 
         Args:
             db: Database session
-            user_id: User ID
+            user_id: User ID (UUID)
             role_name: Role name to assign
         """
         result = await db.execute(select(Role).where(Role.name == role_name))
         role = result.scalar_one_or_none()
 
         if role:
-            # Add role to user (many-to-many relationship)
-            result = await db.execute(select(User).where(User.id == user_id))
-            user = result.scalar_one_or_none()
-
-            if user and role not in user.roles:
-                user.roles.append(role)
-                await db.commit()
-                logger.info(f"Role '{role_name}' assigned to user {user_id}")
+            # Use direct insert for many-to-many relationship to avoid lazy loading issues
+            stmt = insert(user_roles).values(user_id=user_id, role_id=role.id)
+            await db.execute(stmt)
+            await db.commit()
+            logger.info(f"Role '{role_name}' assigned to user {user_id}")
+        else:
+            logger.error(f"Role '{role_name}' not found in database")
 
     @staticmethod
     async def authenticate_user(
@@ -164,7 +169,7 @@ class AuthService:
             )
 
         # Update last login
-        user.last_login = datetime.utcnow()
+        user.last_login = datetime.now(timezone.utc)
         await db.commit()
 
         logger.info(f"User authenticated: {user.id} ({user.email})")
@@ -172,18 +177,28 @@ class AuthService:
         return user
 
     @staticmethod
-    async def create_tokens(user: User) -> dict:
+    async def create_tokens(user: User, db: AsyncSession = None) -> dict:
         """
         Create access and refresh tokens for a user
 
         Args:
             user: The user to create tokens for
+            db: Optional database session for loading roles
 
         Returns:
             dict: Dictionary containing access_token and refresh_token
         """
-        # Get user roles
-        role_names = [role.name for role in user.roles]
+        # Get user roles explicitly to avoid lazy loading issues
+        if db:
+            from app.core.models.user import Role, user_roles
+            result = await db.execute(
+                select(Role).join(user_roles).where(user_roles.c.user_id == user.id)
+            )
+            roles = result.scalars().all()
+            role_names = [role.name for role in roles]
+        else:
+            # Fallback to lazy loading if no db session provided
+            role_names = [role.name for role in user.roles]
 
         # Create access token
         access_token = create_access_token(
@@ -248,7 +263,7 @@ class AuthService:
             )
 
         # Create new tokens
-        tokens = await AuthService.create_tokens(user)
+        tokens = await AuthService.create_tokens(user, db)
 
         logger.info(f"Token refreshed for user: {user.id}")
 

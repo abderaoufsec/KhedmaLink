@@ -23,24 +23,20 @@ def client():
 
 def test_register_user_success(client):
     """Test successful user registration"""
-    try:
-        response = client.post(
-            "/api/v1/auth/register",
-            json={
-                "email": "newuser@example.com",
-                "password": "TestPass123",
-                "full_name": "New User",
-                "phone": "+213555123456",
-            },
-        )
+    response = client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "newuser@example.com",
+            "password": "TestPass123",
+            "full_name": "New User",
+            "phone": "+213555123456",
+        },
+    )
 
-        # Will fail without database, but tests endpoint exists
-        # Accept 201 (success), 500 (database error), or 503 (service unavailable)
-        assert response.status_code in [201, 500, 503]
-    except Exception as e:
-        # If the error is a database connection error, the test passes
-        # because the endpoint exists and attempted to connect
-        assert True
+    # Should return 201 on successful registration
+    # May return 400 if email already exists (valid duplicate check)
+    # Should NOT return 500 (internal server error)
+    assert response.status_code in [201, 400]
 
 
 def test_register_user_weak_password(client):
@@ -78,22 +74,17 @@ def test_register_user_invalid_email(client):
 
 def test_login_endpoint_exists(client):
     """Test that login endpoint exists"""
-    try:
-        response = client.post(
-            "/api/v1/auth/login",
-            json={
-                "email": "test@example.com",
-                "password": "TestPass123",
-            },
-        )
+    response = client.post(
+        "/api/v1/auth/login",
+        json={
+            "email": "test@example.com",
+            "password": "TestPass123",
+        },
+    )
 
-        # Will fail without database, but tests endpoint exists
-        # Accept 401 (wrong credentials), 500 (database error), or 503 (service unavailable)
-        assert response.status_code in [401, 500, 503]
-    except Exception as e:
-        # If the error is a database connection error, the test passes
-        # because the endpoint exists and attempted to connect
-        assert True
+    # Should return 401 for invalid credentials (user doesn't exist)
+    # Should NOT return 500 (internal server error)
+    assert response.status_code in [401, 400]
 
 
 def test_login_missing_fields(client):
@@ -261,8 +252,9 @@ def test_refresh_token_endpoint_exists(client):
         },
     )
 
-    # Will fail without valid token, but tests endpoint exists
-    assert response.status_code in [401, 500]
+    # Should return 401 for invalid token
+    # Should NOT return 500 (internal server error)
+    assert response.status_code == 401
 
 
 def test_logout_endpoint_exists(client):

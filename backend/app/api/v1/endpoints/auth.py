@@ -5,6 +5,7 @@ Handles user registration, login, token refresh, and logout
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+import traceback
 
 from app.core.database import get_db
 from app.core.security import create_access_token
@@ -46,19 +47,39 @@ async def register(
     Returns:
         UserResponse: The created user
     """
-    user = await AuthService.register_user(db, user_data)
+    logger.info(f"Registration request received for email: {user_data.email}")
+    
+    try:
+        user = await AuthService.register_user(db, user_data)
+        logger.info(f"User created successfully: {user.id}")
 
-    return UserResponse(
-        id=str(user.id),
-        email=user.email,
-        full_name=user.full_name,
-        phone=user.phone,
-        is_active=user.is_active,
-        is_verified=user.is_verified,
-        status=user.status,
-        roles=[role.name for role in user.roles],
-        created_at=user.created_at.isoformat(),
-    )
+        # Load roles explicitly to avoid lazy loading issues
+        from sqlalchemy import select
+        from app.core.models.user import Role, user_roles
+        result = await db.execute(
+            select(Role).join(user_roles).where(user_roles.c.user_id == user.id)
+        )
+        roles = result.scalars().all()
+        logger.info(f"Roles loaded: {[role.name for role in roles]}")
+
+        response = UserResponse(
+            id=str(user.id),
+            email=user.email,
+            full_name=user.full_name,
+            phone=user.phone,
+            is_active=user.is_active,
+            is_verified=user.is_verified,
+            status=user.status,
+            roles=[role.name for role in roles],
+            created_at=user.created_at.isoformat(),
+        )
+        logger.info(f"Response created successfully")
+        return response
+        
+    except Exception as e:
+        logger.error(f"Registration error: {str(e)}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        raise
 
 
 @router.post("/login", response_model=TokenResponse)
@@ -79,7 +100,7 @@ async def login(
         TokenResponse: Access and refresh tokens
     """
     user = await AuthService.authenticate_user(db, login_data)
-    tokens = await AuthService.create_tokens(user)
+    tokens = await AuthService.create_tokens(user, db)
 
     return TokenResponse(
         access_token=tokens["access_token"],
