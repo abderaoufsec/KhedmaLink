@@ -161,7 +161,7 @@ This project is built following strict engineering principles. See:
 
 ## Contact
 
-[Contact information to be added]
+[benabdsselema@gmail.com]
 
 ---
 
