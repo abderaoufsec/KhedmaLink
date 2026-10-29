@@ -54,9 +54,9 @@ def upgrade() -> None:
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
         sa.Column('closed_at', sa.DateTime(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('pk_service_requests'),
-        sa.ForeignKeyConstraint(['customer_id'], 'users', ondelete='CASCADE'),
-        sa.ForeignKeyConstraint(['category_id'], 'categories', ondelete='RESTRICT')
+        sa.PrimaryKeyConstraint('id'),
+        sa.ForeignKeyConstraint(['customer_id'], ['users.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ondelete='RESTRICT')
     )
     op.create_index('ix_service_requests_id', 'service_requests', ['id'])
     op.create_index('ix_service_requests_customer_id', 'service_requests', ['customer_id'])
@@ -82,9 +82,9 @@ def upgrade() -> None:
         sa.Column('uploaded_by', postgresql.UUID(as_uuid=True), nullable=True),
         sa.Column('upload_status', sa.String(length=20), nullable=False),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-        sa.PrimaryKeyConstraint('pk_request_attachments'),
-        sa.ForeignKeyConstraint(['request_id'], 'service_requests', ondelete='CASCADE'),
-        sa.ForeignKeyConstraint(['uploaded_by'], 'users', ondelete='SET NULL')
+        sa.PrimaryKeyConstraint('id'),
+        sa.ForeignKeyConstraint(['request_id'], ['service_requests.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['uploaded_by'], ['users.id'], ondelete='SET NULL')
     )
     op.create_index('ix_request_attachments_id', 'request_attachments', ['id'])
     op.create_index('ix_request_attachments_request_id', 'request_attachments', ['request_id'])

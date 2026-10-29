@@ -16,8 +16,8 @@ class ReviewApiService {
 
   /// Constructor
   ReviewApiService({http.Client? client, AuthService? authService})
-      : _client = client ?? http.Client(),
-        _authService = authService ?? AuthService();
+    : _client = client ?? http.Client(),
+      _authService = authService ?? AuthService();
 
   /// Get base URL from config
   String get _baseUrl => AppConfig.apiBaseUrlDirect;
@@ -43,12 +43,12 @@ class ReviewApiService {
     try {
       AppLogger.info('Fetching review for booking: $bookingId');
 
-      final response = await _client.get(
-        Uri.parse('$_baseUrl/api/v1/reviews/me/bookings/$bookingId/review'),
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(
+            Uri.parse('$_baseUrl/api/v1/reviews/me/bookings/$bookingId/review'),
+            headers: await _getAuthHeaders(),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -67,7 +67,9 @@ class ReviewApiService {
         return null;
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch review: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch review: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch review');
       }
     } catch (e) {
@@ -91,23 +93,23 @@ class ReviewApiService {
     try {
       AppLogger.info('Creating review for booking: $bookingId');
 
-      final response = await _client.post(
-        Uri.parse('$_baseUrl/api/v1/reviews/me/bookings/$bookingId/review'),
-        headers: await _getAuthHeaders(),
-        body: jsonEncode({
-          'booking_id': bookingId,
-          'rating': rating,
-          if (title != null) 'title': title,
-          if (comment != null) 'comment': comment,
-          if (professionalism != null) 'professionalism': professionalism,
-          if (quality != null) 'quality': quality,
-          if (timeliness != null) 'timeliness': timeliness,
-          if (communication != null) 'communication': communication,
-          if (value != null) 'value': value,
-        }),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .post(
+            Uri.parse('$_baseUrl/api/v1/reviews/me/bookings/$bookingId/review'),
+            headers: await _getAuthHeaders(),
+            body: jsonEncode({
+              'booking_id': bookingId,
+              'rating': rating,
+              if (title != null) 'title': title,
+              if (comment != null) 'comment': comment,
+              if (professionalism != null) 'professionalism': professionalism,
+              if (quality != null) 'quality': quality,
+              if (timeliness != null) 'timeliness': timeliness,
+              if (communication != null) 'communication': communication,
+              if (value != null) 'value': value,
+            }),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -123,11 +125,15 @@ class ReviewApiService {
         throw Exception('Only the customer can create a review');
       } else if (response.statusCode == 400) {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to create review: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to create review: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to create review');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to create review: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to create review: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to create review');
       }
     } catch (e) {
@@ -150,27 +156,27 @@ class ReviewApiService {
         'limit': limit.toString(),
       };
 
-      final uri = Uri.parse('$_baseUrl/api/v1/reviews/providers/$providerId/reviews')
-          .replace(queryParameters: queryParams);
+      final uri = Uri.parse(
+        '$_baseUrl/api/v1/reviews/providers/$providerId/reviews',
+      ).replace(queryParameters: queryParams);
 
-      final response = await _client.get(
-        uri,
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(uri, headers: await _getAuthHeaders())
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as List;
-        final reviews =
-            data.map((item) => Review.fromJson(item as Map<String, dynamic>))
-                .toList();
+        final reviews = data
+            .map((item) => Review.fromJson(item as Map<String, dynamic>))
+            .toList();
 
         AppLogger.info('Reviews fetched successfully: ${reviews.length}');
         return reviews;
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch reviews: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch reviews: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch reviews');
       }
     } catch (e) {
@@ -184,12 +190,14 @@ class ReviewApiService {
     try {
       AppLogger.info('Fetching reputation for provider: $providerId');
 
-      final response = await _client.get(
-        Uri.parse('$_baseUrl/api/v1/reviews/providers/$providerId/reputation'),
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(
+            Uri.parse(
+              '$_baseUrl/api/v1/reviews/providers/$providerId/reputation',
+            ),
+            headers: await _getAuthHeaders(),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -199,7 +207,9 @@ class ReviewApiService {
         return reputation;
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch reputation: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch reputation: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch reputation');
       }
     } catch (e) {
@@ -218,17 +228,18 @@ class ReviewApiService {
     try {
       AppLogger.info('Updating review: $reviewId');
 
-      final response = await _client.patch(
-        Uri.parse('$_baseUrl/api/v1/reviews/me/reviews/$reviewId'),
-        headers: await _getAuthHeaders(),
-        body: jsonEncode({
-          if (title != null) 'title': title,
-          if (comment != null) 'comment': comment,
-          if (providerResponse != null) 'provider_response': providerResponse,
-        }),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .patch(
+            Uri.parse('$_baseUrl/api/v1/reviews/me/reviews/$reviewId'),
+            headers: await _getAuthHeaders(),
+            body: jsonEncode({
+              if (title != null) 'title': title,
+              if (comment != null) 'comment': comment,
+              if (providerResponse != null)
+                'provider_response': providerResponse,
+            }),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -247,7 +258,9 @@ class ReviewApiService {
         throw Exception('Review not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to update review: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to update review: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to update review');
       }
     } catch (e) {

@@ -127,9 +127,7 @@ class _RequestListScreenState extends State<RequestListScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                AppTheme.primaryColor,
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
             ),
             const SizedBox(height: 16),
             Text(
@@ -217,17 +215,19 @@ class _RequestListScreenState extends State<RequestListScreen>
             Text(
               language == 'ar' ? 'لا توجد طلبات' : 'Aucune demande',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface
-                        .withValues(alpha: 0.7),
-                  ),
+                color: Theme.of(context).colorScheme.onSurface
+                    .withValues(alpha: 0.7),
+              ),
             ),
             const SizedBox(height: 16),
             Text(
-              language == 'ar' ? 'أنشئ طلبك الأول' : 'Créez votre première demande',
+              language == 'ar'
+                  ? 'أنشئ طلبك الأول'
+                  : 'Créez votre première demande',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface
-                        .withValues(alpha: 0.5),
-                  ),
+                color: Theme.of(context).colorScheme.onSurface
+                    .withValues(alpha: 0.5),
+              ),
             ),
           ],
         ),
@@ -391,12 +391,17 @@ class _RequestCard extends StatelessWidget {
                 // Description preview
                 Builder(
                   builder: (context) {
-                    final description = _getRequestDescription(request, language);
+                    final description = _getRequestDescription(
+                      request,
+                      language,
+                    );
                     if (description.isNotEmpty) {
                       return Text(
                         description,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -406,7 +411,7 @@ class _RequestCard extends StatelessWidget {
                   },
                 ),
                 if (_getRequestDescription(request, language).isNotEmpty)
-                const SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
                 // Category and location
                 Row(
@@ -420,7 +425,9 @@ class _RequestCard extends StatelessWidget {
                     Text(
                       'General',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -433,7 +440,9 @@ class _RequestCard extends StatelessWidget {
                     Text(
                       '${request.wilaya} - ${request.city}',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                   ],
@@ -452,7 +461,9 @@ class _RequestCard extends StatelessWidget {
                     Text(
                       request.createdAt.split('T')[0],
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 16),

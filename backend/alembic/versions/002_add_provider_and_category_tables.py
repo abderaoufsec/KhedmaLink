@@ -28,7 +28,12 @@ def upgrade() -> None:
     # Create categories table
     op.create_table(
         'categories',
-        sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
+        sa.Column(
+            'id',
+            postgresql.UUID(as_uuid=True),
+            nullable=False,
+            server_default=sa.text('gen_random_uuid()'),
+        ),
         sa.Column('name_ar', sa.String(length=100), nullable=False),
         sa.Column('name_fr', sa.String(length=100), nullable=False),
         sa.Column('description_ar', sa.Text(), nullable=True),
@@ -38,7 +43,7 @@ def upgrade() -> None:
         sa.Column('sort_order', sa.Integer(), nullable=False),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('pk_categories')
+        sa.PrimaryKeyConstraint('id')
     )
     op.create_index('ix_categories_id', 'categories', ['id'])
     op.create_index('ix_categories_name_ar', 'categories', ['name_ar'])
@@ -68,9 +73,9 @@ def upgrade() -> None:
         sa.Column('completed_jobs', sa.Integer(), nullable=False),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('pk_provider_profiles'),
-        sa.UniqueConstraint('uq_provider_profiles_user_id'),
-        sa.ForeignKeyConstraint(['user_id'], 'users', ondelete='CASCADE')
+        sa.PrimaryKeyConstraint('id'),
+        sa.UniqueConstraint('user_id', name='uq_provider_profiles_user_id'),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE')
     )
     op.create_index('ix_provider_profiles_id', 'provider_profiles', ['id'])
     op.create_index('ix_provider_profiles_user_id', 'provider_profiles', ['user_id'])
@@ -93,10 +98,10 @@ def upgrade() -> None:
         sa.Column('is_active', sa.Boolean(), nullable=False),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('pk_provider_services'),
-        sa.ForeignKeyConstraint(['provider_id'], 'provider_profiles', ondelete='CASCADE'),
-        sa.ForeignKeyConstraint(['category_id'], 'categories', ondelete='CASCADE'),
-        sa.UniqueConstraint('uq_provider_services_provider_category', 'provider_id', 'category_id')
+        sa.PrimaryKeyConstraint('id'),
+        sa.ForeignKeyConstraint(['provider_id'], ['provider_profiles.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ondelete='CASCADE'),
+        sa.UniqueConstraint('provider_id', 'category_id', name='uq_provider_services_provider_category')
     )
     op.create_index('ix_provider_services_id', 'provider_services', ['id'])
     op.create_index('ix_provider_services_provider_id', 'provider_services', ['provider_id'])
@@ -118,8 +123,8 @@ def upgrade() -> None:
         sa.Column('is_active', sa.Boolean(), nullable=False),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('pk_service_areas'),
-        sa.ForeignKeyConstraint(['provider_id'], 'provider_profiles', ondelete='CASCADE')
+        sa.PrimaryKeyConstraint('id'),
+        sa.ForeignKeyConstraint(['provider_id'], ['provider_profiles.id'], ondelete='CASCADE')
     )
     op.create_index('ix_service_areas_id', 'service_areas', ['id'])
     op.create_index('ix_service_areas_provider_id', 'service_areas', ['provider_id'])
@@ -138,8 +143,8 @@ def upgrade() -> None:
         sa.Column('is_active', sa.Boolean(), nullable=False),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('pk_availability_rules'),
-        sa.ForeignKeyConstraint(['provider_id'], 'provider_profiles', ondelete='CASCADE')
+        sa.PrimaryKeyConstraint('id'),
+        sa.ForeignKeyConstraint(['provider_id'], ['provider_profiles.id'], ondelete='CASCADE')
     )
     op.create_index('ix_availability_rules_id', 'availability_rules', ['id'])
     op.create_index('ix_availability_rules_provider_id', 'availability_rules', ['provider_id'])
@@ -158,9 +163,9 @@ def upgrade() -> None:
         sa.Column('admin_notes', sa.Text(), nullable=True),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('pk_verification_cases'),
-        sa.ForeignKeyConstraint(['provider_id'], 'provider_profiles', ondelete='CASCADE'),
-        sa.ForeignKeyConstraint(['reviewed_by'], 'users')
+        sa.PrimaryKeyConstraint('id'),
+        sa.ForeignKeyConstraint(['provider_id'], ['provider_profiles.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['reviewed_by'], ['users.id'])
     )
     op.create_index('ix_verification_cases_id', 'verification_cases', ['id'])
     op.create_index('ix_verification_cases_provider_id', 'verification_cases', ['provider_id'])
@@ -168,9 +173,19 @@ def upgrade() -> None:
     op.create_index('ix_verification_cases_status', 'verification_cases', ['status'])
 
     # Insert initial categories
+    categories_table = sa.table(
+        'categories',
+        sa.column('id', postgresql.UUID(as_uuid=True)),
+        sa.column('name_ar', sa.String(length=100)),
+        sa.column('name_fr', sa.String(length=100)),
+        sa.column('description_ar', sa.Text()),
+        sa.column('description_fr', sa.Text()),
+        sa.column('is_active', sa.Boolean()),
+        sa.column('sort_order', sa.Integer()),
+    )
     op.execute(
         sa.insert(
-            sa.table('categories')
+            categories_table
         ).values(
             [
                 {

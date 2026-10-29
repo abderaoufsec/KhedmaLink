@@ -2,6 +2,7 @@
 // Handles API communication for dispute operations
 
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:khedmalink/core/config/app_config.dart';
 import 'package:khedmalink/core/models/dispute_models.dart';
@@ -10,12 +11,9 @@ import 'package:khedmalink/core/analytics/app_logger.dart';
 /// Dispute API service for dispute operations
 class DisputeApiService {
   final String _baseUrl;
-  final String _apiVersion;
   String? _authToken;
 
-  DisputeApiService()
-      : _baseUrl = AppConfig.apiBaseUrlDirect,
-        _apiVersion = AppConfig.apiVersion;
+  DisputeApiService() : _baseUrl = AppConfig.apiEndpoint;
 
   /// Set authentication token
   void setAuthToken(String token) {
@@ -29,9 +27,7 @@ class DisputeApiService {
 
   /// Get authorization headers
   Map<String, String> _getHeaders() {
-    final headers = <String, String>{
-      'Content-Type': 'application/json',
-    };
+    final headers = <String, String>{'Content-Type': 'application/json'};
     if (_authToken != null) {
       headers['Authorization'] = 'Bearer $_authToken';
     }
@@ -47,8 +43,8 @@ class DisputeApiService {
   }) async {
     try {
       AppLogger.info('Creating dispute for booking: $bookingId');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/disputes');
+
+      final uri = Uri.parse('$_baseUrl/disputes');
       final body = json.encode({
         'booking_id': bookingId,
         'dispute_type': disputeType.toJson(),
@@ -80,14 +76,14 @@ class DisputeApiService {
   }) async {
     try {
       AppLogger.info('Listing disputes: status=$statusFilter');
-      
+
       final queryParams = <String, String>{
         'page': page.toString(),
         'page_size': pageSize.toString(),
       };
       if (statusFilter != null) queryParams['status_filter'] = statusFilter;
 
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/disputes')
+      final uri = Uri.parse('$_baseUrl/disputes')
           .replace(queryParameters: queryParams);
 
       final response = await http.get(uri, headers: _getHeaders());
@@ -110,8 +106,8 @@ class DisputeApiService {
   Future<Dispute> getDispute(String disputeId) async {
     try {
       AppLogger.info('Getting dispute: $disputeId');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/disputes/$disputeId');
+
+      final uri = Uri.parse('$_baseUrl/disputes/$disputeId');
 
       final response = await http.get(uri, headers: _getHeaders());
 
@@ -136,13 +132,15 @@ class DisputeApiService {
   }) async {
     try {
       AppLogger.info('Updating dispute: $disputeId');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/disputes/$disputeId');
-      final body = json.encode({
-        if (response != null) 'response': response,
-      });
 
-      final httpResponse = await http.put(uri, headers: _getHeaders(), body: body);
+      final uri = Uri.parse('$_baseUrl/disputes/$disputeId');
+      final body = json.encode({if (response != null) 'response': response});
+
+      final httpResponse = await http.put(
+        uri,
+        headers: _getHeaders(),
+        body: body,
+      );
 
       if (httpResponse.statusCode == 200) {
         final data = json.decode(httpResponse.body) as Map<String, dynamic>;
@@ -170,8 +168,8 @@ class DisputeApiService {
   }) async {
     try {
       AppLogger.info('Adding evidence to dispute: $disputeId');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/disputes/$disputeId/evidence');
+
+      final uri = Uri.parse('$_baseUrl/disputes/$disputeId/evidence');
       final body = json.encode({
         'evidence_type': evidenceType,
         if (fileUrl != null) 'file_url': fileUrl,
@@ -201,8 +199,8 @@ class DisputeApiService {
   Future<DisputeEvidenceListResponse> listEvidence(String disputeId) async {
     try {
       AppLogger.info('Listing evidence for dispute: $disputeId');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/disputes/$disputeId/evidence');
+
+      final uri = Uri.parse('$_baseUrl/disputes/$disputeId/evidence');
 
       final response = await http.get(uri, headers: _getHeaders());
 

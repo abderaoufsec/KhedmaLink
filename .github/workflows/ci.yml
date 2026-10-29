@@ -19,7 +19,7 @@ on:
 
 # Environment variables
 env:
-  FLUTTER_VERSION: '3.24.0'
+  FLUTTER_VERSION: '3.47.4'
   PYTHON_VERSION: '3.11'
   NODE_VERSION: '18'
 
@@ -72,7 +72,7 @@ jobs:
       
       # Step 7: Upload Flutter coverage
       - name: Upload Flutter coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: frontend/coverage/lcov.info
           flags: flutter
@@ -149,7 +149,7 @@ jobs:
       
       # Step 8: Upload security report
       - name: Upload security report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: bandit-report
@@ -160,11 +160,10 @@ jobs:
         run: |
           cd backend
           pytest tests/ -v --cov=app --cov-report=xml --cov-report=html --tb=short
-        continue-on-error: true
       
       # Step 10: Upload Python coverage
       - name: Upload Python coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: backend/coverage.xml
           flags: python
@@ -173,7 +172,7 @@ jobs:
       
       # Step 11: Upload test results
       - name: Upload test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: python-test-results
@@ -224,7 +223,7 @@ jobs:
       # Step 4: Run database migrations
       - name: Run database migrations
         env:
-          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@localhost:5432/test_db
         run: |
           cd backend
           alembic upgrade head
@@ -232,7 +231,7 @@ jobs:
       # Step 5: Check migration status
       - name: Check migration status
         env:
-          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@localhost:5432/test_db
         run: |
           cd backend
           alembic current
@@ -293,7 +292,7 @@ jobs:
       
       # Step 3: Upload Trivy results to GitHub Security
       - name: Upload Trivy results
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
@@ -337,7 +336,7 @@ jobs:
       - name: Build Docker images
         run: |
           docker build -t khedmalink-backend:${{ github.sha }} -f backend/Dockerfile ./backend
-          docker build -t khedmlink-frontend:${{ github.sha }} -f frontend/Dockerfile ./frontend
+          docker build -t khedmalink-frontend:${{ github.sha }} -f frontend/Dockerfile ./frontend
       
       # Step 5: Push images (only on main)
       - name: Push Docker images

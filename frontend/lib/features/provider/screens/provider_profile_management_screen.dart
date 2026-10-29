@@ -65,10 +65,7 @@ class _ProviderProfileManagementScreenState
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadProfile,
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadProfile),
         ],
       ),
       body: _buildBody(context, language),
@@ -77,9 +74,7 @@ class _ProviderProfileManagementScreenState
 
   Widget _buildBody(BuildContext context, String language) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -95,10 +90,7 @@ class _ProviderProfileManagementScreenState
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadProfile,
-              child: const Text('Retry'),
-            ),
+            ElevatedButton(onPressed: _loadProfile, child: const Text('Retry')),
           ],
         ),
       );
@@ -109,11 +101,7 @@ class _ProviderProfileManagementScreenState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.person_outline,
-              size: 64,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.person_outline, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               language == 'ar' ? 'لا يوجد ملف شخصي' : 'Aucun profil',
@@ -141,21 +129,20 @@ class _ProviderProfileManagementScreenState
           // Business name
           Text(
             _profile!.businessName ?? 'Unknown',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(context).textTheme.headlineSmall
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           // Verification status
           _StatusBadge(status: _profile!.verificationStatus),
           const SizedBox(height: 16),
           // Description
-          if (_profile!.descriptionAr != null || _profile!.descriptionFr != null) ...[
+          if (_profile!.descriptionAr != null ||
+              _profile!.descriptionFr != null) ...[
             Text(
               language == 'ar' ? 'الوصف' : 'Description',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
@@ -205,9 +192,8 @@ class _ProviderProfileManagementScreenState
                   const SizedBox(width: 8),
                   Text(
                     '(${_profile!.totalReviews} reviews)',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey,
-                        ),
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: Colors.grey),
                   ),
                 ],
               ],
@@ -233,17 +219,13 @@ class _ProviderProfileManagementScreenState
             const SizedBox(width: 8),
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.only(left: 28),
-          child: child,
-        ),
+        Padding(padding: const EdgeInsets.only(left: 28), child: child),
       ],
     );
   }

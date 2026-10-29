@@ -54,14 +54,12 @@ class _DisputeListScreenState extends State<DisputeListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final language = Localizations.localeOf(context).languageCode == 'ar' ? 'ar' : 'fr';
-    
+    final language = Localizations.localeOf(context).languageCode == 'ar'
+        ? 'ar'
+        : 'fr';
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          language == 'ar' ? 'النزاعات' : 'Disputes',
-        ),
-      ),
+      appBar: AppBar(title: Text(language == 'ar' ? 'النزاعات' : 'Disputes')),
       body: _buildBody(context, language),
     );
   }
@@ -82,9 +80,7 @@ class _DisputeListScreenState extends State<DisputeListScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadDisputes,
-              child: Text(
-                language == 'ar' ? 'إعادة المحاولة' : 'Retry',
-              ),
+              child: Text(language == 'ar' ? 'إعادة المحاولة' : 'Retry'),
             ),
           ],
         ),
@@ -93,9 +89,7 @@ class _DisputeListScreenState extends State<DisputeListScreen> {
 
     if (_disputeList == null || _disputeList!.items.isEmpty) {
       return Center(
-        child: Text(
-          language == 'ar' ? 'لا توجد نزاعات' : 'No disputes found',
-        ),
+        child: Text(language == 'ar' ? 'لا توجد نزاعات' : 'No disputes found'),
       );
     }
 
@@ -115,7 +109,11 @@ class _DisputeListScreenState extends State<DisputeListScreen> {
     );
   }
 
-  Widget _buildDisputeCard(BuildContext context, Dispute dispute, String language) {
+  Widget _buildDisputeCard(
+    BuildContext context,
+    Dispute dispute,
+    String language,
+  ) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
@@ -167,7 +165,7 @@ class _DisputeListScreenState extends State<DisputeListScreen> {
 
   Widget _buildPagination(String language) {
     final totalPages = (_disputeList!.total / _pageSize).ceil();
-    
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(

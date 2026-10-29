@@ -11,13 +11,13 @@ class AdminDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final language = Localizations.localeOf(context).languageCode == 'ar' ? 'ar' : 'fr';
-    
+    final language = Localizations.localeOf(context).languageCode == 'ar'
+        ? 'ar'
+        : 'fr';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          language == 'ar' ? 'لوحة الإدارة' : 'Admin Dashboard',
-        ),
+        title: Text(language == 'ar' ? 'لوحة الإدارة' : 'Admin Dashboard'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -30,14 +30,18 @@ class AdminDashboardScreen extends StatelessWidget {
             context,
             icon: Icons.people,
             title: language == 'ar' ? 'قائمة المستخدمين' : 'User List',
-            subtitle: language == 'ar' ? 'عرض وإدارة جميع المستخدمين' : 'View and manage all users',
+            subtitle: language == 'ar'
+                ? 'عرض وإدارة جميع المستخدمين'
+                : 'View and manage all users',
             onTap: () => context.push('/admin/users'),
           ),
           _buildMenuItem(
             context,
             icon: Icons.verified_user,
             title: language == 'ar' ? 'قائمة التحقق' : 'Verification Queue',
-            subtitle: language == 'ar' ? 'الموافقة على طلبات التحقق' : 'Approve verification requests',
+            subtitle: language == 'ar'
+                ? 'الموافقة على طلبات التحقق'
+                : 'Approve verification requests',
             onTap: () => context.push('/admin/verification'),
           ),
           const SizedBox(height: 24),
@@ -49,7 +53,9 @@ class AdminDashboardScreen extends StatelessWidget {
             context,
             icon: Icons.delete,
             title: language == 'ar' ? 'حذف المحتوى' : 'Delete Content',
-            subtitle: language == 'ar' ? 'حذف التقييمات والطلبات' : 'Delete reviews and requests',
+            subtitle: language == 'ar'
+                ? 'حذف التقييمات والطلبات'
+                : 'Delete reviews and requests',
             onTap: () => context.push('/admin/content'),
           ),
           const SizedBox(height: 24),
@@ -61,7 +67,9 @@ class AdminDashboardScreen extends StatelessWidget {
             context,
             icon: Icons.history,
             title: language == 'ar' ? 'سجلات التدقيق' : 'Audit Logs',
-            subtitle: language == 'ar' ? 'عرض سجل الإجراءات الإدارية' : 'View admin action history',
+            subtitle: language == 'ar'
+                ? 'عرض سجل الإجراءات الإدارية'
+                : 'View admin action history',
             onTap: () => context.push('/admin/audit-logs'),
           ),
         ],
@@ -74,9 +82,8 @@ class AdminDashboardScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.titleMedium
+            ?.copyWith(fontWeight: FontWeight.bold),
       ),
     );
   }

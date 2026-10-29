@@ -54,8 +54,14 @@ void main() {
 
     test('screen breakpoints should be positive', () {
       expect(AppConstants.breakpointMobile, greaterThan(0));
-      expect(AppConstants.breakpointTablet, greaterThan(AppConstants.breakpointMobile));
-      expect(AppConstants.breakpointDesktop, greaterThan(AppConstants.breakpointTablet));
+      expect(
+        AppConstants.breakpointTablet,
+        greaterThan(AppConstants.breakpointMobile),
+      );
+      expect(
+        AppConstants.breakpointDesktop,
+        greaterThan(AppConstants.breakpointTablet),
+      );
     });
 
     test('avatar size constants should be positive', () {

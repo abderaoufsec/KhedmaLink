@@ -41,7 +41,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
     try {
       final booking = await _bookingService.getMyBooking(widget.bookingId);
       final events = await _bookingService.listBookingEvents(widget.bookingId);
-      
+
       if (mounted) {
         setState(() {
           _booking = booking;
@@ -70,10 +70,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadBooking,
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadBooking),
           IconButton(
             icon: const Icon(Icons.chat_bubble_outline),
             onPressed: () {
@@ -88,9 +85,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
 
   Widget _buildBody(BuildContext context, String language) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -106,19 +101,14 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadBooking,
-              child: const Text('Retry'),
-            ),
+            ElevatedButton(onPressed: _loadBooking, child: const Text('Retry')),
           ],
         ),
       );
     }
 
     if (_booking == null) {
-      return const Center(
-        child: Text('Booking not found'),
-      );
+      return const Center(child: Text('Booking not found'));
     }
 
     return SingleChildScrollView(
@@ -133,9 +123,9 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 child: Text(
                   _booking!.formattedPrice,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ),
               _BookingStatusBadge(status: _booking!.status),
@@ -218,16 +208,14 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
           const SizedBox(height: 16),
           Text(
             language == 'ar' ? 'تاريخ الإنشاء' : 'Date de création',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
             _booking!.createdAt,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.grey,
-                ),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: Colors.grey),
           ),
           const SizedBox(height: 24),
           // Action buttons
@@ -268,9 +256,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () => _showCancelDialog(context),
-                child: Text(
-                  language == 'ar' ? 'إلغاء الحجز' : 'Annuler',
-                ),
+                child: Text(language == 'ar' ? 'إلغاء الحجز' : 'Annuler'),
               ),
             ),
           if (_booking!.isDisputed || _booking!.isCompleted)
@@ -280,18 +266,15 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 onPressed: () {
                   context.push('/bookings/${widget.bookingId}/dispute');
                 },
-                child: Text(
-                  language == 'ar' ? 'رفع نزاع' : 'Raise Dispute',
-                ),
+                child: Text(language == 'ar' ? 'رفع نزاع' : 'Raise Dispute'),
               ),
             ),
           const SizedBox(height: 24),
           // Events timeline
           Text(
             language == 'ar' ? 'سجل الأحداث' : 'Historique des événements',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           if (_events.isEmpty)
@@ -329,17 +312,13 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
             const SizedBox(width: 8),
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.only(left: 28),
-          child: child,
-        ),
+        Padding(padding: const EdgeInsets.only(left: 28), child: child),
       ],
     );
   }
@@ -363,9 +342,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              language == 'ar' ? 'فشل بدء العمل: $e' : 'Échec: $e',
-            ),
+            content: Text(language == 'ar' ? 'فشل بدء العمل: $e' : 'Échec: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -408,11 +385,15 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(language == 'ar' ? 'إلغاء الحجز' : 'Annuler la réservation'),
+        title: Text(
+          language == 'ar' ? 'إلغاء الحجز' : 'Annuler la réservation',
+        ),
         content: TextField(
           controller: reasonController,
           decoration: InputDecoration(
-            labelText: language == 'ar' ? 'سبب الإلغاء' : 'Raison de l\'annulation',
+            labelText: language == 'ar'
+                ? 'سبب الإلغاء'
+                : 'Raison de l\'annulation',
             border: const OutlineInputBorder(),
           ),
           maxLines: 3,

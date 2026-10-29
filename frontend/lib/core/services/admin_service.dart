@@ -2,6 +2,7 @@
 // Handles API communication for admin operations
 
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:khedmalink/core/config/app_config.dart';
 import 'package:khedmalink/core/models/admin_models.dart';
@@ -10,12 +11,9 @@ import 'package:khedmalink/core/analytics/app_logger.dart';
 /// Admin API service for admin operations
 class AdminApiService {
   final String _baseUrl;
-  final String _apiVersion;
   String? _authToken;
 
-  AdminApiService()
-      : _baseUrl = AppConfig.apiBaseUrlDirect,
-        _apiVersion = AppConfig.apiVersion;
+  AdminApiService() : _baseUrl = AppConfig.apiEndpoint;
 
   /// Set authentication token
   void setAuthToken(String token) {
@@ -29,9 +27,7 @@ class AdminApiService {
 
   /// Get authorization headers
   Map<String, String> _getHeaders() {
-    final headers = <String, String>{
-      'Content-Type': 'application/json',
-    };
+    final headers = <String, String>{'Content-Type': 'application/json'};
     if (_authToken != null) {
       headers['Authorization'] = 'Bearer $_authToken';
     }
@@ -47,8 +43,10 @@ class AdminApiService {
     int pageSize = 20,
   }) async {
     try {
-      AppLogger.info('Listing users with filters: status=$status, role=$role, email=$email');
-      
+      AppLogger.info(
+        'Listing users with filters: status=$status, role=$role, email=$email',
+      );
+
       final queryParams = <String, String>{
         'page': page.toString(),
         'page_size': pageSize.toString(),
@@ -57,7 +55,7 @@ class AdminApiService {
       if (role != null) queryParams['role'] = role;
       if (email != null) queryParams['email'] = email;
 
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/admin/users')
+      final uri = Uri.parse('$_baseUrl/admin/users')
           .replace(queryParameters: queryParams);
 
       final response = await http.get(uri, headers: _getHeaders());
@@ -84,8 +82,8 @@ class AdminApiService {
   }) async {
     try {
       AppLogger.info('Updating user status: userId=$userId, status=$status');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/admin/users/status');
+
+      final uri = Uri.parse('$_baseUrl/admin/users/status');
       final body = json.encode({
         'user_id': userId,
         'status': status,
@@ -113,24 +111,30 @@ class AdminApiService {
   }) async {
     try {
       AppLogger.info('Listing verification queue');
-      
+
       final queryParams = <String, String>{
         'page': page.toString(),
         'page_size': pageSize.toString(),
       };
 
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/admin/verification/queue')
+      final uri = Uri.parse('$_baseUrl/admin/verification/queue')
           .replace(queryParameters: queryParams);
 
       final response = await http.get(uri, headers: _getHeaders());
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body) as Map<String, dynamic>;
-        AppLogger.info('Verification queue listed successfully: ${data['total']} total');
+        AppLogger.info(
+          'Verification queue listed successfully: ${data['total']} total',
+        );
         return VerificationQueueResponse.fromJson(data);
       } else {
-        AppLogger.error('Failed to list verification queue: ${response.statusCode}');
-        throw Exception('Failed to list verification queue: ${response.statusCode}');
+        AppLogger.error(
+          'Failed to list verification queue: ${response.statusCode}',
+        );
+        throw Exception(
+          'Failed to list verification queue: ${response.statusCode}',
+        );
       }
     } catch (e) {
       AppLogger.error('Error listing verification queue: $e');
@@ -145,9 +149,11 @@ class AdminApiService {
     String? reason,
   }) async {
     try {
-      AppLogger.info('Performing verification action: providerId=$providerId, action=$action');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/admin/verification/action');
+      AppLogger.info(
+        'Performing verification action: providerId=$providerId, action=$action',
+      );
+
+      final uri = Uri.parse('$_baseUrl/admin/verification/action');
       final body = json.encode({
         'provider_id': providerId,
         'action': action,
@@ -159,8 +165,12 @@ class AdminApiService {
       if (response.statusCode == 200) {
         AppLogger.info('Verification action performed successfully');
       } else {
-        AppLogger.error('Failed to perform verification action: ${response.statusCode}');
-        throw Exception('Failed to perform verification action: ${response.statusCode}');
+        AppLogger.error(
+          'Failed to perform verification action: ${response.statusCode}',
+        );
+        throw Exception(
+          'Failed to perform verification action: ${response.statusCode}',
+        );
       }
     } catch (e) {
       AppLogger.error('Error performing verification action: $e');
@@ -176,8 +186,8 @@ class AdminApiService {
   }) async {
     try {
       AppLogger.info('Deleting content: type=$resourceType, id=$resourceId');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/admin/content/delete');
+
+      final uri = Uri.parse('$_baseUrl/admin/content/delete');
       final body = json.encode({
         'resource_type': resourceType,
         'resource_id': resourceId,
@@ -206,21 +216,23 @@ class AdminApiService {
   }) async {
     try {
       AppLogger.info('Listing audit logs: actionType=$actionType');
-      
+
       final queryParams = <String, String>{
         'page': page.toString(),
         'page_size': pageSize.toString(),
       };
       if (actionType != null) queryParams['action_type'] = actionType;
 
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/admin/audit-logs')
+      final uri = Uri.parse('$_baseUrl/admin/audit-logs')
           .replace(queryParameters: queryParams);
 
       final response = await http.get(uri, headers: _getHeaders());
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body) as Map<String, dynamic>;
-        AppLogger.info('Audit logs listed successfully: ${data['total']} total');
+        AppLogger.info(
+          'Audit logs listed successfully: ${data['total']} total',
+        );
         return AuditLogListResponse.fromJson(data);
       } else {
         AppLogger.error('Failed to list audit logs: ${response.statusCode}');

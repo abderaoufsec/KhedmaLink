@@ -17,28 +17,28 @@ class AppTheme {
 
   /// Primary brand color (Modern Indigo for trust and professionalism)
   static const Color primaryColor = Color(0xFF6366F1); // Modern Indigo
-  
+
   /// Primary color variant (lighter shade)
   static const Color primaryLight = Color(0xFF818CF8);
-  
+
   /// Primary color variant (darker shade)
   static const Color primaryDark = Color(0xFF4F46E5);
 
   /// Secondary brand color (Modern Coral for action and warmth)
   static const Color secondaryColor = Color(0xFFF43F5E); // Modern Coral
-  
+
   /// Secondary color variant (lighter shade)
   static const Color secondaryLight = Color(0xFFFB7185);
-  
+
   /// Secondary color variant (darker shade)
   static const Color secondaryDark = Color(0xFFE11D48);
 
   /// Accent color (Teal for freshness and growth)
   static const Color accentColor = Color(0xFF14B8A6);
-  
+
   /// Accent light variant
   static const Color accentLight = Color(0xFF2DD4BF);
-  
+
   /// Accent dark variant
   static const Color accentDark = Color(0xFF0D9488);
 
@@ -46,15 +46,15 @@ class AppTheme {
   static const Color successColor = Color(0xFF10B981); // Emerald
   static const Color successLight = Color(0xFF34D399);
   static const Color successDark = Color(0xFF059669);
-  
+
   static const Color warningColor = Color(0xFFF59E0B); // Amber
   static const Color warningLight = Color(0xFFFBBF24);
   static const Color warningDark = Color(0xFFD97706);
-  
+
   static const Color errorColor = Color(0xFFEF4444); // Red
   static const Color errorLight = Color(0xFFF87171);
   static const Color errorDark = Color(0xFFDC2626);
-  
+
   static const Color infoColor = Color(0xFF3B82F6); // Blue
   static const Color infoLight = Color(0xFF60A5FA);
   static const Color infoDark = Color(0xFF2563EB);
@@ -181,25 +181,28 @@ class AppTheme {
 
     // Modern elevated button with gradient and shadows
     elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppConstants.spacingXl,
-          vertical: AppConstants.spacingLg,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-        ),
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
-        textStyle: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-        ),
-      ).copyWith(
-        overlayColor: WidgetStateProperty.all(primaryLight.withValues(alpha: 0.2)),
-      ),
+      style:
+          ElevatedButton.styleFrom(
+            elevation: 0,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingXl,
+              vertical: AppConstants.spacingLg,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+            ),
+            backgroundColor: primaryColor,
+            foregroundColor: Colors.white,
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.5,
+            ),
+          ).copyWith(
+            overlayColor: WidgetStateProperty.all(
+              primaryLight.withValues(alpha: 0.2),
+            ),
+          ),
     ),
 
     // Modern text button with refined styling
@@ -269,10 +272,7 @@ class AppTheme {
         horizontal: AppConstants.spacingLg,
         vertical: AppConstants.spacingLg,
       ),
-      hintStyle: TextStyle(
-        color: grey400,
-        fontSize: 15,
-      ),
+      hintStyle: TextStyle(color: grey400, fontSize: 15),
     ),
 
     // Modern text theme with refined typography
@@ -460,25 +460,28 @@ class AppTheme {
 
     // Modern dark elevated button
     elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppConstants.spacingXl,
-          vertical: AppConstants.spacingLg,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-        ),
-        backgroundColor: primaryLight,
-        foregroundColor: Colors.white,
-        textStyle: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-        ),
-      ).copyWith(
-        overlayColor: WidgetStateProperty.all(primaryColor.withValues(alpha: 0.2)),
-      ),
+      style:
+          ElevatedButton.styleFrom(
+            elevation: 0,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingXl,
+              vertical: AppConstants.spacingLg,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+            ),
+            backgroundColor: primaryLight,
+            foregroundColor: Colors.white,
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.5,
+            ),
+          ).copyWith(
+            overlayColor: WidgetStateProperty.all(
+              primaryColor.withValues(alpha: 0.2),
+            ),
+          ),
     ),
 
     // Modern dark text button
@@ -548,10 +551,7 @@ class AppTheme {
         horizontal: AppConstants.spacingLg,
         vertical: AppConstants.spacingLg,
       ),
-      hintStyle: TextStyle(
-        color: grey500,
-        fontSize: 15,
-      ),
+      hintStyle: TextStyle(color: grey500, fontSize: 15),
     ),
 
     // Modern dark text theme

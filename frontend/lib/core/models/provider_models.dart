@@ -131,7 +131,8 @@ class ProviderProfile {
       wilaya: json['wilaya'] as String?,
       address: json['address'] as String?,
       verificationStatus: json['verification_status'] as String,
-      verificationRejectionReason: json['verification_rejection_reason'] as String?,
+      verificationRejectionReason:
+          json['verification_rejection_reason'] as String?,
       isPublic: json['is_public'] as bool,
       isAvailable: json['is_available'] as bool,
       ratingAverage: (json['rating_average'] as num).toDouble(),

@@ -31,7 +31,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/disputes", response_model=DisputeResponse, status_code=status.HTTP_201_CREATED
+    "", response_model=DisputeResponse, status_code=status.HTTP_201_CREATED
 )
 async def create_dispute(
     dispute_data: DisputeCreate,
@@ -98,7 +98,7 @@ async def create_dispute(
     return new_dispute
 
 
-@router.get("/disputes", response_model=DisputeListResponse)
+@router.get("", response_model=DisputeListResponse)
 async def list_disputes(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -153,7 +153,7 @@ async def list_disputes(
     )
 
 
-@router.get("/disputes/{dispute_id}", response_model=DisputeResponse)
+@router.get("/{dispute_id}", response_model=DisputeResponse)
 async def get_dispute(
     dispute_id: str,
     current_user: User = Depends(get_current_user),
@@ -194,7 +194,7 @@ async def get_dispute(
     return dispute
 
 
-@router.put("/disputes/{dispute_id}", response_model=DisputeResponse)
+@router.put("/{dispute_id}", response_model=DisputeResponse)
 async def update_dispute(
     dispute_id: str,
     update_data: DisputeUpdate,
@@ -244,7 +244,7 @@ async def update_dispute(
     return dispute
 
 
-@router.post("/disputes/{dispute_id}/resolve", response_model=DisputeResponse)
+@router.post("/{dispute_id}/resolve", response_model=DisputeResponse)
 async def resolve_dispute(
     dispute_id: str,
     resolve_data: DisputeResolve,
@@ -295,7 +295,7 @@ async def resolve_dispute(
 
 
 @router.post(
-    "/disputes/{dispute_id}/evidence",
+    "/{dispute_id}/evidence",
     response_model=DisputeEvidenceResponse,
     status_code=status.HTTP_201_CREATED,
 )
@@ -352,7 +352,7 @@ async def add_evidence(
 
 
 @router.get(
-    "/disputes/{dispute_id}/evidence", response_model=DisputeEvidenceListResponse
+    "/{dispute_id}/evidence", response_model=DisputeEvidenceListResponse
 )
 async def list_evidence(
     dispute_id: str,

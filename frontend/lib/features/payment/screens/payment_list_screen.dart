@@ -54,14 +54,12 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final language = Localizations.localeOf(context).languageCode == 'ar' ? 'ar' : 'fr';
-    
+    final language = Localizations.localeOf(context).languageCode == 'ar'
+        ? 'ar'
+        : 'fr';
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          language == 'ar' ? 'المدفوعات' : 'Payments',
-        ),
-      ),
+      appBar: AppBar(title: Text(language == 'ar' ? 'المدفوعات' : 'Payments')),
       body: _buildBody(context, language),
     );
   }
@@ -82,9 +80,7 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadPayments,
-              child: Text(
-                language == 'ar' ? 'إعادة المحاولة' : 'Retry',
-              ),
+              child: Text(language == 'ar' ? 'إعادة المحاولة' : 'Retry'),
             ),
           ],
         ),
@@ -93,9 +89,7 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
 
     if (_paymentList == null || _paymentList!.items.isEmpty) {
       return Center(
-        child: Text(
-          language == 'ar' ? 'لا توجد مدفوعات' : 'No payments found',
-        ),
+        child: Text(language == 'ar' ? 'لا توجد مدفوعات' : 'No payments found'),
       );
     }
 
@@ -115,7 +109,11 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
     );
   }
 
-  Widget _buildPaymentCard(BuildContext context, Payment payment, String language) {
+  Widget _buildPaymentCard(
+    BuildContext context,
+    Payment payment,
+    String language,
+  ) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
@@ -125,7 +123,9 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
           children: [
             Text(payment.paymentMethod.getDisplayName(language)),
             Text(payment.status.getDisplayName(language)),
-            Text('${language == 'ar' ? 'العمولة' : 'Commission'}: ${payment.formattedCommissionAmount}'),
+            Text(
+              '${language == 'ar' ? 'العمولة' : 'Commission'}: ${payment.formattedCommissionAmount}',
+            ),
           ],
         ),
         trailing: Icon(
@@ -176,7 +176,7 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
 
   Widget _buildPagination(String language) {
     final totalPages = (_paymentList!.total / _pageSize).ceil();
-    
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(

@@ -16,8 +16,8 @@ class QuoteApiService {
 
   /// Constructor
   QuoteApiService({http.Client? client, AuthService? authService})
-      : _client = client ?? http.Client(),
-        _authService = authService ?? AuthService();
+    : _client = client ?? http.Client(),
+      _authService = authService ?? AuthService();
 
   /// Get base URL from config
   String get _baseUrl => AppConfig.apiBaseUrlDirect;
@@ -60,18 +60,15 @@ class QuoteApiService {
       final uri = Uri.parse('$_baseUrl/api/v1/quotes/me/quotes')
           .replace(queryParameters: queryParams);
 
-      final response = await _client.get(
-        uri,
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(uri, headers: await _getAuthHeaders())
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as List;
-        final quotes =
-            data.map((item) => Quote.fromJson(item as Map<String, dynamic>))
-                .toList();
+        final quotes = data
+            .map((item) => Quote.fromJson(item as Map<String, dynamic>))
+            .toList();
 
         AppLogger.info('My quotes fetched successfully: ${quotes.length}');
         return quotes;
@@ -80,7 +77,9 @@ class QuoteApiService {
         throw Exception('Unauthorized');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch quotes: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch quotes: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch quotes');
       }
     } catch (e) {
@@ -104,23 +103,28 @@ class QuoteApiService {
     try {
       AppLogger.info('Creating quote');
 
-      final response = await _client.post(
-        Uri.parse('$_baseUrl/api/v1/quotes/me/quotes'),
-        headers: await _getAuthHeaders(),
-        body: jsonEncode({
-          'request_id': requestId,
-          if (description?.isNotEmpty == true) 'description': description,
-          'estimated_price': estimatedPrice,
-          'currency': currency,
-          if (estimatedDuration != null) 'estimated_duration': estimatedDuration,
-          if (estimatedDurationUnit?.isNotEmpty == true) 'estimated_duration_unit': estimatedDurationUnit,
-          if (availableDate != null) 'available_date': availableDate.toIso8601String(),
-          if (availableTimeStart?.isNotEmpty == true) 'available_time_start': availableTimeStart,
-          if (availableTimeEnd?.isNotEmpty == true) 'available_time_end': availableTimeEnd,
-        }),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .post(
+            Uri.parse('$_baseUrl/api/v1/quotes/me/quotes'),
+            headers: await _getAuthHeaders(),
+            body: jsonEncode({
+              'request_id': requestId,
+              if (description?.isNotEmpty == true) 'description': description,
+              'estimated_price': estimatedPrice,
+              'currency': currency,
+              if (estimatedDuration != null)
+                'estimated_duration': estimatedDuration,
+              if (estimatedDurationUnit?.isNotEmpty == true)
+                'estimated_duration_unit': estimatedDurationUnit,
+              if (availableDate != null)
+                'available_date': availableDate.toIso8601String(),
+              if (availableTimeStart?.isNotEmpty == true)
+                'available_time_start': availableTimeStart,
+              if (availableTimeEnd?.isNotEmpty == true)
+                'available_time_end': availableTimeEnd,
+            }),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -136,7 +140,9 @@ class QuoteApiService {
         throw Exception('Service request not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to create quote: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to create quote: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to create quote');
       }
     } catch (e) {
@@ -150,12 +156,12 @@ class QuoteApiService {
     try {
       AppLogger.info('Fetching quote: $quoteId');
 
-      final response = await _client.get(
-        Uri.parse('$_baseUrl/api/v1/quotes/me/quotes/$quoteId'),
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(
+            Uri.parse('$_baseUrl/api/v1/quotes/me/quotes/$quoteId'),
+            headers: await _getAuthHeaders(),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -171,7 +177,9 @@ class QuoteApiService {
         throw Exception('Quote not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch quote: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch quote: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch quote');
       }
     } catch (e) {
@@ -196,23 +204,28 @@ class QuoteApiService {
     try {
       AppLogger.info('Updating quote: $quoteId');
 
-      final response = await _client.put(
-        Uri.parse('$_baseUrl/api/v1/quotes/me/quotes/$quoteId'),
-        headers: await _getAuthHeaders(),
-        body: jsonEncode({
-          if (description?.isNotEmpty == true) 'description': description,
-          if (estimatedPrice != null) 'estimated_price': estimatedPrice,
-          if (currency?.isNotEmpty == true) 'currency': currency,
-          if (estimatedDuration != null) 'estimated_duration': estimatedDuration,
-          if (estimatedDurationUnit?.isNotEmpty == true) 'estimated_duration_unit': estimatedDurationUnit,
-          if (availableDate != null) 'available_date': availableDate.toIso8601String(),
-          if (availableTimeStart?.isNotEmpty == true) 'available_time_start': availableTimeStart,
-          if (availableTimeEnd?.isNotEmpty == true) 'available_time_end': availableTimeEnd,
-          if (status != null) 'status': status,
-        }),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .put(
+            Uri.parse('$_baseUrl/api/v1/quotes/me/quotes/$quoteId'),
+            headers: await _getAuthHeaders(),
+            body: jsonEncode({
+              if (description?.isNotEmpty == true) 'description': description,
+              if (estimatedPrice != null) 'estimated_price': estimatedPrice,
+              if (currency?.isNotEmpty == true) 'currency': currency,
+              if (estimatedDuration != null)
+                'estimated_duration': estimatedDuration,
+              if (estimatedDurationUnit?.isNotEmpty == true)
+                'estimated_duration_unit': estimatedDurationUnit,
+              if (availableDate != null)
+                'available_date': availableDate.toIso8601String(),
+              if (availableTimeStart?.isNotEmpty == true)
+                'available_time_start': availableTimeStart,
+              if (availableTimeEnd?.isNotEmpty == true)
+                'available_time_end': availableTimeEnd,
+              if (status != null) 'status': status,
+            }),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -228,7 +241,9 @@ class QuoteApiService {
         throw Exception('Quote not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to update quote: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to update quote: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to update quote');
       }
     } catch (e) {
@@ -242,12 +257,12 @@ class QuoteApiService {
     try {
       AppLogger.info('Deleting quote: $quoteId');
 
-      final response = await _client.delete(
-        Uri.parse('$_baseUrl/api/v1/quotes/me/quotes/$quoteId'),
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .delete(
+            Uri.parse('$_baseUrl/api/v1/quotes/me/quotes/$quoteId'),
+            headers: await _getAuthHeaders(),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 204) {
         AppLogger.info('Quote deleted successfully: $quoteId');
@@ -259,7 +274,9 @@ class QuoteApiService {
         throw Exception('Quote not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to delete quote: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to delete quote: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to delete quote');
       }
     } catch (e) {
@@ -277,18 +294,18 @@ class QuoteApiService {
     try {
       AppLogger.info('Fetching quotes for request: $requestId');
 
-      final response = await _client.get(
-        Uri.parse('$_baseUrl/api/v1/quotes/me/requests/$requestId/quotes'),
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(
+            Uri.parse('$_baseUrl/api/v1/quotes/me/requests/$requestId/quotes'),
+            headers: await _getAuthHeaders(),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as List;
-        final quotes =
-            data.map((item) => Quote.fromJson(item as Map<String, dynamic>))
-                .toList();
+        final quotes = data
+            .map((item) => Quote.fromJson(item as Map<String, dynamic>))
+            .toList();
 
         AppLogger.info('Request quotes fetched successfully: ${quotes.length}');
         return quotes;
@@ -300,7 +317,9 @@ class QuoteApiService {
         throw Exception('Service request not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch request quotes: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch request quotes: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch request quotes');
       }
     } catch (e) {
@@ -314,12 +333,14 @@ class QuoteApiService {
     try {
       AppLogger.info('Accepting quote: $quoteId for request: $requestId');
 
-      final response = await _client.post(
-        Uri.parse('$_baseUrl/api/v1/quotes/me/requests/$requestId/quotes/$quoteId/accept'),
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .post(
+            Uri.parse(
+              '$_baseUrl/api/v1/quotes/me/requests/$requestId/quotes/$quoteId/accept',
+            ),
+            headers: await _getAuthHeaders(),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -335,7 +356,9 @@ class QuoteApiService {
         throw Exception('Quote or request not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to accept quote: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to accept quote: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to accept quote');
       }
     } catch (e) {
@@ -365,28 +388,31 @@ class QuoteApiService {
       final uri = Uri.parse('$_baseUrl/api/v1/quotes/me/eligible-requests')
           .replace(queryParameters: queryParams);
 
-      final response = await _client.get(
-        uri,
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(uri, headers: await _getAuthHeaders())
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as List;
-        final matches =
-            data.map((item) => RequestMatch.fromJson(item as Map<String, dynamic>))
-                .toList();
+        final matches = data
+            .map((item) => RequestMatch.fromJson(item as Map<String, dynamic>))
+            .toList();
 
-        AppLogger.info('Eligible requests fetched successfully: ${matches.length}');
+        AppLogger.info(
+          'Eligible requests fetched successfully: ${matches.length}',
+        );
         return matches;
       } else if (response.statusCode == 401) {
         AppLogger.error('Unauthorized access to eligible requests');
         throw Exception('Unauthorized');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch eligible requests: ${error?['detail'] ?? 'Unknown error'}');
-        throw Exception(error?['detail'] ?? 'Failed to fetch eligible requests');
+        AppLogger.error(
+          'Failed to fetch eligible requests: ${error?['detail'] ?? 'Unknown error'}',
+        );
+        throw Exception(
+          error?['detail'] ?? 'Failed to fetch eligible requests',
+        );
       }
     } catch (e) {
       AppLogger.error('Fetch eligible requests error: $e');

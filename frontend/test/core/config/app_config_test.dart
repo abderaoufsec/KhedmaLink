@@ -39,7 +39,10 @@ void main() {
 
     test('api endpoint should include version', () {
       // Accept localhost and emulator IP for testing
-      final validEndpoints = ['http://localhost:8000/api/v1', 'http://10.0.2.2:8000/api/v1'];
+      final validEndpoints = [
+        'http://localhost:8000/api/v1',
+        'http://10.0.2.2:8000/api/v1',
+      ];
       expect(validEndpoints.contains(AppConfig.apiEndpoint), true);
     });
 

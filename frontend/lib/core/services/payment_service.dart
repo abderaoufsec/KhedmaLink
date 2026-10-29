@@ -2,6 +2,7 @@
 // Handles API communication for payment operations
 
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:khedmalink/core/config/app_config.dart';
 import 'package:khedmalink/core/models/payment_models.dart';
@@ -10,12 +11,9 @@ import 'package:khedmalink/core/analytics/app_logger.dart';
 /// Payment API service for payment operations
 class PaymentApiService {
   final String _baseUrl;
-  final String _apiVersion;
   String? _authToken;
 
-  PaymentApiService()
-      : _baseUrl = AppConfig.apiBaseUrlDirect,
-        _apiVersion = AppConfig.apiVersion;
+  PaymentApiService() : _baseUrl = AppConfig.apiEndpoint;
 
   /// Set authentication token
   void setAuthToken(String token) {
@@ -29,9 +27,7 @@ class PaymentApiService {
 
   /// Get authorization headers
   Map<String, String> _getHeaders() {
-    final headers = <String, String>{
-      'Content-Type': 'application/json',
-    };
+    final headers = <String, String>{'Content-Type': 'application/json'};
     if (_authToken != null) {
       headers['Authorization'] = 'Bearer $_authToken';
     }
@@ -46,8 +42,8 @@ class PaymentApiService {
   }) async {
     try {
       AppLogger.info('Creating payment for booking: $bookingId');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/payments');
+
+      final uri = Uri.parse('$_baseUrl/payments');
       final body = json.encode({
         'booking_id': bookingId,
         'payment_method': paymentMethod.toJson(),
@@ -78,14 +74,14 @@ class PaymentApiService {
   }) async {
     try {
       AppLogger.info('Listing payments: status=$statusFilter');
-      
+
       final queryParams = <String, String>{
         'page': page.toString(),
         'page_size': pageSize.toString(),
       };
       if (statusFilter != null) queryParams['status_filter'] = statusFilter;
 
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/payments')
+      final uri = Uri.parse('$_baseUrl/payments')
           .replace(queryParameters: queryParams);
 
       final response = await http.get(uri, headers: _getHeaders());
@@ -108,8 +104,8 @@ class PaymentApiService {
   Future<Payment> getPayment(String paymentId) async {
     try {
       AppLogger.info('Getting payment: $paymentId');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/payments/$paymentId');
+
+      final uri = Uri.parse('$_baseUrl/payments/$paymentId');
 
       final response = await http.get(uri, headers: _getHeaders());
 
@@ -131,8 +127,8 @@ class PaymentApiService {
   Future<TransactionListResponse> listTransactions(String paymentId) async {
     try {
       AppLogger.info('Listing transactions for payment: $paymentId');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/payments/$paymentId/transactions');
+
+      final uri = Uri.parse('$_baseUrl/payments/$paymentId/transactions');
 
       final response = await http.get(uri, headers: _getHeaders());
 
@@ -154,8 +150,8 @@ class PaymentApiService {
   Future<PayoutListResponse> listPayouts(String paymentId) async {
     try {
       AppLogger.info('Listing payouts for payment: $paymentId');
-      
-      final uri = Uri.parse('$_baseUrl/$_apiVersion/payments/$paymentId/payouts');
+
+      final uri = Uri.parse('$_baseUrl/payments/$paymentId/payouts');
 
       final response = await http.get(uri, headers: _getHeaders());
 

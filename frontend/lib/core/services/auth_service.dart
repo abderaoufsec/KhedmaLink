@@ -52,7 +52,9 @@ class AuthService {
         return data;
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Registration failed: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Registration failed: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Registration failed');
       }
     } catch (e) {
@@ -127,7 +129,9 @@ class AuthService {
         return data;
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Token refresh failed: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Token refresh failed: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Token refresh failed');
       }
     } catch (e) {
@@ -179,7 +183,9 @@ class AuthService {
         return data;
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch user profile: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch user profile: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch user profile');
       }
     } catch (e) {
@@ -211,7 +217,9 @@ class AuthService {
         return data;
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Profile update failed: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Profile update failed: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Profile update failed');
       }
     } catch (e) {
@@ -241,7 +249,9 @@ class AuthService {
         AppLogger.info('Password changed successfully');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Password change failed: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Password change failed: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Password change failed');
       }
     } catch (e) {

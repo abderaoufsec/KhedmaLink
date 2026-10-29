@@ -48,12 +48,13 @@ class _RegisterScreenState extends State<RegisterScreen>
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
-    );
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     _animationController.forward();
   }
@@ -199,7 +200,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                         Text(
                           'Join KhedmaLink today',
                           style: theme.textTheme.bodyLarge?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.7,
+                            ),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -214,7 +217,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                               color: AppTheme.errorColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: AppTheme.errorColor.withValues(alpha: 0.3),
+                                color: AppTheme.errorColor.withValues(
+                                  alpha: 0.3,
+                                ),
                                 width: 1,
                               ),
                             ),
@@ -363,7 +368,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                               ),
                               onPressed: () {
                                 setState(() {
-                                  _obscureConfirmPassword = !_obscureConfirmPassword;
+                                  _obscureConfirmPassword =
+                                      !_obscureConfirmPassword;
                                 });
                               },
                             ),
@@ -387,12 +393,14 @@ class _RegisterScreenState extends State<RegisterScreen>
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: isDark 
+                            color: isDark
                                 ? AppTheme.grey800.withValues(alpha: 0.5)
                                 : Colors.white.withValues(alpha: 0.8),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: theme.colorScheme.outline.withValues(alpha: 0.3),
+                              color: theme.colorScheme.outline.withValues(
+                                alpha: 0.3,
+                              ),
                             ),
                           ),
                           child: Row(
@@ -404,7 +412,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     _agreeToTerms = value ?? false;
                                   });
                                 },
-                                fillColor: WidgetStateProperty.resolveWith((states) {
+                                fillColor: WidgetStateProperty.resolveWith((
+                                  states,
+                                ) {
                                   if (states.contains(WidgetState.selected)) {
                                     return AppTheme.secondaryColor;
                                   }
@@ -477,8 +487,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                             Text(
                               "Already have an account? ",
                               style: TextStyle(
-                                color: theme.colorScheme.onSurface
-                                    .withValues(alpha: 0.7),
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.7,
+                                ),
                                 fontSize: 15,
                               ),
                             ),

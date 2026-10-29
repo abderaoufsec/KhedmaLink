@@ -64,9 +64,8 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
               // Category selection
               Text(
                 language == 'ar' ? 'الفئة' : 'Catégorie',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(context).textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
@@ -89,7 +88,9 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return language == 'ar' ? 'هذا الحقل مطلوب' : 'This field is required';
+                    return language == 'ar'
+                        ? 'هذا الحقل مطلوب'
+                        : 'This field is required';
                   }
                   return null;
                 },
@@ -104,7 +105,9 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return language == 'ar' ? 'هذا الحقل مطلوب' : 'This field is required';
+                    return language == 'ar'
+                        ? 'هذا الحقل مطلوب'
+                        : 'This field is required';
                   }
                   return null;
                 },
@@ -120,7 +123,9 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                 maxLines: 4,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return language == 'ar' ? 'هذا الحقل مطلوب' : 'This field is required';
+                    return language == 'ar'
+                        ? 'هذا الحقل مطلوب'
+                        : 'This field is required';
                   }
                   return null;
                 },
@@ -135,7 +140,9 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return language == 'ar' ? 'هذا الحقل مطلوب' : 'This field is required';
+                    return language == 'ar'
+                        ? 'هذا الحقل مطلوب'
+                        : 'This field is required';
                   }
                   return null;
                 },
@@ -150,7 +157,9 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return language == 'ar' ? 'هذا الحقل مطلوب' : 'This field is required';
+                    return language == 'ar'
+                        ? 'هذا الحقل مطلوب'
+                        : 'This field is required';
                   }
                   return null;
                 },
@@ -182,9 +191,7 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
               const SizedBox(height: 16),
               // Flexible schedule
               SwitchListTile(
-                title: Text(
-                  language == 'ar' ? 'جدول مرن' : 'Horaire flexible',
-                ),
+                title: Text(language == 'ar' ? 'جدول مرن' : 'Horaire flexible'),
                 subtitle: Text(
                   language == 'ar'
                       ? 'أنا مرن بخصوص الوقت'
@@ -201,29 +208,16 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
               // Urgency
               Text(
                 language == 'ar' ? 'الاستعجال' : 'Urgence',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(context).textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               SegmentedButton<String>(
                 segments: const [
-                  ButtonSegment(
-                    value: 'low',
-                    label: Text('Low'),
-                  ),
-                  ButtonSegment(
-                    value: 'medium',
-                    label: Text('Medium'),
-                  ),
-                  ButtonSegment(
-                    value: 'high',
-                    label: Text('High'),
-                  ),
-                  ButtonSegment(
-                    value: 'urgent',
-                    label: Text('Urgent'),
-                  ),
+                  ButtonSegment(value: 'low', label: Text('Low')),
+                  ButtonSegment(value: 'medium', label: Text('Medium')),
+                  ButtonSegment(value: 'high', label: Text('High')),
+                  ButtonSegment(value: 'urgent', label: Text('Urgent')),
                 ],
                 selected: {_urgency},
                 onSelectionChanged: (Set<String> newSelection) {
@@ -240,7 +234,9 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                     child: TextFormField(
                       controller: _budgetMinController,
                       decoration: InputDecoration(
-                        labelText: language == 'ar' ? 'الحد الأدنى للميزانية' : 'Budget min',
+                        labelText: language == 'ar'
+                            ? 'الحد الأدنى للميزانية'
+                            : 'Budget min',
                         border: const OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
@@ -251,7 +247,9 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                     child: TextFormField(
                       controller: _budgetMaxController,
                       decoration: InputDecoration(
-                        labelText: language == 'ar' ? 'الحد الأقصى للميزانية' : 'Budget max',
+                        labelText: language == 'ar'
+                            ? 'الحد الأقصى للميزانية'
+                            : 'Budget max',
                         border: const OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
@@ -272,7 +270,9 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : Text(
-                          language == 'ar' ? 'إرسال الطلب' : 'Envoyer la demande',
+                          language == 'ar'
+                              ? 'إرسال الطلب'
+                              : 'Envoyer la demande',
                         ),
                 ),
               ),
@@ -309,7 +309,7 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
 
     try {
       final requestService = api.RequestApiService();
-      
+
       final budgetMin = _budgetMinController.text.isEmpty
           ? null
           : double.tryParse(_budgetMinController.text);
@@ -337,7 +337,9 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              language == 'ar' ? 'تم إنشاء الطلب بنجاح' : 'Service request created successfully',
+              language == 'ar'
+                  ? 'تم إنشاء الطلب بنجاح'
+                  : 'Service request created successfully',
             ),
             backgroundColor: Colors.green,
           ),

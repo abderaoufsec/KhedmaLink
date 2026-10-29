@@ -6,8 +6,8 @@ Creates all database tables and seeds default data
 import asyncio
 from sqlalchemy import select
 from app.core.database import engine, Base, AsyncSessionLocal
-from app.core.models.user import User, Role, user_roles
-from app.core.models.provider import Category
+import app.core.models  # noqa: F401 - registers every model with Base.metadata
+from app.core.models.user import Role
 from app.core.logging import get_logger
 import uuid
 from datetime import datetime, timezone
@@ -17,19 +17,9 @@ logger = get_logger(__name__)
 
 async def init_database():
     """Initialize database with all tables and seed data"""
-    
-    # Import all models to ensure they're registered with Base
-    from app.core.models.user import User, Role
-    from app.core.models.provider import Category
-    from app.core.models.request import ServiceRequest
-    from app.core.models.quote import Quote
-    from app.core.models.booking import Booking
-    from app.core.models.message import Message
-    from app.core.models.review import Review
-    from app.core.models.dispute import Dispute
-    from app.core.models.payment import Payment
-    
-    # Create all tables
+
+    # Create all tables. Importing app.core.models above ensures every model,
+    # including AuditLog and the provider tables, is registered on Base.metadata.
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     

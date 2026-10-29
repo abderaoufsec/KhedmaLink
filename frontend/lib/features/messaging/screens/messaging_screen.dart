@@ -48,7 +48,9 @@ class _MessagingScreenState extends State<MessagingScreen> {
     });
 
     try {
-      final messages = await _messagingService.listBookingMessages(widget.bookingId);
+      final messages = await _messagingService.listBookingMessages(
+        widget.bookingId,
+      );
       if (mounted) {
         setState(() {
           _messages = messages;
@@ -87,7 +89,10 @@ class _MessagingScreenState extends State<MessagingScreen> {
     });
 
     try {
-      final message = await _messagingService.createMessage(widget.bookingId, content);
+      final message = await _messagingService.createMessage(
+        widget.bookingId,
+        content,
+      );
       if (mounted) {
         setState(() {
           _messages.add(message);
@@ -105,7 +110,9 @@ class _MessagingScreenState extends State<MessagingScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              language == 'ar' ? 'فشل إرسال الرسالة: $e' : 'Failed to send message: $e',
+              language == 'ar'
+                  ? 'فشل إرسال الرسالة: $e'
+                  : 'Failed to send message: $e',
             ),
             backgroundColor: Colors.red,
           ),
@@ -124,17 +131,12 @@ class _MessagingScreenState extends State<MessagingScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadMessages,
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadMessages),
         ],
       ),
       body: Column(
         children: [
-          Expanded(
-            child: _buildMessagesList(context, language),
-          ),
+          Expanded(child: _buildMessagesList(context, language)),
           _buildMessageInput(context, language),
         ],
       ),
@@ -143,9 +145,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
 
   Widget _buildMessagesList(BuildContext context, String language) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -175,11 +175,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.chat_bubble_outline,
-              size: 64,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.chat_bubble_outline, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               language == 'ar' ? 'لا توجد رسائل' : 'No messages',
@@ -203,10 +199,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
       itemCount: _messages.length,
       itemBuilder: (context, index) {
         final message = _messages[index];
-        return _MessageBubble(
-          message: message,
-          language: language,
-        );
+        return _MessageBubble(message: message, language: language);
       },
     );
   }
@@ -230,7 +223,9 @@ class _MessagingScreenState extends State<MessagingScreen> {
             child: TextField(
               controller: _messageController,
               decoration: InputDecoration(
-                hintText: language == 'ar' ? 'اكتب رسالة...' : 'Type a message...',
+                hintText: language == 'ar'
+                    ? 'اكتب رسالة...'
+                    : 'Type a message...',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -269,10 +264,7 @@ class _MessageBubble extends StatelessWidget {
   final models.Message message;
   final String language;
 
-  const _MessageBubble({
-    required this.message,
-    required this.language,
-  });
+  const _MessageBubble({required this.message, required this.language});
 
   @override
   Widget build(BuildContext context) {
@@ -312,7 +304,8 @@ class _MessageBubble extends StatelessWidget {
                 fontSize: 12,
                 color: isFromSelf
                     ? Theme.of(context).colorScheme.onPrimary.withOpacity(0.7)
-                    : Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.7),
+                    : Theme.of(context).colorScheme.onSurfaceVariant
+                          .withOpacity(0.7),
               ),
             ),
           ],

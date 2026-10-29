@@ -207,7 +207,9 @@ class AppNotification {
   }
 
   /// Check if notification is about a quote
-  bool get isAboutQuote => notificationType == 'quote_received' || notificationType == 'quote_accepted';
+  bool get isAboutQuote =>
+      notificationType == 'quote_received' ||
+      notificationType == 'quote_accepted';
 
   /// Check if notification is about a booking
   bool get isAboutBooking => notificationType.startsWith('booking_');

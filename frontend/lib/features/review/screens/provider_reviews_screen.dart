@@ -38,9 +38,13 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
     });
 
     try {
-      final reviews = await _reviewService.listProviderReviews(widget.providerId);
-      final reputation = await _reviewService.getProviderReputation(widget.providerId);
-      
+      final reviews = await _reviewService.listProviderReviews(
+        widget.providerId,
+      );
+      final reputation = await _reviewService.getProviderReputation(
+        widget.providerId,
+      );
+
       if (mounted) {
         setState(() {
           _reviews = reviews;
@@ -69,10 +73,7 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadData,
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadData),
         ],
       ),
       body: _buildBody(context, language),
@@ -81,9 +82,7 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
 
   Widget _buildBody(BuildContext context, String language) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -99,10 +98,7 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadData,
-              child: const Text('Retry'),
-            ),
+            ElevatedButton(onPressed: _loadData, child: const Text('Retry')),
           ],
         ),
       );
@@ -114,7 +110,8 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
         padding: const EdgeInsets.all(16),
         children: [
           // Reputation summary
-          if (_reputation != null) _ReputationCard(reputation: _reputation!, language: language),
+          if (_reputation != null)
+            _ReputationCard(reputation: _reputation!, language: language),
           const SizedBox(height: 16),
           // Reviews list
           if (_reviews.isEmpty)
@@ -143,7 +140,9 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
               ),
             )
           else
-            ..._reviews.map((review) => _ReviewCard(review: review, language: language)),
+            ..._reviews.map(
+              (review) => _ReviewCard(review: review, language: language),
+            ),
         ],
       ),
     );
@@ -154,10 +153,7 @@ class _ReputationCard extends StatelessWidget {
   final ProviderReputation reputation;
   final String language;
 
-  const _ReputationCard({
-    required this.reputation,
-    required this.language,
-  });
+  const _ReputationCard({required this.reputation, required this.language});
 
   @override
   Widget build(BuildContext context) {
@@ -174,9 +170,9 @@ class _ReputationCard extends StatelessWidget {
                 Text(
                   reputation.formattedAverageRating,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 ...List.generate(5, (index) {
@@ -194,18 +190,16 @@ class _ReputationCard extends StatelessWidget {
             // Total reviews
             Text(
               '${reputation.totalReviews} ${language == 'ar' ? 'تقييم' : 'reviews'}',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey[600],
-                  ),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: Colors.grey[600]),
             ),
             const SizedBox(height: 12),
             // Badges
             if (reputation.badges.isNotEmpty) ...[
               Text(
                 language == 'ar' ? 'الشارات' : 'Badges',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(context).textTheme.titleSmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Wrap(
@@ -214,7 +208,9 @@ class _ReputationCard extends StatelessWidget {
                 children: reputation.badges.map((badge) {
                   return Chip(
                     label: Text(badge),
-                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                    backgroundColor: Theme.of(context)
+                        .colorScheme
+                        .primaryContainer,
                   );
                 }).toList(),
               ),
@@ -230,10 +226,7 @@ class _ReviewCard extends StatelessWidget {
   final Review review;
   final String language;
 
-  const _ReviewCard({
-    required this.review,
-    required this.language,
-  });
+  const _ReviewCard({required this.review, required this.language});
 
   @override
   Widget build(BuildContext context) {
@@ -258,9 +251,8 @@ class _ReviewCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   review.createdAt.toString().split(' ')[0],
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey[600],
-                      ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -269,9 +261,8 @@ class _ReviewCard extends StatelessWidget {
             if (review.title != null) ...[
               Text(
                 review.title!,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(context).textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
             ],
@@ -289,30 +280,30 @@ class _ReviewCard extends StatelessWidget {
                 runSpacing: 8,
                 children: [
                   if (review.professionalism != null)
-                  _CategoryBadge(
-                    label: language == 'ar' ? 'احتراف' : 'Professionalism',
-                    rating: review.professionalism!,
-                  ),
+                    _CategoryBadge(
+                      label: language == 'ar' ? 'احتراف' : 'Professionalism',
+                      rating: review.professionalism!,
+                    ),
                   if (review.quality != null)
-                  _CategoryBadge(
-                    label: language == 'ar' ? 'جودة' : 'Quality',
-                    rating: review.quality!,
-                  ),
+                    _CategoryBadge(
+                      label: language == 'ar' ? 'جودة' : 'Quality',
+                      rating: review.quality!,
+                    ),
                   if (review.timeliness != null)
-                  _CategoryBadge(
-                    label: language == 'ar' ? 'مواعد' : 'Timeliness',
-                    rating: review.timeliness!,
-                  ),
+                    _CategoryBadge(
+                      label: language == 'ar' ? 'مواعد' : 'Timeliness',
+                      rating: review.timeliness!,
+                    ),
                   if (review.communication != null)
-                  _CategoryBadge(
-                    label: language == 'ar' ? 'تواصل' : 'Communication',
-                    rating: review.communication!,
-                  ),
+                    _CategoryBadge(
+                      label: language == 'ar' ? 'تواصل' : 'Communication',
+                      rating: review.communication!,
+                    ),
                   if (review.value != null)
-                  _CategoryBadge(
-                    label: language == 'ar' ? 'قيمة' : 'Value',
-                    rating: review.value!,
-                  ),
+                    _CategoryBadge(
+                      label: language == 'ar' ? 'قيمة' : 'Value',
+                      rating: review.value!,
+                    ),
                 ],
               ),
             ],
@@ -330,9 +321,8 @@ class _ReviewCard extends StatelessWidget {
                   children: [
                     Text(
                       language == 'ar' ? 'رد مقدم الخدمة' : 'Provider Response',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style: Theme.of(context).textTheme.titleSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -354,10 +344,7 @@ class _CategoryBadge extends StatelessWidget {
   final String label;
   final int rating;
 
-  const _CategoryBadge({
-    required this.label,
-    required this.rating,
-  });
+  const _CategoryBadge({required this.label, required this.rating});
 
   @override
   Widget build(BuildContext context) {
@@ -372,10 +359,7 @@ class _CategoryBadge extends StatelessWidget {
         children: [
           const Icon(Icons.star, size: 14, color: Colors.amber),
           const SizedBox(width: 4),
-          Text(
-            '$label: $rating',
-            style: const TextStyle(fontSize: 12),
-          ),
+          Text('$label: $rating', style: const TextStyle(fontSize: 12)),
         ],
       ),
     );

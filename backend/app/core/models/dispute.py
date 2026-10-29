@@ -50,9 +50,21 @@ class Dispute(Base):
     )
 
     # Dispute details
-    dispute_type = Column(SQLEnum(DisputeType), nullable=False)
+    dispute_type = Column(
+        SQLEnum(
+            DisputeType,
+            values_callable=lambda enum_cls: [member.value for member in enum_cls],
+        ),
+        nullable=False,
+    )
     status = Column(
-        SQLEnum(DisputeStatus), default=DisputeStatus.OPEN, nullable=False, index=True
+        SQLEnum(
+            DisputeStatus,
+            values_callable=lambda enum_cls: [member.value for member in enum_cls],
+        ),
+        default=DisputeStatus.OPEN,
+        nullable=False,
+        index=True,
     )
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=False)

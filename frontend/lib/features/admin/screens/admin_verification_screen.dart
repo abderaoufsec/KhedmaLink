@@ -11,7 +11,8 @@ class AdminVerificationScreen extends StatefulWidget {
   const AdminVerificationScreen({super.key});
 
   @override
-  State<AdminVerificationScreen> createState() => _AdminVerificationScreenState();
+  State<AdminVerificationScreen> createState() =>
+      _AdminVerificationScreenState();
 }
 
 class _AdminVerificationScreenState extends State<AdminVerificationScreen> {
@@ -59,28 +60,27 @@ class _AdminVerificationScreenState extends State<AdminVerificationScreen> {
         action: action,
       );
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Action performed successfully')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Action performed successfully')));
       _loadQueue();
     } catch (e) {
       AppLogger.error('Error performing action: $e');
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final language = Localizations.localeOf(context).languageCode == 'ar' ? 'ar' : 'fr';
-    
+    final language = Localizations.localeOf(context).languageCode == 'ar'
+        ? 'ar'
+        : 'fr';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          language == 'ar' ? 'قائمة التحقق' : 'Verification Queue',
-        ),
+        title: Text(language == 'ar' ? 'قائمة التحقق' : 'Verification Queue'),
       ),
       body: _buildBody(context, language),
     );
@@ -102,9 +102,7 @@ class _AdminVerificationScreenState extends State<AdminVerificationScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadQueue,
-              child: Text(
-                language == 'ar' ? 'إعادة المحاولة' : 'Retry',
-              ),
+              child: Text(language == 'ar' ? 'إعادة المحاولة' : 'Retry'),
             ),
           ],
         ),
@@ -114,7 +112,9 @@ class _AdminVerificationScreenState extends State<AdminVerificationScreen> {
     if (_queue == null || _queue!.items.isEmpty) {
       return Center(
         child: Text(
-          language == 'ar' ? 'لا توجد طلبات تحقق معلقة' : 'No pending verification requests',
+          language == 'ar'
+              ? 'لا توجد طلبات تحقق معلقة'
+              : 'No pending verification requests',
         ),
       );
     }
@@ -143,7 +143,9 @@ class _AdminVerificationScreenState extends State<AdminVerificationScreen> {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
-        title: Text(item.businessName ?? (language == 'ar' ? 'مقدم خدمة' : 'Provider')),
+        title: Text(
+          item.businessName ?? (language == 'ar' ? 'مقدم خدمة' : 'Provider'),
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -175,7 +177,7 @@ class _AdminVerificationScreenState extends State<AdminVerificationScreen> {
 
   Widget _buildPagination(String language) {
     final totalPages = (_queue!.total / _pageSize).ceil();
-    
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(

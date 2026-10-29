@@ -18,25 +18,25 @@ def client():
 def test_create_dispute_unauthorized(client: TestClient):
     """Test that creating a dispute requires authentication"""
     response = client.post("/api/v1/disputes")
-    assert response.status_code == 404
+    assert response.status_code == 403
 
 
 def test_list_disputes_unauthorized(client: TestClient):
     """Test that listing disputes requires authentication"""
     response = client.get("/api/v1/disputes")
-    assert response.status_code == 404
+    assert response.status_code == 403
 
 
 def test_get_dispute_unauthorized(client: TestClient):
     """Test that getting a dispute requires authentication"""
     response = client.get("/api/v1/disputes/123e4567-e89b-12d3-a456-426614174000")
-    assert response.status_code == 404
+    assert response.status_code == 403
 
 
 def test_update_dispute_unauthorized(client: TestClient):
     """Test that updating a dispute requires authentication"""
     response = client.put("/api/v1/disputes/123e4567-e89b-12d3-a456-426614174000")
-    assert response.status_code == 404
+    assert response.status_code == 403
 
 
 def test_resolve_dispute_unauthorized(client: TestClient):
@@ -44,7 +44,7 @@ def test_resolve_dispute_unauthorized(client: TestClient):
     response = client.post(
         "/api/v1/disputes/123e4567-e89b-12d3-a456-426614174000/resolve"
     )
-    assert response.status_code == 404
+    assert response.status_code == 403
 
 
 def test_add_evidence_unauthorized(client: TestClient):
@@ -52,7 +52,7 @@ def test_add_evidence_unauthorized(client: TestClient):
     response = client.post(
         "/api/v1/disputes/123e4567-e89b-12d3-a456-426614174000/evidence"
     )
-    assert response.status_code == 404
+    assert response.status_code == 403
 
 
 def test_list_evidence_unauthorized(client: TestClient):
@@ -60,7 +60,7 @@ def test_list_evidence_unauthorized(client: TestClient):
     response = client.get(
         "/api/v1/disputes/123e4567-e89b-12d3-a456-426614174000/evidence"
     )
-    assert response.status_code == 404
+    assert response.status_code == 403
 
 
 def test_dispute_create_schema_validation(client: TestClient):
@@ -74,8 +74,8 @@ def test_dispute_create_schema_validation(client: TestClient):
             "description": "",
         },
     )
-    # Should fail validation even without auth
-    assert response.status_code in [404, 422]
+    # Authentication is enforced before request-body validation
+    assert response.status_code in [403, 422]
 
 
 def test_dispute_resolve_schema_validation(client: TestClient):
@@ -86,8 +86,8 @@ def test_dispute_resolve_schema_validation(client: TestClient):
             "resolution": "",
         },
     )
-    # Should fail validation even without auth
-    assert response.status_code in [404, 422]
+    # Authentication is enforced before request-body validation
+    assert response.status_code in [403, 422]
 
 
 def test_evidence_create_schema_validation(client: TestClient):
@@ -98,5 +98,5 @@ def test_evidence_create_schema_validation(client: TestClient):
             "evidence_type": "",
         },
     )
-    # Should fail validation even without auth
-    assert response.status_code in [404, 422]
+    # Authentication is enforced before request-body validation
+    assert response.status_code in [403, 422]

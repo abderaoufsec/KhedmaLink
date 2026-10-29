@@ -24,33 +24,33 @@ def upgrade():
     payment_method_enum = postgresql.ENUM(
         'cash', 'manual', 'card',
         name='paymentmethod',
-        create_type=True
+        create_type=False
     )
-    payment_method_enum.create(op.get_bind())
+    payment_method_enum.create(op.get_bind(), checkfirst=True)
 
     # Create payment_status enum
     payment_status_enum = postgresql.ENUM(
         'pending', 'processing', 'completed', 'failed', 'refunded', 'partially_refunded',
         name='paymentstatus',
-        create_type=True
+        create_type=False
     )
-    payment_status_enum.create(op.get_bind())
+    payment_status_enum.create(op.get_bind(), checkfirst=True)
 
     # Create transaction_type enum
     transaction_type_enum = postgresql.ENUM(
         'capture', 'refund', 'payout',
         name='transactiontype',
-        create_type=True
+        create_type=False
     )
-    transaction_type_enum.create(op.get_bind())
+    transaction_type_enum.create(op.get_bind(), checkfirst=True)
 
     # Create payout_status enum
     payout_status_enum = postgresql.ENUM(
         'pending', 'processing', 'completed', 'failed',
         name='payoutstatus',
-        create_type=True
+        create_type=False
     )
-    payout_status_enum.create(op.get_bind())
+    payout_status_enum.create(op.get_bind(), checkfirst=True)
 
     # Create payments table
     op.create_table(
@@ -120,10 +120,8 @@ def upgrade():
     )
 
     # Create index on payments for status
-    op.create_index('ix_payments_status', 'payments', ['status'])
 
     # Create index on payments for created_at
-    op.create_index('ix_payments_created_at', 'payments', ['created_at'])
 
     # Create transactions table
     op.create_table(
@@ -159,7 +157,6 @@ def upgrade():
     )
 
     # Create index on transactions for payment_id
-    op.create_index('ix_transactions_payment_id', 'transactions', ['payment_id'])
 
     # Create payouts table
     op.create_table(
@@ -214,10 +211,8 @@ def upgrade():
     )
 
     # Create index on payouts for status
-    op.create_index('ix_payouts_status', 'payouts', ['status'])
 
     # Create index on payouts for created_at
-    op.create_index('ix_payouts_created_at', 'payouts', ['created_at'])
 
 
 def downgrade():

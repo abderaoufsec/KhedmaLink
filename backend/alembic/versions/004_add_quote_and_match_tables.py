@@ -46,9 +46,9 @@ def upgrade() -> None:
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
         sa.Column('submitted_at', sa.DateTime(timezone=True), nullable=True),
         sa.Column('accepted_at', sa.DateTime(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('pk_quotes'),
-        sa.ForeignKeyConstraint(['request_id'], 'service_requests', ondelete='CASCADE'),
-        sa.ForeignKeyConstraint(['provider_id'], 'users', ondelete='CASCADE')
+        sa.PrimaryKeyConstraint('id'),
+        sa.ForeignKeyConstraint(['request_id'], ['service_requests.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['provider_id'], ['users.id'], ondelete='CASCADE')
     )
     op.create_index('ix_quotes_id', 'quotes', ['id'])
     op.create_index('ix_quotes_request_id', 'quotes', ['request_id'])
@@ -66,9 +66,9 @@ def upgrade() -> None:
         sa.Column('status', sa.String(length=20), nullable=False),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('pk_request_matches'),
-        sa.ForeignKeyConstraint(['request_id'], 'service_requests', ondelete='CASCADE'),
-        sa.ForeignKeyConstraint(['provider_id'], 'users', ondelete='CASCADE')
+        sa.PrimaryKeyConstraint('id'),
+        sa.ForeignKeyConstraint(['request_id'], ['service_requests.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['provider_id'], ['users.id'], ondelete='CASCADE')
     )
     op.create_index('ix_request_matches_id', 'request_matches', ['id'])
     op.create_index('ix_request_matches_request_id', 'request_matches', ['request_id'])

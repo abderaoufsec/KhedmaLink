@@ -81,16 +81,12 @@ def upgrade():
     )
 
     # Create index on audit_logs for action_type
-    op.create_index('ix_audit_logs_action_type', 'audit_logs', ['action_type'])
 
     # Create index on audit_logs for actor_id
-    op.create_index('ix_audit_logs_actor_id', 'audit_logs', ['actor_id'])
 
     # Create index on audit_logs for target_user_id
-    op.create_index('ix_audit_logs_target_user_id', 'audit_logs', ['target_user_id'])
 
     # Create index on audit_logs for created_at
-    op.create_index('ix_audit_logs_created_at', 'audit_logs', ['created_at'])
 
 
 def downgrade():
@@ -105,3 +101,6 @@ def downgrade():
 
     # Drop audit_logs table
     op.drop_table('audit_logs')
+
+    # Drop enum type
+    postgresql.ENUM(name='auditactiontype').drop(op.get_bind())

@@ -1,14 +1,8 @@
 // Dispute models for KhedmaLink Flutter app
 // Contains data models for disputes and dispute evidence
 
-
 /// Dispute status enum
-enum DisputeStatus {
-  open,
-  investigating,
-  resolved,
-  closed,
-}
+enum DisputeStatus { open, investigating, resolved, closed }
 
 /// Dispute type enum
 enum DisputeType {
@@ -115,13 +109,17 @@ class Dispute {
       id: json['id'] as String,
       bookingId: json['booking_id'] as String,
       raisedBy: json['raised_by'] as String,
-      disputeType: DisputeTypeExtension.fromJson(json['dispute_type'] as String),
+      disputeType: DisputeTypeExtension.fromJson(
+        json['dispute_type'] as String,
+      ),
       status: DisputeStatusExtension.fromJson(json['status'] as String),
       title: json['title'] as String,
       description: json['description'] as String,
       resolution: json['resolution'] as String?,
       resolvedBy: json['resolved_by'] as String?,
-      resolvedAt: json['resolved_at'] != null ? DateTime.parse(json['resolved_at'] as String) : null,
+      resolvedAt: json['resolved_at'] != null
+          ? DateTime.parse(json['resolved_at'] as String)
+          : null,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
@@ -218,7 +216,9 @@ class DisputeListResponse {
 
   factory DisputeListResponse.fromJson(Map<String, dynamic> json) {
     return DisputeListResponse(
-      items: (json['items'] as List).map((e) => Dispute.fromJson(e as Map<String, dynamic>)).toList(),
+      items: (json['items'] as List)
+          .map((e) => Dispute.fromJson(e as Map<String, dynamic>))
+          .toList(),
       total: json['total'] as int,
       page: json['page'] as int,
       pageSize: json['page_size'] as int,
@@ -230,13 +230,13 @@ class DisputeListResponse {
 class DisputeEvidenceListResponse {
   final List<DisputeEvidence> items;
 
-  DisputeEvidenceListResponse({
-    required this.items,
-  });
+  DisputeEvidenceListResponse({required this.items});
 
   factory DisputeEvidenceListResponse.fromJson(Map<String, dynamic> json) {
     return DisputeEvidenceListResponse(
-      items: (json['items'] as List).map((e) => DisputeEvidence.fromJson(e as Map<String, dynamic>)).toList(),
+      items: (json['items'] as List)
+          .map((e) => DisputeEvidence.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }

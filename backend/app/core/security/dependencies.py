@@ -3,6 +3,7 @@ Authentication dependencies for FastAPI routes
 Provides dependency functions for protecting routes with JWT authentication
 """
 
+import uuid
 from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -50,8 +51,14 @@ async def get_current_user(
         logger.warning("Invalid token provided")
         raise credentials_exception
 
+    try:
+        user_uuid = uuid.UUID(str(user_id))
+    except (TypeError, ValueError):
+        logger.warning(f"Token subject is not a valid UUID: {user_id}")
+        raise credentials_exception
+
     # Query user from database
-    result = await db.execute(select(User).where(User.id == user_id))
+    result = await db.execute(select(User).where(User.id == user_uuid))
     user = result.scalar_one_or_none()
 
     if user is None:

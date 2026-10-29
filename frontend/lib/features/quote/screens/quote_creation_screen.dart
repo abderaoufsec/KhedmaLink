@@ -62,7 +62,9 @@ class _QuoteCreationScreenState extends State<QuoteCreationScreen> {
                 maxLines: 4,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return language == 'ar' ? 'هذا الحقل مطلوب' : 'This field is required';
+                    return language == 'ar'
+                        ? 'هذا الحقل مطلوب'
+                        : 'This field is required';
                   }
                   return null;
                 },
@@ -79,11 +81,15 @@ class _QuoteCreationScreenState extends State<QuoteCreationScreen> {
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return language == 'ar' ? 'هذا الحقل مطلوب' : 'This field is required';
+                    return language == 'ar'
+                        ? 'هذا الحقل مطلوب'
+                        : 'This field is required';
                   }
                   final price = double.tryParse(value);
                   if (price == null || price <= 0) {
-                    return language == 'ar' ? 'السعر يجب أن يكون موجباً' : 'Price must be positive';
+                    return language == 'ar'
+                        ? 'السعر يجب أن يكون موجباً'
+                        : 'Price must be positive';
                   }
                   return null;
                 },
@@ -96,7 +102,9 @@ class _QuoteCreationScreenState extends State<QuoteCreationScreen> {
                     child: TextFormField(
                       controller: _estimatedDurationController,
                       decoration: InputDecoration(
-                        labelText: language == 'ar' ? 'المدة المقدرة' : 'Durée estimée',
+                        labelText: language == 'ar'
+                            ? 'المدة المقدرة'
+                            : 'Durée estimée',
                         border: const OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
@@ -111,7 +119,10 @@ class _QuoteCreationScreenState extends State<QuoteCreationScreen> {
                         border: const OutlineInputBorder(),
                       ),
                       items: const [
-                        DropdownMenuItem(value: 'minutes', child: Text('Minutes')),
+                        DropdownMenuItem(
+                          value: 'minutes',
+                          child: Text('Minutes'),
+                        ),
                         DropdownMenuItem(value: 'hours', child: Text('Hours')),
                         DropdownMenuItem(value: 'days', child: Text('Days')),
                       ],
@@ -188,7 +199,7 @@ class _QuoteCreationScreenState extends State<QuoteCreationScreen> {
 
     try {
       final quoteService = api.QuoteApiService();
-      
+
       final estimatedPrice = double.tryParse(_estimatedPriceController.text);
       final estimatedDuration = _estimatedDurationController.text.isEmpty
           ? null
@@ -207,7 +218,9 @@ class _QuoteCreationScreenState extends State<QuoteCreationScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              language == 'ar' ? 'تم إنشاء العرض بنجاح' : 'Devis créé avec succès',
+              language == 'ar'
+                  ? 'تم إنشاء العرض بنجاح'
+                  : 'Devis créé avec succès',
             ),
             backgroundColor: Colors.green,
           ),
@@ -220,7 +233,9 @@ class _QuoteCreationScreenState extends State<QuoteCreationScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              language == 'ar' ? 'فشل إنشاء العرض: $e' : 'Échec de la création du devis: $e',
+              language == 'ar'
+                  ? 'فشل إنشاء العرض: $e'
+                  : 'Échec de la création du devis: $e',
             ),
             backgroundColor: Colors.red,
           ),

@@ -51,7 +51,14 @@ class AuditLog(Base):
     id = Column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
 
     # Action details
-    action_type = Column(SQLEnum(AuditActionType), nullable=False, index=True)
+    action_type = Column(
+        SQLEnum(
+            AuditActionType,
+            values_callable=lambda enum_cls: [member.value for member in enum_cls],
+        ),
+        nullable=False,
+        index=True,
+    )
     actor_id = Column(
         PG_UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
     )

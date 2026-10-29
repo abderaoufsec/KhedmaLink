@@ -42,12 +42,13 @@ class _LoginScreenState extends State<LoginScreen>
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
-    );
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     _animationController.forward();
   }
@@ -167,7 +168,9 @@ class _LoginScreenState extends State<LoginScreen>
                         Text(
                           'Trusted Local Services',
                           style: theme.textTheme.bodyLarge?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.7,
+                            ),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -182,7 +185,9 @@ class _LoginScreenState extends State<LoginScreen>
                               color: AppTheme.errorColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: AppTheme.errorColor.withValues(alpha: 0.3),
+                                color: AppTheme.errorColor.withValues(
+                                  alpha: 0.3,
+                                ),
                                 width: 1,
                               ),
                             ),
@@ -331,8 +336,9 @@ class _LoginScreenState extends State<LoginScreen>
                             Text(
                               "Don't have an account? ",
                               style: TextStyle(
-                                color: theme.colorScheme.onSurface
-                                    .withValues(alpha: 0.7),
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.7,
+                                ),
                                 fontSize: 15,
                               ),
                             ),

@@ -96,10 +96,20 @@ class Payment(Base):
 
     # Payment method and status
     payment_method = Column(
-        SQLEnum(PaymentMethod), nullable=False, default=PaymentMethod.CASH
+        SQLEnum(
+            PaymentMethod,
+            values_callable=lambda enum_cls: [member.value for member in enum_cls],
+        ),
+        nullable=False,
+        default=PaymentMethod.CASH,
     )
     status = Column(
-        SQLEnum(PaymentStatus), nullable=False, default=PaymentStatus.PENDING
+        SQLEnum(
+            PaymentStatus,
+            values_callable=lambda enum_cls: [member.value for member in enum_cls],
+        ),
+        nullable=False,
+        default=PaymentStatus.PENDING,
     )
 
     # External payment reference (if using PSP)
@@ -143,7 +153,13 @@ class Transaction(Base):
     )
 
     # Transaction details
-    transaction_type = Column(SQLEnum(TransactionType), nullable=False)
+    transaction_type = Column(
+        SQLEnum(
+            TransactionType,
+            values_callable=lambda enum_cls: [member.value for member in enum_cls],
+        ),
+        nullable=False,
+    )
     amount = Column(Numeric(precision=10, scale=2), nullable=False)
     currency = Column(String(3), nullable=False, default="DZD")
 
@@ -189,7 +205,14 @@ class Payout(Base):
     payout_method = Column(String(50), nullable=False, default="cash")
 
     # Payout status
-    status = Column(SQLEnum(PayoutStatus), nullable=False, default=PayoutStatus.PENDING)
+    status = Column(
+        SQLEnum(
+            PayoutStatus,
+            values_callable=lambda enum_cls: [member.value for member in enum_cls],
+        ),
+        nullable=False,
+        default=PayoutStatus.PENDING,
+    )
 
     # External payout reference (if using PSP)
     external_payout_id = Column(String(255), nullable=True)  # PSP payout ID

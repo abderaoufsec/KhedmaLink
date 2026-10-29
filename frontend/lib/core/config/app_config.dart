@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+
 import 'dart:io' show Platform;
 
 /// Application configuration constants and settings
@@ -54,7 +55,7 @@ class AppConfig {
     if (definedUrl.isNotEmpty) {
       return definedUrl;
     }
-    
+
     // Environment-based fallbacks
     switch (environment) {
       case 'production':

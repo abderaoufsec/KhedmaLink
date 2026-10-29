@@ -54,13 +54,13 @@ class _AdminAuditLogsScreenState extends State<AdminAuditLogsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final language = Localizations.localeOf(context).languageCode == 'ar' ? 'ar' : 'fr';
-    
+    final language = Localizations.localeOf(context).languageCode == 'ar'
+        ? 'ar'
+        : 'fr';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          language == 'ar' ? 'سجلات التدقيق' : 'Audit Logs',
-        ),
+        title: Text(language == 'ar' ? 'سجلات التدقيق' : 'Audit Logs'),
       ),
       body: _buildBody(context, language),
     );
@@ -82,9 +82,7 @@ class _AdminAuditLogsScreenState extends State<AdminAuditLogsScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadAuditLogs,
-              child: Text(
-                language == 'ar' ? 'إعادة المحاولة' : 'Retry',
-              ),
+              child: Text(language == 'ar' ? 'إعادة المحاولة' : 'Retry'),
             ),
           ],
         ),
@@ -115,7 +113,11 @@ class _AdminAuditLogsScreenState extends State<AdminAuditLogsScreen> {
     );
   }
 
-  Widget _buildAuditLogCard(BuildContext context, AuditLog log, String language) {
+  Widget _buildAuditLogCard(
+    BuildContext context,
+    AuditLog log,
+    String language,
+  ) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
@@ -141,7 +143,7 @@ class _AdminAuditLogsScreenState extends State<AdminAuditLogsScreen> {
 
   Widget _buildPagination(String language) {
     final totalPages = (_auditLogs!.total / _pageSize).ceil();
-    
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(

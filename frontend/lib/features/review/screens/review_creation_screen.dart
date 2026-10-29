@@ -52,7 +52,9 @@ class _ReviewCreationScreenState extends State<ReviewCreationScreen> {
         widget.bookingId,
         _rating,
         title: _titleController.text.isEmpty ? null : _titleController.text,
-        comment: _commentController.text.isEmpty ? null : _commentController.text,
+        comment: _commentController.text.isEmpty
+            ? null
+            : _commentController.text,
         professionalism: _professionalism,
         quality: _quality,
         timeliness: _timeliness,
@@ -64,7 +66,9 @@ class _ReviewCreationScreenState extends State<ReviewCreationScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              language == 'ar' ? 'تم إرسال التقييم بنجاح' : 'Review submitted successfully',
+              language == 'ar'
+                  ? 'تم إرسال التقييم بنجاح'
+                  : 'Review submitted successfully',
             ),
             backgroundColor: Colors.green,
           ),
@@ -126,7 +130,9 @@ class _ReviewCreationScreenState extends State<ReviewCreationScreen> {
               TextFormField(
                 controller: _titleController,
                 decoration: InputDecoration(
-                  labelText: language == 'ar' ? 'العنوان (اختياري)' : 'Title (optional)',
+                  labelText: language == 'ar'
+                      ? 'العنوان (اختياري)'
+                      : 'Title (optional)',
                   border: const OutlineInputBorder(),
                 ),
               ),
@@ -143,7 +149,9 @@ class _ReviewCreationScreenState extends State<ReviewCreationScreen> {
               const SizedBox(height: 24),
               // Category ratings
               Text(
-                language == 'ar' ? 'التقييم التفصيلي (اختياري)' : 'Detailed Ratings (optional)',
+                language == 'ar'
+                    ? 'التقييم التفصيلي (اختياري)'
+                    : 'Detailed Ratings (optional)',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 16),
@@ -239,14 +247,14 @@ class _CategoryRatingRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: Text(label),
-        ),
+        Expanded(child: Text(label)),
         Row(
           children: List.generate(5, (index) {
             return IconButton(
               icon: Icon(
-                rating != null && index < rating! ? Icons.star : Icons.star_border,
+                rating != null && index < rating!
+                    ? Icons.star
+                    : Icons.star_border,
                 color: Colors.amber,
                 size: 24,
               ),

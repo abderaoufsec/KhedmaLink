@@ -111,42 +111,6 @@ async def list_providers(
     return providers
 
 
-@router.get(
-    "/{provider_id}",
-    response_model=ProviderProfilePublic,
-    status_code=status.HTTP_200_OK,
-)
-async def get_provider_profile(
-    provider_id: str,
-    db: AsyncSession = Depends(get_db),
-):
-    """
-    Get a public provider profile by ID
-
-    - **provider_id**: UUID of the provider profile
-
-    Returns public provider profile details or 404 if not found
-    """
-    # Query for provider profile
-    query = select(ProviderProfile).where(
-        and_(ProviderProfile.id == provider_id, ProviderProfile.is_public == True)
-    )
-    result = await db.execute(query)
-    provider = result.scalar_one_or_none()
-
-    # Check if provider exists
-    if not provider:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Provider profile not found"
-        )
-
-    # Calculate reputation and add badges
-    reputation = await calculate_provider_reputation(db, provider.user_id)
-    provider.badges = reputation.badges
-
-    return provider
-
-
 # =============================================================================
 # PROVIDER PROFILE MANAGEMENT ENDPOINTS
 # =============================================================================
@@ -862,3 +826,45 @@ async def delete_availability_rule(
     await db.commit()
 
     return None
+
+
+# =============================================================================
+# PUBLIC PROVIDER DETAIL ENDPOINT
+# Declared after all static /me routes so it does not shadow them.
+# =============================================================================
+
+
+@router.get(
+    "/{provider_id}",
+    response_model=ProviderProfilePublic,
+    status_code=status.HTTP_200_OK,
+)
+async def get_provider_profile(
+    provider_id: str,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Get a public provider profile by ID
+
+    - **provider_id**: UUID of the provider profile
+
+    Returns public provider profile details or 404 if not found
+    """
+    # Query for provider profile
+    query = select(ProviderProfile).where(
+        and_(ProviderProfile.id == provider_id, ProviderProfile.is_public == True)
+    )
+    result = await db.execute(query)
+    provider = result.scalar_one_or_none()
+
+    # Check if provider exists
+    if not provider:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Provider profile not found"
+        )
+
+    # Calculate reputation and add badges
+    reputation = await calculate_provider_reputation(db, provider.user_id)
+    provider.badges = reputation.badges
+
+    return provider

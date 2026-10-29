@@ -70,7 +70,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              language == 'ar' ? 'فشل تحديث الإشعار' : 'Failed to update notification',
+              language == 'ar'
+                  ? 'فشل تحديث الإشعار'
+                  : 'Failed to update notification',
             ),
             backgroundColor: Colors.red,
           ),
@@ -120,9 +122,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   Widget _buildBody(BuildContext context, String language) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -221,7 +221,8 @@ class _NotificationTile extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: _getNotificationColor(notification.notificationType).withOpacity(0.1),
+                  color: _getNotificationColor(notification.notificationType)
+                      .withOpacity(0.1),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Icon(
@@ -238,7 +239,9 @@ class _NotificationTile extends StatelessWidget {
                     Text(
                       notification.getLocalizedTitle(language),
                       style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: notification.isUnread ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: notification.isUnread
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                     ),
                     if (notification.getLocalizedBody(language) != null) ...[

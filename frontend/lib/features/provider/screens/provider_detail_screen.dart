@@ -35,7 +35,9 @@ class _ProviderDetailScreenState extends State<ProviderDetailScreen> {
     });
 
     try {
-      final provider = await _providerService.getProviderProfile(widget.providerId);
+      final provider = await _providerService.getProviderProfile(
+        widget.providerId,
+      );
       if (mounted) {
         setState(() {
           _provider = provider;
@@ -71,9 +73,7 @@ class _ProviderDetailScreenState extends State<ProviderDetailScreen> {
 
   Widget _buildBody(BuildContext context, String language) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -99,9 +99,7 @@ class _ProviderDetailScreenState extends State<ProviderDetailScreen> {
     }
 
     if (_provider == null) {
-      return const Center(
-        child: Text('Provider not found'),
-      );
+      return const Center(child: Text('Provider not found'));
     }
 
     return SingleChildScrollView(
@@ -115,14 +113,16 @@ class _ProviderDetailScreenState extends State<ProviderDetailScreen> {
               Expanded(
                 child: Text(
                   _provider!.businessName ?? 'Unknown',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(context).textTheme.headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
               if (_provider!.verificationStatus == 'verified')
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.green.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(16),
@@ -140,12 +140,12 @@ class _ProviderDetailScreenState extends State<ProviderDetailScreen> {
           ),
           const SizedBox(height: 16),
           // Description
-          if (_provider!.descriptionAr != null || _provider!.descriptionFr != null) ...[
+          if (_provider!.descriptionAr != null ||
+              _provider!.descriptionFr != null) ...[
             Text(
               language == 'ar' ? 'الوصف' : 'Description',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
@@ -184,9 +184,8 @@ class _ProviderDetailScreenState extends State<ProviderDetailScreen> {
                   const SizedBox(width: 8),
                   Text(
                     '(${_provider!.totalReviews} reviews)',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey,
-                        ),
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: Colors.grey),
                   ),
                 ],
               ],
@@ -212,17 +211,13 @@ class _ProviderDetailScreenState extends State<ProviderDetailScreen> {
             const SizedBox(width: 8),
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.only(left: 28),
-          child: child,
-        ),
+        Padding(padding: const EdgeInsets.only(left: 28), child: child),
       ],
     );
   }

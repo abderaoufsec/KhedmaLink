@@ -76,9 +76,7 @@ class _EligibleRequestsScreenState extends State<EligibleRequestsScreen> {
 
   Widget _buildBody(BuildContext context, String language) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -108,14 +106,12 @@ class _EligibleRequestsScreenState extends State<EligibleRequestsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.assignment_outlined,
-              size: 64,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.assignment_outlined, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              language == 'ar' ? 'لا توجد طلبات متاحة' : 'Aucune demande disponible',
+              language == 'ar'
+                  ? 'لا توجد طلبات متاحة'
+                  : 'Aucune demande disponible',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
@@ -148,7 +144,10 @@ class _EligibleRequestsScreenState extends State<EligibleRequestsScreen> {
   }
 
   void _createQuote(String requestId) {
-    context.pushNamed('quote_creation', pathParameters: {'requestId': requestId});
+    context.pushNamed(
+      'quote_creation',
+      pathParameters: {'requestId': requestId},
+    );
   }
 }
 
@@ -214,9 +213,7 @@ class _MatchCard extends StatelessWidget {
             if (match.eligibilityReason != null) ...[
               Text(
                 match.eligibilityReason!,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: Colors.green,
-                ),
+                style: theme.textTheme.bodySmall?.copyWith(color: Colors.green),
               ),
               const SizedBox(height: 8),
             ],

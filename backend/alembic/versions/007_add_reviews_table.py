@@ -77,13 +77,10 @@ def upgrade():
     )
 
     # Create index on reviews for booking_id
-    op.create_index('ix_reviews_booking_id', 'reviews', ['booking_id'])
 
     # Create index on reviews for provider_id
-    op.create_index('ix_reviews_provider_id', 'reviews', ['provider_id'])
 
     # Create index on reviews for rating
-    op.create_index('ix_reviews_rating', 'reviews', ['rating'])
 
 
 def downgrade():

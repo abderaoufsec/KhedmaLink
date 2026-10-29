@@ -16,8 +16,8 @@ class BookingApiService {
 
   /// Constructor
   BookingApiService({http.Client? client, AuthService? authService})
-      : _client = client ?? http.Client(),
-        _authService = authService ?? AuthService();
+    : _client = client ?? http.Client(),
+      _authService = authService ?? AuthService();
 
   /// Get base URL from config
   String get _baseUrl => AppConfig.apiBaseUrlDirect;
@@ -60,18 +60,15 @@ class BookingApiService {
       final uri = Uri.parse('$_baseUrl/api/v1/bookings/me/bookings')
           .replace(queryParameters: queryParams);
 
-      final response = await _client.get(
-        uri,
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(uri, headers: await _getAuthHeaders())
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as List;
-        final bookings =
-            data.map((item) => Booking.fromJson(item as Map<String, dynamic>))
-                .toList();
+        final bookings = data
+            .map((item) => Booking.fromJson(item as Map<String, dynamic>))
+            .toList();
 
         AppLogger.info('My bookings fetched successfully: ${bookings.length}');
         return bookings;
@@ -80,7 +77,9 @@ class BookingApiService {
         throw Exception('Unauthorized');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch bookings: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch bookings: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch bookings');
       }
     } catch (e) {
@@ -94,12 +93,12 @@ class BookingApiService {
     try {
       AppLogger.info('Fetching booking: $bookingId');
 
-      final response = await _client.get(
-        Uri.parse('$_baseUrl/api/v1/bookings/me/bookings/$bookingId'),
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(
+            Uri.parse('$_baseUrl/api/v1/bookings/me/bookings/$bookingId'),
+            headers: await _getAuthHeaders(),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -115,7 +114,9 @@ class BookingApiService {
         throw Exception('Booking not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch booking: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch booking: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch booking');
       }
     } catch (e) {
@@ -129,15 +130,15 @@ class BookingApiService {
     try {
       AppLogger.info('Cancelling booking: $bookingId');
 
-      final response = await _client.post(
-        Uri.parse('$_baseUrl/api/v1/bookings/me/bookings/$bookingId/cancel'),
-        headers: await _getAuthHeaders(),
-        body: jsonEncode({
-          'cancellation_reason': reason,
-        }),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .post(
+            Uri.parse(
+              '$_baseUrl/api/v1/bookings/me/bookings/$bookingId/cancel',
+            ),
+            headers: await _getAuthHeaders(),
+            body: jsonEncode({'cancellation_reason': reason}),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -153,7 +154,9 @@ class BookingApiService {
         throw Exception('Booking not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to cancel booking: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to cancel booking: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to cancel booking');
       }
     } catch (e) {
@@ -167,12 +170,12 @@ class BookingApiService {
     try {
       AppLogger.info('Starting booking: $bookingId');
 
-      final response = await _client.post(
-        Uri.parse('$_baseUrl/api/v1/bookings/me/bookings/$bookingId/start'),
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .post(
+            Uri.parse('$_baseUrl/api/v1/bookings/me/bookings/$bookingId/start'),
+            headers: await _getAuthHeaders(),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -188,7 +191,9 @@ class BookingApiService {
         throw Exception('Only the provider can start this booking');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to start booking: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to start booking: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to start booking');
       }
     } catch (e) {
@@ -202,15 +207,15 @@ class BookingApiService {
     try {
       AppLogger.info('Completing booking: $bookingId');
 
-      final response = await _client.post(
-        Uri.parse('$_baseUrl/api/v1/bookings/me/bookings/$bookingId/complete'),
-        headers: await _getAuthHeaders(),
-        body: jsonEncode({
-          if (notes != null) 'completion_notes': notes,
-        }),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .post(
+            Uri.parse(
+              '$_baseUrl/api/v1/bookings/me/bookings/$bookingId/complete',
+            ),
+            headers: await _getAuthHeaders(),
+            body: jsonEncode({if (notes != null) 'completion_notes': notes}),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -226,7 +231,9 @@ class BookingApiService {
         throw Exception('Only the provider can complete this booking');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to complete booking: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to complete booking: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to complete booking');
       }
     } catch (e) {
@@ -244,18 +251,20 @@ class BookingApiService {
     try {
       AppLogger.info('Fetching events for booking: $bookingId');
 
-      final response = await _client.get(
-        Uri.parse('$_baseUrl/api/v1/bookings/me/bookings/$bookingId/events'),
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(
+            Uri.parse(
+              '$_baseUrl/api/v1/bookings/me/bookings/$bookingId/events',
+            ),
+            headers: await _getAuthHeaders(),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as List;
-        final events =
-            data.map((item) => BookingEvent.fromJson(item as Map<String, dynamic>))
-                .toList();
+        final events = data
+            .map((item) => BookingEvent.fromJson(item as Map<String, dynamic>))
+            .toList();
 
         AppLogger.info('Booking events fetched successfully: ${events.length}');
         return events;
@@ -267,7 +276,9 @@ class BookingApiService {
         throw Exception('Booking not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch booking events: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch booking events: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch booking events');
       }
     } catch (e) {

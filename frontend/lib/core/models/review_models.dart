@@ -92,14 +92,14 @@ class Review {
   /// Get average of category ratings
   double? get averageCategoryRating {
     if (!hasCategoryRatings) return null;
-    
+
     final ratings = <int>[];
     if (professionalism != null) ratings.add(professionalism!);
     if (quality != null) ratings.add(quality!);
     if (timeliness != null) ratings.add(timeliness!);
     if (communication != null) ratings.add(communication!);
     if (value != null) ratings.add(value!);
-    
+
     if (ratings.isEmpty) return null;
     return ratings.reduce((a, b) => a + b) / ratings.length;
   }

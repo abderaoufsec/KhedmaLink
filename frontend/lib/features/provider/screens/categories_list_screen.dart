@@ -111,9 +111,7 @@ class _CategoriesListScreenState extends State<CategoriesListScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                AppTheme.primaryColor,
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
             ),
             const SizedBox(height: 16),
             Text(
@@ -201,9 +199,9 @@ class _CategoriesListScreenState extends State<CategoriesListScreen>
             Text(
               language == 'ar' ? 'لا توجد فئات' : 'Aucune catégorie',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface
-                        .withValues(alpha: 0.7),
-                  ),
+                color: Theme.of(context).colorScheme.onSurface
+                    .withValues(alpha: 0.7),
+              ),
             ),
           ],
         ),
@@ -346,11 +344,7 @@ class _CategoryCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Icon(
-                    categoryIcon,
-                    size: 28,
-                    color: Colors.white,
-                  ),
+                  child: Icon(categoryIcon, size: 28, color: Colors.white),
                 ),
                 const SizedBox(height: 16),
 
@@ -370,12 +364,17 @@ class _CategoryCard extends StatelessWidget {
                 // Category description
                 Builder(
                   builder: (context) {
-                    final description = _getCategoryDescription(category, language);
+                    final description = _getCategoryDescription(
+                      category,
+                      language,
+                    );
                     if (description != null && description.isNotEmpty) {
                       return Text(
                         description,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.6,
+                          ),
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 2,

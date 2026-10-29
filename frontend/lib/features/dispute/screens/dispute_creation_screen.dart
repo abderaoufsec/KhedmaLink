@@ -21,7 +21,7 @@ class _DisputeCreationScreenState extends State<DisputeCreationScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
-  
+
   DisputeType _selectedType = DisputeType.other;
   bool _isLoading = false;
   String? _error;
@@ -67,13 +67,13 @@ class _DisputeCreationScreenState extends State<DisputeCreationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final language = Localizations.localeOf(context).languageCode == 'ar' ? 'ar' : 'fr';
-    
+    final language = Localizations.localeOf(context).languageCode == 'ar'
+        ? 'ar'
+        : 'fr';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          language == 'ar' ? 'إنشاء نزاع' : 'Create Dispute',
-        ),
+        title: Text(language == 'ar' ? 'إنشاء نزاع' : 'Create Dispute'),
       ),
       body: _buildBody(context, language),
     );
@@ -118,7 +118,9 @@ class _DisputeCreationScreenState extends State<DisputeCreationScreen> {
               },
               validator: (value) {
                 if (value == null) {
-                  return language == 'ar' ? 'هذا الحقل مطلوب' : 'This field is required';
+                  return language == 'ar'
+                      ? 'هذا الحقل مطلوب'
+                      : 'This field is required';
                 }
                 return null;
               },
@@ -132,7 +134,9 @@ class _DisputeCreationScreenState extends State<DisputeCreationScreen> {
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return language == 'ar' ? 'هذا الحقل مطلوب' : 'This field is required';
+                  return language == 'ar'
+                      ? 'هذا الحقل مطلوب'
+                      : 'This field is required';
                 }
                 return null;
               },
@@ -147,7 +151,9 @@ class _DisputeCreationScreenState extends State<DisputeCreationScreen> {
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return language == 'ar' ? 'هذا الحقل مطلوب' : 'This field is required';
+                  return language == 'ar'
+                      ? 'هذا الحقل مطلوب'
+                      : 'This field is required';
                 }
                 return null;
               },

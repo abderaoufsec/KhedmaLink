@@ -124,9 +124,7 @@ class _ProvidersListScreenState extends State<ProvidersListScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                AppTheme.primaryColor,
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
             ),
             const SizedBox(height: 16),
             Text(
@@ -214,9 +212,9 @@ class _ProvidersListScreenState extends State<ProvidersListScreen>
             Text(
               language == 'ar' ? 'لا توجد نتائج' : 'Aucun résultat',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface
-                        .withValues(alpha: 0.7),
-                  ),
+                color: Theme.of(context).colorScheme.onSurface
+                    .withValues(alpha: 0.7),
+              ),
             ),
           ],
         ),
@@ -334,10 +332,14 @@ class _ProviderCard extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: AppTheme.successColor.withValues(alpha: 0.1),
+                                color: AppTheme.successColor.withValues(
+                                  alpha: 0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
-                                  color: AppTheme.successColor.withValues(alpha: 0.3),
+                                  color: AppTheme.successColor.withValues(
+                                    alpha: 0.3,
+                                  ),
                                 ),
                               ),
                               child: Row(
@@ -376,8 +378,9 @@ class _ProviderCard extends StatelessWidget {
                           Text(
                             '${provider.wilaya} - ${provider.city}',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.7),
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.7,
+                              ),
                             ),
                           ),
                         ],
@@ -390,8 +393,7 @@ class _ProviderCard extends StatelessWidget {
                           Row(
                             children: List.generate(5, (starIndex) {
                               return Icon(
-                                starIndex <
-                                        (provider.averageRating.round())
+                                starIndex < (provider.averageRating.round())
                                     ? Icons.star_rounded
                                     : Icons.star_border_rounded,
                                 size: 14,
@@ -412,8 +414,9 @@ class _ProviderCard extends StatelessWidget {
                             Text(
                               '(${provider.totalReviews})',
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onSurface
-                                    .withValues(alpha: 0.5),
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.5,
+                                ),
                               ),
                             ),
                           ],

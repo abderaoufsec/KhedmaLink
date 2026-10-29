@@ -26,18 +26,18 @@ def upgrade():
         'in_progress', 'completed', 'cancelled', 'expired',
         'rejected', 'disputed',
         name='booking_status',
-        create_type=True
+        create_type=False
     )
-    booking_status_enum.create(op.get_bind())
+    booking_status_enum.create(op.get_bind(), checkfirst=True)
 
     # Create booking_event_type enum type
     booking_event_type_enum = postgresql.ENUM(
         'created', 'scheduled', 'started', 'completed',
         'cancelled', 'disputed', 'status_changed',
         name='booking_event_type',
-        create_type=True
+        create_type=False
     )
-    booking_event_type_enum.create(op.get_bind())
+    booking_event_type_enum.create(op.get_bind(), checkfirst=True)
 
     # Create bookings table
     op.create_table(
@@ -116,7 +116,6 @@ def upgrade():
     )
 
     # Create index on bookings for status
-    op.create_index('ix_bookings_status', 'bookings', ['status'])
 
     # Create booking_events table
     op.create_table(
@@ -159,7 +158,6 @@ def upgrade():
     )
 
     # Create index on booking_events for booking_id
-    op.create_index('ix_booking_events_booking_id', 'booking_events', ['booking_id'])
 
 
 def downgrade():

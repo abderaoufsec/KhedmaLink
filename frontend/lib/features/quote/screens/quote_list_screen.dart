@@ -67,10 +67,7 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadQuotes,
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadQuotes),
         ],
       ),
       body: _buildBody(context, _language),
@@ -79,9 +76,7 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
 
   Widget _buildBody(BuildContext context, String language) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -97,10 +92,7 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadQuotes,
-              child: const Text('Retry'),
-            ),
+            ElevatedButton(onPressed: _loadQuotes, child: const Text('Retry')),
           ],
         ),
       );
@@ -111,11 +103,7 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.description_outlined,
-              size: 64,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.description_outlined, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               language == 'ar' ? 'لا توجد عروض' : 'Aucun devis',
@@ -170,7 +158,9 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              _language == 'ar' ? 'فشل قبول العرض: $e' : 'Échec de l\'acceptation: $e',
+              _language == 'ar'
+                  ? 'فشل قبول العرض: $e'
+                  : 'Échec de l\'acceptation: $e',
             ),
             backgroundColor: Colors.red,
           ),

@@ -63,10 +63,7 @@ class _BookingListScreenState extends State<BookingListScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadBookings,
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadBookings),
         ],
       ),
       body: _buildBody(context, language),
@@ -75,9 +72,7 @@ class _BookingListScreenState extends State<BookingListScreen> {
 
   Widget _buildBody(BuildContext context, String language) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -107,11 +102,7 @@ class _BookingListScreenState extends State<BookingListScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.event_busy_outlined,
-              size: 64,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.event_busy_outlined, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               language == 'ar' ? 'لا توجد حجوزات' : 'Aucune réservation',
@@ -136,10 +127,7 @@ class _BookingListScreenState extends State<BookingListScreen> {
         itemCount: _bookings.length,
         itemBuilder: (context, index) {
           final booking = _bookings[index];
-          return _BookingCard(
-            booking: booking,
-            language: language,
-          );
+          return _BookingCard(booking: booking, language: language);
         },
       ),
     );
@@ -150,10 +138,7 @@ class _BookingCard extends StatelessWidget {
   final Booking booking;
   final String language;
 
-  const _BookingCard({
-    required this.booking,
-    required this.language,
-  });
+  const _BookingCard({required this.booking, required this.language});
 
   @override
   Widget build(BuildContext context) {
@@ -228,10 +213,9 @@ class _BookingCard extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: () => _showCancelDialog(context, booking, language),
-                  child: Text(
-                    language == 'ar' ? 'إلغاء الحجز' : 'Annuler',
-                  ),
+                  onPressed: () =>
+                      _showCancelDialog(context, booking, language),
+                  child: Text(language == 'ar' ? 'إلغاء الحجز' : 'Annuler'),
                 ),
               ),
           ],
@@ -240,17 +224,25 @@ class _BookingCard extends StatelessWidget {
     );
   }
 
-  void _showCancelDialog(BuildContext context, Booking booking, String language) {
+  void _showCancelDialog(
+    BuildContext context,
+    Booking booking,
+    String language,
+  ) {
     final reasonController = TextEditingController();
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(language == 'ar' ? 'إلغاء الحجز' : 'Annuler la réservation'),
+        title: Text(
+          language == 'ar' ? 'إلغاء الحجز' : 'Annuler la réservation',
+        ),
         content: TextField(
           controller: reasonController,
           decoration: InputDecoration(
-            labelText: language == 'ar' ? 'سبب الإلغاء' : 'Raison de l\'annulation',
+            labelText: language == 'ar'
+                ? 'سبب الإلغاء'
+                : 'Raison de l\'annulation',
             border: const OutlineInputBorder(),
           ),
           maxLines: 3,

@@ -54,13 +54,13 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final language = Localizations.localeOf(context).languageCode == 'ar' ? 'ar' : 'fr';
-    
+    final language = Localizations.localeOf(context).languageCode == 'ar'
+        ? 'ar'
+        : 'fr';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          language == 'ar' ? 'قائمة المستخدمين' : 'User List',
-        ),
+        title: Text(language == 'ar' ? 'قائمة المستخدمين' : 'User List'),
       ),
       body: _buildBody(context, language),
     );
@@ -82,9 +82,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadUsers,
-              child: Text(
-                language == 'ar' ? 'إعادة المحاولة' : 'Retry',
-              ),
+              child: Text(language == 'ar' ? 'إعادة المحاولة' : 'Retry'),
             ),
           ],
         ),
@@ -93,9 +91,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
     if (_userList == null || _userList!.items.isEmpty) {
       return Center(
-        child: Text(
-          language == 'ar' ? 'لا يوجد مستخدمين' : 'No users found',
-        ),
+        child: Text(language == 'ar' ? 'لا يوجد مستخدمين' : 'No users found'),
       );
     }
 
@@ -115,7 +111,11 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     );
   }
 
-  Widget _buildUserCard(BuildContext context, UserListItem user, String language) {
+  Widget _buildUserCard(
+    BuildContext context,
+    UserListItem user,
+    String language,
+  ) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
@@ -127,11 +127,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           children: [
             Text(user.getStatusDisplay(language)),
             if (user.isVerified)
-              Icon(
-                Icons.verified,
-                size: 16,
-                color: Colors.green,
-              ),
+              Icon(Icons.verified, size: 16, color: Colors.green),
           ],
         ),
         onTap: () {
@@ -144,7 +140,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
   Widget _buildPagination(String language) {
     final totalPages = (_userList!.total / _pageSize).ceil();
-    
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(

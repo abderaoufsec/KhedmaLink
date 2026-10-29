@@ -90,10 +90,8 @@ def upgrade():
     )
 
     # Create index on disputes for status
-    op.create_index('ix_disputes_status', 'disputes', ['status'])
 
     # Create index on disputes for created_at
-    op.create_index('ix_disputes_created_at', 'disputes', ['created_at'])
 
     # Create dispute_evidence table
     op.create_table(
@@ -133,7 +131,6 @@ def upgrade():
     )
 
     # Create index on dispute_evidence for dispute_id
-    op.create_index('ix_dispute_evidence_dispute_id', 'dispute_evidence', ['dispute_id'])
 
 
 def downgrade():
@@ -148,3 +145,7 @@ def downgrade():
     # Drop tables
     op.drop_table('dispute_evidence')
     op.drop_table('disputes')
+
+    # Drop enum types
+    postgresql.ENUM(name='disputestatus').drop(op.get_bind())
+    postgresql.ENUM(name='disputetype').drop(op.get_bind())

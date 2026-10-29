@@ -1,13 +1,8 @@
 // Payment models for KhedmaLink Flutter app
 // Contains data models for payments, transactions, and payouts
 
-
 /// Payment method enum
-enum PaymentMethod {
-  cash,
-  manual,
-  card,
-}
+enum PaymentMethod { cash, manual, card }
 
 /// Payment status enum
 enum PaymentStatus {
@@ -20,19 +15,10 @@ enum PaymentStatus {
 }
 
 /// Transaction type enum
-enum TransactionType {
-  capture,
-  refund,
-  payout,
-}
+enum TransactionType { capture, refund, payout }
 
 /// Payout status enum
-enum PayoutStatus {
-  pending,
-  processing,
-  completed,
-  failed,
-}
+enum PayoutStatus { pending, processing, completed, failed }
 
 /// Extension for PaymentMethod string conversion
 extension PaymentMethodExtension on PaymentMethod {
@@ -193,12 +179,16 @@ class Payment {
       commissionRate: (json['commission_rate'] as num).toDouble(),
       commissionAmount: (json['commission_amount'] as num).toDouble(),
       providerAmount: (json['provider_amount'] as num).toDouble(),
-      paymentMethod: PaymentMethodExtension.fromJson(json['payment_method'] as String),
+      paymentMethod: PaymentMethodExtension.fromJson(
+        json['payment_method'] as String,
+      ),
       status: PaymentStatusExtension.fromJson(json['status'] as String),
       externalPaymentId: json['external_payment_id'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
-      completedAt: json['completed_at'] != null ? DateTime.parse(json['completed_at'] as String) : null,
+      completedAt: json['completed_at'] != null
+          ? DateTime.parse(json['completed_at'] as String)
+          : null,
     );
   }
 
@@ -258,7 +248,9 @@ class Transaction {
     return Transaction(
       id: json['id'] as String,
       paymentId: json['payment_id'] as String,
-      transactionType: TransactionTypeExtension.fromJson(json['transaction_type'] as String),
+      transactionType: TransactionTypeExtension.fromJson(
+        json['transaction_type'] as String,
+      ),
       amount: (json['amount'] as num).toDouble(),
       currency: json['currency'] as String,
       externalTransactionId: json['external_transaction_id'] as String?,
@@ -327,7 +319,9 @@ class Payout {
       notes: json['notes'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
-      completedAt: json['completed_at'] != null ? DateTime.parse(json['completed_at'] as String) : null,
+      completedAt: json['completed_at'] != null
+          ? DateTime.parse(json['completed_at'] as String)
+          : null,
     );
   }
 
@@ -368,7 +362,9 @@ class PaymentListResponse {
 
   factory PaymentListResponse.fromJson(Map<String, dynamic> json) {
     return PaymentListResponse(
-      items: (json['items'] as List).map((e) => Payment.fromJson(e as Map<String, dynamic>)).toList(),
+      items: (json['items'] as List)
+          .map((e) => Payment.fromJson(e as Map<String, dynamic>))
+          .toList(),
       total: json['total'] as int,
       page: json['page'] as int,
       pageSize: json['page_size'] as int,
@@ -380,13 +376,13 @@ class PaymentListResponse {
 class TransactionListResponse {
   final List<Transaction> items;
 
-  TransactionListResponse({
-    required this.items,
-  });
+  TransactionListResponse({required this.items});
 
   factory TransactionListResponse.fromJson(Map<String, dynamic> json) {
     return TransactionListResponse(
-      items: (json['items'] as List).map((e) => Transaction.fromJson(e as Map<String, dynamic>)).toList(),
+      items: (json['items'] as List)
+          .map((e) => Transaction.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }
@@ -395,13 +391,13 @@ class TransactionListResponse {
 class PayoutListResponse {
   final List<Payout> items;
 
-  PayoutListResponse({
-    required this.items,
-  });
+  PayoutListResponse({required this.items});
 
   factory PayoutListResponse.fromJson(Map<String, dynamic> json) {
     return PayoutListResponse(
-      items: (json['items'] as List).map((e) => Payout.fromJson(e as Map<String, dynamic>)).toList(),
+      items: (json['items'] as List)
+          .map((e) => Payout.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }

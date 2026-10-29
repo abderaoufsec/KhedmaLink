@@ -40,8 +40,10 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
 
     try {
       final request = await _requestService.getMyRequest(widget.requestId);
-      final attachments = await _requestService.listRequestAttachments(widget.requestId);
-      
+      final attachments = await _requestService.listRequestAttachments(
+        widget.requestId,
+      );
+
       if (mounted) {
         setState(() {
           _request = request;
@@ -85,9 +87,7 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
 
   Widget _buildBody(BuildContext context, String language) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -103,19 +103,14 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadRequest,
-              child: const Text('Retry'),
-            ),
+            ElevatedButton(onPressed: _loadRequest, child: const Text('Retry')),
           ],
         ),
       );
     }
 
     if (_request == null) {
-      return const Center(
-        child: Text('Request not found'),
-      );
+      return const Center(child: Text('Request not found'));
     }
 
     return SingleChildScrollView(
@@ -135,17 +130,15 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
           // Title
           Text(
             _request!.getLocalizedName(language),
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(context).textTheme.headlineSmall
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
           // Description
           Text(
             language == 'ar' ? 'الوصف' : 'Description',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
@@ -192,7 +185,8 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
             ),
           if (_request!.preferredDate != null) const SizedBox(height: 16),
           // Time range
-          if (_request!.preferredTimeStart != null || _request!.preferredTimeEnd != null)
+          if (_request!.preferredTimeStart != null ||
+              _request!.preferredTimeEnd != null)
             _buildSection(
               context,
               language == 'ar' ? 'الوقت المفضل' : 'Heure préférée',
@@ -214,14 +208,15 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                     Text(
                       language == 'ar' ? 'مرن' : 'Flexible',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                 ],
               ),
             ),
-          if (_request!.preferredTimeStart != null || _request!.preferredTimeEnd != null)
+          if (_request!.preferredTimeStart != null ||
+              _request!.preferredTimeEnd != null)
             const SizedBox(height: 16),
           // Budget
           if (_request!.budgetMin != null || _request!.budgetMax != null)
@@ -251,9 +246,8 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
           if (_attachments.isNotEmpty) ...[
             Text(
               language == 'ar' ? 'المرفقات' : 'Pièces jointes',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             SizedBox(
@@ -275,16 +269,14 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
           // Created date
           Text(
             language == 'ar' ? 'تاريخ الإنشاء' : 'Date de création',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
             _request!.createdAt,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.grey,
-                ),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: Colors.grey),
           ),
           const SizedBox(height: 24),
           // View quotes button
@@ -293,11 +285,12 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  context.pushNamed('quote_list', pathParameters: {'requestId': widget.requestId});
+                  context.pushNamed(
+                    'quote_list',
+                    pathParameters: {'requestId': widget.requestId},
+                  );
                 },
-                child: Text(
-                  language == 'ar' ? 'عرض العروض' : 'Voir les devis',
-                ),
+                child: Text(language == 'ar' ? 'عرض العروض' : 'Voir les devis'),
               ),
             ),
         ],
@@ -320,17 +313,13 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
             const SizedBox(width: 8),
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.only(left: 28),
-          child: child,
-        ),
+        Padding(padding: const EdgeInsets.only(left: 28), child: child),
       ],
     );
   }
@@ -346,7 +335,9 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              language == 'ar' ? 'تم حذف المرفق بنجاح' : 'Attachment deleted successfully',
+              language == 'ar'
+                  ? 'تم حذف المرفق بنجاح'
+                  : 'Attachment deleted successfully',
             ),
             backgroundColor: Colors.green,
           ),
@@ -470,10 +461,7 @@ class _AttachmentCard extends StatelessWidget {
   final RequestAttachment attachment;
   final VoidCallback onDelete;
 
-  const _AttachmentCard({
-    required this.attachment,
-    required this.onDelete,
-  });
+  const _AttachmentCard({required this.attachment, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {

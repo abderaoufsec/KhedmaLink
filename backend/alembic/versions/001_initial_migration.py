@@ -8,6 +8,7 @@ Create Date: 2025-01-22 22:00:00.000000
 
 """
 from typing import Sequence, Union
+import uuid
 
 from alembic import op
 import sqlalchemy as sa
@@ -33,8 +34,8 @@ def upgrade() -> None:
         sa.Column('description', sa.String(length=255), nullable=True),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('pk_roles'),
-        sa.UniqueConstraint('uq_roles_name')
+        sa.PrimaryKeyConstraint('id'),
+        sa.UniqueConstraint('name')
     )
     op.create_index('ix_roles_id', 'roles', ['id'])
     op.create_index('ix_roles_name', 'roles', ['name'])
@@ -53,9 +54,9 @@ def upgrade() -> None:
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
         sa.Column('last_login', sa.DateTime(timezone=True), nullable=True),
-        sa.PrimaryKeyConstraint('pk_users'),
-        sa.UniqueConstraint('uq_users_email'),
-        sa.UniqueConstraint('uq_users_phone')
+        sa.PrimaryKeyConstraint('id'),
+        sa.UniqueConstraint('email'),
+        sa.UniqueConstraint('phone')
     )
     op.create_index('ix_users_id', 'users', ['id'])
     op.create_index('ix_users_email', 'users', ['email'])
@@ -66,9 +67,9 @@ def upgrade() -> None:
         'user_roles',
         sa.Column('user_id', postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column('role_id', postgresql.UUID(as_uuid=True), nullable=False),
-        sa.ForeignKeyConstraint(['user_id'], 'users', ondelete='CASCADE'),
-        sa.ForeignKeyConstraint(['role_id'], 'roles', ondelete='CASCADE'),
-        sa.PrimaryKeyConstraint('pk_user_roles', 'user_id', 'role_id')
+        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ondelete='CASCADE'),
+        sa.PrimaryKeyConstraint('user_id', 'role_id')
     )
 
     # Create user_role_history table for audit trail
@@ -80,25 +81,44 @@ def upgrade() -> None:
         sa.Column('action', sa.String(length=20), nullable=False),
         sa.Column('performed_by', postgresql.UUID(as_uuid=True), nullable=True),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-        sa.PrimaryKeyConstraint('pk_user_role_history'),
-        sa.ForeignKeyConstraint(['user_id'], 'users', ondelete='CASCADE'),
-        sa.ForeignKeyConstraint(['role_id'], 'roles', ondelete='CASCADE'),
-        sa.ForeignKeyConstraint(['performed_by'], 'users')
+        sa.PrimaryKeyConstraint('id'),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['performed_by'], ['users.id'])
     )
     op.create_index('ix_user_role_history_id', 'user_role_history', ['id'])
 
     # Insert default roles
-    op.execute(
-        sa.insert(
-            sa.table('roles')
-        ).values(
-            [
-                {'name': 'customer', 'description': 'Regular customer role'},
-                {'name': 'provider', 'description': 'Service provider role'},
-                {'name': 'admin', 'description': 'Administrator role'},
-                {'name': 'super_admin', 'description': 'Super administrator role'},
-            ]
-        )
+    roles_table = sa.table(
+        'roles',
+        sa.column('id', postgresql.UUID(as_uuid=True)),
+        sa.column('name', sa.String(length=50)),
+        sa.column('description', sa.String(length=255)),
+    )
+    op.bulk_insert(
+        roles_table,
+        [
+            {
+                'id': uuid.uuid4(),
+                'name': 'customer',
+                'description': 'Regular customer role',
+            },
+            {
+                'id': uuid.uuid4(),
+                'name': 'provider',
+                'description': 'Service provider role',
+            },
+            {
+                'id': uuid.uuid4(),
+                'name': 'admin',
+                'description': 'Administrator role',
+            },
+            {
+                'id': uuid.uuid4(),
+                'name': 'super_admin',
+                'description': 'Super administrator role',
+            },
+        ],
     )
 
 

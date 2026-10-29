@@ -16,8 +16,8 @@ class MessagingApiService {
 
   /// Constructor
   MessagingApiService({http.Client? client, AuthService? authService})
-      : _client = client ?? http.Client(),
-        _authService = authService ?? AuthService();
+    : _client = client ?? http.Client(),
+      _authService = authService ?? AuthService();
 
   /// Get base URL from config
   String get _baseUrl => AppConfig.apiBaseUrlDirect;
@@ -53,21 +53,21 @@ class MessagingApiService {
         'limit': limit.toString(),
       };
 
-      final uri = Uri.parse('$_baseUrl/api/v1/messages/me/bookings/$bookingId/messages')
-          .replace(queryParameters: queryParams);
+      final uri = Uri.parse(
+        '$_baseUrl/api/v1/messages/me/bookings/$bookingId/messages',
+      ).replace(queryParameters: queryParams);
 
-      final response = await _client.get(
-        uri,
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(uri, headers: await _getAuthHeaders())
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as List;
-        final messages =
-            data.map((item) => models.Message.fromJson(item as Map<String, dynamic>))
-                .toList();
+        final messages = data
+            .map(
+              (item) => models.Message.fromJson(item as Map<String, dynamic>),
+            )
+            .toList();
 
         AppLogger.info('Messages fetched successfully: ${messages.length}');
         return messages;
@@ -82,7 +82,9 @@ class MessagingApiService {
         throw Exception('Booking not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch messages: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch messages: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch messages');
       }
     } catch (e) {
@@ -96,17 +98,19 @@ class MessagingApiService {
     try {
       AppLogger.info('Creating message for booking: $bookingId');
 
-      final response = await _client.post(
-        Uri.parse('$_baseUrl/api/v1/messages/me/bookings/$bookingId/messages'),
-        headers: await _getAuthHeaders(),
-        body: jsonEncode({
-          'booking_id': bookingId,
-          'content': content,
-          'message_type': 'text',
-        }),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .post(
+            Uri.parse(
+              '$_baseUrl/api/v1/messages/me/bookings/$bookingId/messages',
+            ),
+            headers: await _getAuthHeaders(),
+            body: jsonEncode({
+              'booking_id': bookingId,
+              'content': content,
+              'message_type': 'text',
+            }),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -119,13 +123,17 @@ class MessagingApiService {
         throw Exception('Unauthorized');
       } else if (response.statusCode == 403) {
         AppLogger.error('Forbidden to create message');
-        throw Exception('You do not have permission to send messages to this booking');
+        throw Exception(
+          'You do not have permission to send messages to this booking',
+        );
       } else if (response.statusCode == 404) {
         AppLogger.error('Booking not found');
         throw Exception('Booking not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to create message: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to create message: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to create message');
       }
     } catch (e) {
@@ -139,15 +147,13 @@ class MessagingApiService {
     try {
       AppLogger.info('Updating message: $messageId');
 
-      final response = await _client.patch(
-        Uri.parse('$_baseUrl/api/v1/messages/me/messages/$messageId'),
-        headers: await _getAuthHeaders(),
-        body: jsonEncode({
-          'is_read': isRead,
-        }),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .patch(
+            Uri.parse('$_baseUrl/api/v1/messages/me/messages/$messageId'),
+            headers: await _getAuthHeaders(),
+            body: jsonEncode({'is_read': isRead}),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -166,7 +172,9 @@ class MessagingApiService {
         throw Exception('Message not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to update message: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to update message: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to update message');
       }
     } catch (e) {
@@ -201,27 +209,31 @@ class MessagingApiService {
       final uri = Uri.parse('$_baseUrl/api/v1/messages/me/notifications')
           .replace(queryParameters: queryParams);
 
-      final response = await _client.get(
-        uri,
-        headers: await _getAuthHeaders(),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .get(uri, headers: await _getAuthHeaders())
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as List;
-        final notifications =
-            data.map((item) => models.AppNotification.fromJson(item as Map<String, dynamic>))
-                .toList();
+        final notifications = data
+            .map(
+              (item) =>
+                  models.AppNotification.fromJson(item as Map<String, dynamic>),
+            )
+            .toList();
 
-        AppLogger.info('Notifications fetched successfully: ${notifications.length}');
+        AppLogger.info(
+          'Notifications fetched successfully: ${notifications.length}',
+        );
         return notifications;
       } else if (response.statusCode == 401) {
         AppLogger.error('Unauthorized access to notifications');
         throw Exception('Unauthorized');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to fetch notifications: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to fetch notifications: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to fetch notifications');
       }
     } catch (e) {
@@ -231,19 +243,22 @@ class MessagingApiService {
   }
 
   /// Update a notification (mark as read)
-  Future<models.AppNotification> updateNotification(String notificationId, bool isRead) async {
+  Future<models.AppNotification> updateNotification(
+    String notificationId,
+    bool isRead,
+  ) async {
     try {
       AppLogger.info('Updating notification: $notificationId');
 
-      final response = await _client.patch(
-        Uri.parse('$_baseUrl/api/v1/messages/me/notifications/$notificationId'),
-        headers: await _getAuthHeaders(),
-        body: jsonEncode({
-          'is_read': isRead,
-        }),
-      ).timeout(
-        const Duration(seconds: 30),
-      );
+      final response = await _client
+          .patch(
+            Uri.parse(
+              '$_baseUrl/api/v1/messages/me/notifications/$notificationId',
+            ),
+            headers: await _getAuthHeaders(),
+            body: jsonEncode({'is_read': isRead}),
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -256,13 +271,17 @@ class MessagingApiService {
         throw Exception('Unauthorized');
       } else if (response.statusCode == 403) {
         AppLogger.error('Forbidden to update notification');
-        throw Exception('You do not have permission to update this notification');
+        throw Exception(
+          'You do not have permission to update this notification',
+        );
       } else if (response.statusCode == 404) {
         AppLogger.error('Notification not found');
         throw Exception('Notification not found');
       } else {
         final error = jsonDecode(response.body) as Map<String, dynamic>?;
-        AppLogger.error('Failed to update notification: ${error?['detail'] ?? 'Unknown error'}');
+        AppLogger.error(
+          'Failed to update notification: ${error?['detail'] ?? 'Unknown error'}',
+        );
         throw Exception(error?['detail'] ?? 'Failed to update notification');
       }
     } catch (e) {

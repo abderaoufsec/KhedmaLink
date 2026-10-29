@@ -24,26 +24,26 @@ def upgrade():
     message_type_enum = postgresql.ENUM(
         'text', 'image', 'system',
         name='message_type',
-        create_type=True
+        create_type=False
     )
-    message_type_enum.create(op.get_bind())
+    message_type_enum.create(op.get_bind(), checkfirst=True)
 
     # Create upload_status enum type
     upload_status_enum = postgresql.ENUM(
         'pending', 'uploaded', 'failed',
         name='upload_status',
-        create_type=True
+        create_type=False
     )
-    upload_status_enum.create(op.get_bind())
+    upload_status_enum.create(op.get_bind(), checkfirst=True)
 
     # Create notification_type enum type
     notification_type_enum = postgresql.ENUM(
         'quote_received', 'quote_accepted', 'booking_created', 'booking_scheduled',
         'booking_started', 'booking_completed', 'booking_cancelled', 'message_received',
         name='notification_type',
-        create_type=True
+        create_type=False
     )
-    notification_type_enum.create(op.get_bind())
+    notification_type_enum.create(op.get_bind(), checkfirst=True)
 
     # Create messages table
     op.create_table(
@@ -93,7 +93,6 @@ def upgrade():
     )
 
     # Create index on messages for booking_id
-    op.create_index('ix_messages_booking_id', 'messages', ['booking_id'])
 
     # Create message_attachments table
     op.create_table(
@@ -130,7 +129,6 @@ def upgrade():
     )
 
     # Create index on message_attachments for message_id
-    op.create_index('ix_message_attachments_message_id', 'message_attachments', ['message_id'])
 
     # Create notifications table
     op.create_table(
@@ -170,10 +168,8 @@ def upgrade():
     )
 
     # Create index on notifications for user_id
-    op.create_index('ix_notifications_user_id', 'notifications', ['user_id'])
 
     # Create index on notifications for is_read
-    op.create_index('ix_notifications_is_read', 'notifications', ['is_read'])
 
 
 def downgrade():

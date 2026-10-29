@@ -55,7 +55,9 @@ extension AuditActionTypeExtension on AuditActionType {
       case AuditActionType.categoryDeleted:
         return language == 'ar' ? 'حذف الفئة' : 'Category Deleted';
       case AuditActionType.platformSettingChanged:
-        return language == 'ar' ? 'تغيير إعدادات المنصة' : 'Platform Setting Changed';
+        return language == 'ar'
+            ? 'تغيير إعدادات المنصة'
+            : 'Platform Setting Changed';
       case AuditActionType.featureFlagChanged:
         return language == 'ar' ? 'تغيير ميزة' : 'Feature Flag Changed';
       case AuditActionType.disputeResolved:
@@ -97,7 +99,9 @@ class AuditLog {
   factory AuditLog.fromJson(Map<String, dynamic> json) {
     return AuditLog(
       id: json['id'] as String,
-      actionType: AuditActionTypeExtension.fromJson(json['action_type'] as String),
+      actionType: AuditActionTypeExtension.fromJson(
+        json['action_type'] as String,
+      ),
       actorId: json['actor_id'] as String,
       targetUserId: json['target_user_id'] as String?,
       targetResourceType: json['target_resource_type'] as String?,
@@ -163,7 +167,9 @@ class UserListItem {
       isActive: json['is_active'] as bool,
       isVerified: json['is_verified'] as bool,
       createdAt: DateTime.parse(json['created_at'] as String),
-      lastLogin: json['last_login'] != null ? DateTime.parse(json['last_login'] as String) : null,
+      lastLogin: json['last_login'] != null
+          ? DateTime.parse(json['last_login'] as String)
+          : null,
     );
   }
 
@@ -198,7 +204,9 @@ class UserListResponse {
 
   factory UserListResponse.fromJson(Map<String, dynamic> json) {
     return UserListResponse(
-      items: (json['items'] as List).map((e) => UserListItem.fromJson(e as Map<String, dynamic>)).toList(),
+      items: (json['items'] as List)
+          .map((e) => UserListItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
       total: json['total'] as int,
       page: json['page'] as int,
       pageSize: json['page_size'] as int,
@@ -236,7 +244,9 @@ class ProviderVerificationQueueItem {
       businessType: json['business_type'] as String?,
       verificationStatus: json['verification_status'] as String,
       verificationLevel: json['verification_level'] as String,
-      submittedAt: json['submitted_at'] != null ? DateTime.parse(json['submitted_at'] as String) : null,
+      submittedAt: json['submitted_at'] != null
+          ? DateTime.parse(json['submitted_at'] as String)
+          : null,
       createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
@@ -274,7 +284,13 @@ class VerificationQueueResponse {
 
   factory VerificationQueueResponse.fromJson(Map<String, dynamic> json) {
     return VerificationQueueResponse(
-      items: (json['items'] as List).map((e) => ProviderVerificationQueueItem.fromJson(e as Map<String, dynamic>)).toList(),
+      items: (json['items'] as List)
+          .map(
+            (e) => ProviderVerificationQueueItem.fromJson(
+              e as Map<String, dynamic>,
+            ),
+          )
+          .toList(),
       total: json['total'] as int,
       page: json['page'] as int,
       pageSize: json['page_size'] as int,
@@ -298,7 +314,9 @@ class AuditLogListResponse {
 
   factory AuditLogListResponse.fromJson(Map<String, dynamic> json) {
     return AuditLogListResponse(
-      items: (json['items'] as List).map((e) => AuditLog.fromJson(e as Map<String, dynamic>)).toList(),
+      items: (json['items'] as List)
+          .map((e) => AuditLog.fromJson(e as Map<String, dynamic>))
+          .toList(),
       total: json['total'] as int,
       page: json['page'] as int,
       pageSize: json['page_size'] as int,
