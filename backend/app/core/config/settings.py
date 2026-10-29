@@ -3,9 +3,16 @@ Application Settings Configuration
 Manages all environment variables and application configuration using Pydantic Settings
 """
 
+import os
+from pathlib import Path
 from typing import List, Union
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+def _env_path() -> str:
+    """Resolve .env path relative to project root (backend/)"""
+    return str(Path(__file__).resolve().parents[3] / ".env")
 
 
 class Settings(BaseSettings):
@@ -15,7 +22,7 @@ class Settings(BaseSettings):
     """
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=_env_path(),
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
