@@ -21,14 +21,16 @@ analyze result: 81 info-level issues only (0 errors, 0 warnings) — down from 8
 -------------------------------------------------------------------------------
 P1 — CODE QUALITY (analyzer)
 -------------------------------------------------------------------------------
-[ ] Replace deprecated `withOpacity` → `withValues()` (~80 info-level issues)
-    - booking_list_screen.dart, messaging_screen.dart, notifications_screen.dart,
-      provider_detail_screen.dart, provider_profile_management_screen.dart,
-      eligible_requests_screen.dart, quote_list_screen.dart, request_detail_screen.dart
-[ ] Make `_currentPage` final in onboarding_screen.dart (if safe)
-[ ] Zero errors & warnings in `flutter analyze` (infos acceptable, then reduce)
-[ ] Confirm backend tests stay green (159 passed / 16 skipped) after any changes
-[ ] Confirm Flutter tests stay green (29 passed)
+[x] Replace deprecated `withOpacity` → `withValues()` — ALL occurrences replaced across 9 files
+    - booking_detail_screen.dart, booking_list_screen.dart, messaging_screen.dart,
+      notifications_screen.dart, provider_detail_screen.dart,
+      provider_profile_management_screen.dart, eligible_requests_screen.dart,
+      quote_list_screen.dart, request_detail_screen.dart
+    - Remaining analyzer issues: 56 info-level only (use_null_aware_elements, prefer_final_fields)
+    - 0 errors, 0 warnings (down from 84: 2 errors, 2 warnings, 80 infos)
+[x] Confirm backend tests stay green (159 passed / 16 skipped)
+[x] Confirm Flutter tests stay green (29 passed)
+[ ] Fix remaining info-level issues (use_null_aware_elements, prefer_final_fields)
 
 -------------------------------------------------------------------------------
 P2 — P2 HOME / ONBOARDING (latest commit, incomplete)

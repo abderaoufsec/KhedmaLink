@@ -211,7 +211,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
         color: Theme.of(context).colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -303,9 +303,9 @@ class _MessageBubble extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 color: isFromSelf
-                    ? Theme.of(context).colorScheme.onPrimary.withOpacity(0.7)
+                    ? Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.7)
                     : Theme.of(context).colorScheme.onSurfaceVariant
-                          .withOpacity(0.7),
+                          .withValues(alpha: 0.7),
               ),
             ),
           ],

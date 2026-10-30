@@ -222,7 +222,7 @@ class _NotificationTile extends StatelessWidget {
                 height: 48,
                 decoration: BoxDecoration(
                   color: _getNotificationColor(notification.notificationType)
-                      .withOpacity(0.1),
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Icon(
@@ -249,7 +249,7 @@ class _NotificationTile extends StatelessWidget {
                       Text(
                         notification.getLocalizedBody(language)!,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
