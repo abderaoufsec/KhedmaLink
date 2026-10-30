@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/app_config.dart';
 import '../services/auth_service.dart';
@@ -56,18 +57,28 @@ class AppRouter {
 
     // Redirect unauthenticated users to login
     redirect: (context, state) async {
+      final currentRoute = state.uri.toString();
+
+      // Onboarding gate: first-launch check (shown before login on first ever run)
+      final prefs = await SharedPreferences.getInstance();
+      final onboardingCompleted = prefs.getBool('onboarding_completed') ?? false;
+
+      if (!onboardingCompleted && currentRoute != '/onboarding') {
+        return '/onboarding';
+      }
+
       final authService = AuthService();
       final isAuthenticated = await authService.isAuthenticated();
 
       // Public routes that don't require authentication
       final publicRoutes = ['/login', '/register', '/onboarding'];
 
-      if (!isAuthenticated && !publicRoutes.contains(state.uri.toString())) {
+      if (!isAuthenticated && !publicRoutes.contains(currentRoute)) {
         return '/login';
       }
 
-      // Redirect authenticated users away from login/register
-      if (isAuthenticated && publicRoutes.contains(state.uri.toString())) {
+      // Redirect authenticated users away from login/register/onboarding
+      if (isAuthenticated && publicRoutes.contains(currentRoute)) {
         return '/home';
       }
 

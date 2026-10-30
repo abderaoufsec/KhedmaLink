@@ -11,7 +11,7 @@ import 'package:khedmalink/main.dart';
 void main() {
   testWidgets('App initializes without errors', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const KhedmaLinkApp());
+    await tester.pumpWidget(const KhedmaLinkApp(locale: Locale('ar')));
 
     // Verify that the app initializes without throwing errors
     // The placeholder screen will be replaced in future milestones

@@ -97,6 +97,14 @@ class AppLocalizations {
       'welcome': 'مرحباً',
       'welcomeBack': 'مرحباً بعودتك',
 
+      // Onboarding
+      'onboardingTitle1': 'مرحباً بكم في خدمة لينك',
+      'onboardingSubtitle1': 'تربطك بأفضل مقدمي الخدمات في منطقتك',
+      'onboardingTitle2': 'خدمات موثوقة',
+      'onboardingSubtitle2': 'نحرص على جودة الخدمة ورضا العملاء',
+      'onboardingTitle3': 'ابدأ الآن',
+      'onboardingSubtitle3': 'اكتشف الخدمات واحجز موعدك بسهولة',
+
       // Placeholder
       'notImplemented': 'هذه الميزة لم يتم تنفيذها بعد',
     },
@@ -167,6 +175,13 @@ class AppLocalizations {
       'welcome': 'Bienvenue',
       'welcomeBack': 'Bon retour',
 
+      // Onboarding
+      'onboardingTitle1': 'Bienvenue sur KhedmaLink',
+      'onboardingSubtitle1': 'Vous met en relation avec les meilleurs prestataires de votre région',
+      'onboardingTitle2': 'Services de confiance',
+      'onboardingSubtitle2': 'Nous assurons la qualité du service et la satisfaction client',
+      'onboardingTitle3': 'Commencez maintenant',
+      'onboardingSubtitle3': 'Découvrez les services et réservez votre rendez-vous facilement',
       // Placeholder
       'notImplemented': 'Cette fonctionnalité n\'est pas encore implémentée',
     },
@@ -200,6 +215,21 @@ class AppLocalizations {
   String get skip => _localizedValues[locale.languageCode]!['skip']!;
   String get done => _localizedValues[locale.languageCode]!['done']!;
 
+  // Onboarding
+  String get onboardingTitle1 =>
+      _localizedValues[locale.languageCode]!['onboardingTitle1']!;
+  String get onboardingSubtitle1 =>
+      _localizedValues[locale.languageCode]!['onboardingSubtitle1']!;
+  String get onboardingTitle2 =>
+      _localizedValues[locale.languageCode]!['onboardingTitle2']!;
+  String get onboardingSubtitle2 =>
+      _localizedValues[locale.languageCode]!['onboardingSubtitle2']!;
+  String get onboardingTitle3 =>
+      _localizedValues[locale.languageCode]!['onboardingTitle3']!;
+  String get onboardingSubtitle3 =>
+      _localizedValues[locale.languageCode]!['onboardingSubtitle3']!;
+
+  // Navigation
   // Navigation
   String get home => _localizedValues[locale.languageCode]!['home']!;
   String get profile => _localizedValues[locale.languageCode]!['profile']!;

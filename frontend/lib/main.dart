@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/config/app_config.dart';
 import 'core/routing/app_router.dart';
@@ -11,12 +12,17 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 ///
 /// This function initializes the app with proper configuration,
 /// routing, theming, and localization support for Arabic and French.
-void main() {
+void main() async {
   // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Read saved locale from shared preferences (default to Arabic)
+  final prefs = await SharedPreferences.getInstance();
+  final localeString = prefs.getString('locale') ?? 'ar';
+  final savedLocale = localeString == 'ar' ? const Locale('ar') : const Locale('fr');
+
   // Run the app with configured settings
-  runApp(const KhedmaLinkApp());
+  runApp(KhedmaLinkApp(locale: savedLocale));
 }
 
 /// Root widget of the KhedmaLink application
@@ -27,7 +33,9 @@ void main() {
 /// - Localization support (Arabic RTL, French LTR)
 /// - Responsive design
 class KhedmaLinkApp extends StatelessWidget {
-  const KhedmaLinkApp({super.key});
+  final Locale locale;
+
+  const KhedmaLinkApp({super.key, required this.locale});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +69,7 @@ class KhedmaLinkApp extends StatelessWidget {
       ],
 
       // Current locale configuration
-      locale: const Locale('ar'), // Default to Arabic
+      locale: locale,
     );
   }
 }

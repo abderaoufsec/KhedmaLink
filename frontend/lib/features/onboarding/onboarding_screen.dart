@@ -68,20 +68,20 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           _buildPage(
             index: 0,
-            title: localizations.welcome,
-            subtitle: 'KhedmaLink تربطك بأفضل مقدمي الخدمات في منطقتك',
+            title: localizations.onboardingTitle1,
+            subtitle: localizations.onboardingSubtitle1,
             image: Icons.supervised_user_circle,
           ),
           _buildPage(
             index: 1,
-            title: 'خدمات موثوقة',
-            subtitle: 'نحرص على جودة الخدمة ورضا العملاء',
+            title: localizations.onboardingTitle2,
+            subtitle: localizations.onboardingSubtitle2,
             image: Icons.shopping_bag,
           ),
           _buildPage(
             index: 2,
-            title: 'ابدأ الآن',
-            subtitle: 'اكتشف الخدمات واحجز موعدك بسهولة',
+            title: localizations.onboardingTitle3,
+            subtitle: localizations.onboardingSubtitle3,
             image: Icons.launch,
           ),
         ],
