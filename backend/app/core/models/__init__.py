@@ -3,8 +3,8 @@ Database models package for KhedmaLink backend
 Contains SQLAlchemy ORM models for all database entities
 """
 
-from .user import User, Role, UserRole
-from .provider import (
+from .user import User, Role, UserRole  # noqa: E402
+from .provider import (  # noqa: E402
     Category,
     ProviderProfile,
     ProviderService,
@@ -12,14 +12,14 @@ from .provider import (
     AvailabilityRule,
     VerificationCase,
 )
-from .request import ServiceRequest, RequestAttachment
-from .quote import Quote, RequestMatch
-from .booking import Booking, BookingEvent
-from .message import Message, MessageAttachment, Notification
-from .review import Review
-from .admin import AuditLog, AuditActionType
-from .dispute import Dispute, DisputeEvidence, DisputeStatus, DisputeType
-from .payment import (
+from .request import ServiceRequest, RequestAttachment  # noqa: E402
+from .quote import Quote, RequestMatch  # noqa: E402
+from .booking import Booking, BookingEvent  # noqa: E402
+from .message import Message, MessageAttachment, Notification  # noqa: E402
+from .review import Review  # noqa: E402
+from .admin import AuditLog, AuditActionType  # noqa: E402
+from .dispute import Dispute, DisputeEvidence, DisputeStatus, DisputeType  # noqa: E402
+from .payment import (  # noqa: E402
     Payment,
     Transaction,
     Payout,

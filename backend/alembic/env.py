@@ -3,12 +3,8 @@ Alembic Environment Configuration
 Defines the database connection and migration context for Alembic
 """
 
-from logging.config import fileConfig
-from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import declarative_base
 
 from alembic import context
 

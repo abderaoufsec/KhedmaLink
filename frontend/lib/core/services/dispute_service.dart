@@ -134,7 +134,7 @@ class DisputeApiService {
       AppLogger.info('Updating dispute: $disputeId');
 
       final uri = Uri.parse('$_baseUrl/disputes/$disputeId');
-      final body = json.encode({if (response != null) 'response': response});
+      final body = json.encode({'response': ?response});
 
       final httpResponse = await http.put(
         uri,
@@ -172,11 +172,11 @@ class DisputeApiService {
       final uri = Uri.parse('$_baseUrl/disputes/$disputeId/evidence');
       final body = json.encode({
         'evidence_type': evidenceType,
-        if (fileUrl != null) 'file_url': fileUrl,
-        if (fileName != null) 'file_name': fileName,
-        if (fileSize != null) 'file_size': fileSize,
-        if (mimeType != null) 'mime_type': mimeType,
-        if (description != null) 'description': description,
+        'file_url': ?fileUrl,
+        'file_name': ?fileName,
+        'file_size': ?fileSize,
+        'mime_type': ?mimeType,
+        'description': ?description,
       });
 
       final response = await http.post(uri, headers: _getHeaders(), body: body);

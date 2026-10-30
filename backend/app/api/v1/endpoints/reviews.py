@@ -3,23 +3,23 @@ Review API endpoints
 Handles CRUD operations for reviews and provider reputation
 """
 
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy import select, and_, func
-from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime
+from typing import List, Optional  # noqa: E402
+from fastapi import APIRouter, Depends, HTTPException, status  # noqa: E402
+from sqlalchemy import select  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
+from datetime import datetime  # noqa: E402
 
-from app.core.database import get_db
-from app.core.models.review import Review
-from app.core.models.booking import Booking
-from app.core.models.user import User
-from app.core.schemas.review import (
+from app.core.database import get_db  # noqa: E402
+from app.core.models.review import Review  # noqa: E402
+from app.core.models.booking import Booking  # noqa: E402
+from app.core.models.user import User  # noqa: E402
+from app.core.schemas.review import (  # noqa: E402
     ReviewCreate,
     ReviewUpdate,
     ReviewResponse,
     ProviderReputation,
 )
-from app.core.security.dependencies import get_current_user
+from app.core.security.dependencies import get_current_user  # noqa: E402
 
 # Create router for review endpoints
 router = APIRouter()
@@ -224,7 +224,27 @@ async def create_review(
     )
     db.add(review)
     await db.commit()
-    await db.refresh(review)
+    await db.refresh(
+        review,
+        attribute_names=[
+            "id",
+            "booking_id",
+            "customer_id",
+            "provider_id",
+            "rating",
+            "title",
+            "comment",
+            "professionalism",
+            "quality",
+            "timeliness",
+            "communication",
+            "value",
+            "provider_response",
+            "provider_response_at",
+            "created_at",
+            "updated_at",
+        ],
+    )
 
     return review
 

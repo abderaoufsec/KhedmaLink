@@ -323,7 +323,7 @@ class ProviderApiService {
                 'business_description_ar': businessDescriptionAr,
               if (businessDescriptionFr?.isNotEmpty == true)
                 'business_description_fr': businessDescriptionFr,
-              if (yearsExperience != null) 'years_experience': yearsExperience,
+              'years_experience': ?yearsExperience,
               if (city?.isNotEmpty == true) 'city': city,
               if (wilaya?.isNotEmpty == true) 'wilaya': wilaya,
               if (address?.isNotEmpty == true) 'address': address,
@@ -381,12 +381,12 @@ class ProviderApiService {
                 'business_description_ar': businessDescriptionAr,
               if (businessDescriptionFr?.isNotEmpty == true)
                 'business_description_fr': businessDescriptionFr,
-              if (yearsExperience != null) 'years_experience': yearsExperience,
+              'years_experience': ?yearsExperience,
               if (city?.isNotEmpty == true) 'city': city,
               if (wilaya?.isNotEmpty == true) 'wilaya': wilaya,
               if (address?.isNotEmpty == true) 'address': address,
-              if (isPublic != null) 'is_public': isPublic,
-              if (isAvailable != null) 'is_available': isAvailable,
+              'is_public': ?isPublic,
+              'is_available': ?isAvailable,
             }),
           )
           .timeout(const Duration(seconds: 30));
@@ -483,7 +483,7 @@ class ProviderApiService {
                 'description_ar': descriptionAr,
               if (descriptionFr?.isNotEmpty == true)
                 'description_fr': descriptionFr,
-              if (basePrice != null) 'base_price': basePrice,
+              'base_price': ?basePrice,
               if (priceUnit?.isNotEmpty == true) 'price_unit': priceUnit,
             }),
           )
@@ -539,9 +539,9 @@ class ProviderApiService {
                 'description_ar': descriptionAr,
               if (descriptionFr?.isNotEmpty == true)
                 'description_fr': descriptionFr,
-              if (basePrice != null) 'base_price': basePrice,
+              'base_price': ?basePrice,
               if (priceUnit?.isNotEmpty == true) 'price_unit': priceUnit,
-              if (isActive != null) 'is_active': isActive,
+              'is_active': ?isActive,
             }),
           )
           .timeout(const Duration(seconds: 30));
@@ -663,9 +663,9 @@ class ProviderApiService {
               if (commune?.isNotEmpty == true) 'commune': commune,
               if (addressDetails?.isNotEmpty == true)
                 'address_details': addressDetails,
-              if (latitude != null) 'latitude': latitude,
-              if (longitude != null) 'longitude': longitude,
-              if (radiusKm != null) 'radius_km': radiusKm,
+              'latitude': ?latitude,
+              'longitude': ?longitude,
+              'radius_km': ?radiusKm,
             }),
           )
           .timeout(const Duration(seconds: 30));
@@ -717,10 +717,10 @@ class ProviderApiService {
               if (commune?.isNotEmpty == true) 'commune': commune,
               if (addressDetails?.isNotEmpty == true)
                 'address_details': addressDetails,
-              if (latitude != null) 'latitude': latitude,
-              if (longitude != null) 'longitude': longitude,
-              if (radiusKm != null) 'radius_km': radiusKm,
-              if (isActive != null) 'is_active': isActive,
+              'latitude': ?latitude,
+              'longitude': ?longitude,
+              'radius_km': ?radiusKm,
+              'is_active': ?isActive,
             }),
           )
           .timeout(const Duration(seconds: 30));
@@ -884,10 +884,10 @@ class ProviderApiService {
             Uri.parse('$_baseUrl/api/v1/providers/me/availability/$ruleId'),
             headers: await _getAuthHeaders(),
             body: jsonEncode({
-              if (dayOfWeek != null) 'day_of_week': dayOfWeek,
+              'day_of_week': ?dayOfWeek,
               if (startTime?.isNotEmpty == true) 'start_time': startTime,
               if (endTime?.isNotEmpty == true) 'end_time': endTime,
-              if (isActive != null) 'is_active': isActive,
+              'is_active': ?isActive,
             }),
           )
           .timeout(const Duration(seconds: 30));

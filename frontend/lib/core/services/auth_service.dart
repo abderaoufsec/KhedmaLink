@@ -316,7 +316,33 @@ class AuthService {
   /// Get user ID
   Future<String?> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_userIdKey);
+    final storedId = prefs.getString(_userIdKey);
+    if (storedId != null && storedId.isNotEmpty) {
+      return storedId;
+    }
+    // Fall back to decoding the JWT access token
+    final token = await getAccessToken();
+    if (token == null || token.isEmpty) return null;
+    final parts = token.split('.');
+    if (parts.length != 3) return null;
+    try {
+      final payload = parts[1];
+      // Add padding if needed
+      final padded = payload.padRight(
+        payload.length + (4 - payload.length % 4) % 4,
+        '=',
+      );
+      final decoded = utf8.decode(base64Url.decode(padded));
+      final data = jsonDecode(decoded) as Map<String, dynamic>;
+      final sub = data['sub'] as String?;
+      if (sub != null && sub.isNotEmpty) {
+        await prefs.setString(_userIdKey, sub);
+        return sub;
+      }
+    } catch (e) {
+      AppLogger.error('Failed to decode JWT token: $e');
+    }
+    return null;
   }
 
   /// Get user email

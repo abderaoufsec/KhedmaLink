@@ -3,9 +3,9 @@ API endpoint tests
 Tests health check endpoints and request ID middleware
 """
 
-import pytest
-from fastapi.testclient import TestClient
-from app.main import app
+import pytest  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
+from app.main import app  # noqa: E402
 
 
 @pytest.fixture

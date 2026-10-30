@@ -127,7 +127,12 @@ class _BookingListScreenState extends State<BookingListScreen> {
         itemCount: _bookings.length,
         itemBuilder: (context, index) {
           final booking = _bookings[index];
-          return _BookingCard(booking: booking, language: language);
+          return _BookingCard(
+            booking: booking,
+            language: language,
+            bookingService: _bookingService,
+            onReload: _loadBookings,
+          );
         },
       ),
     );
@@ -137,8 +142,15 @@ class _BookingListScreenState extends State<BookingListScreen> {
 class _BookingCard extends StatelessWidget {
   final Booking booking;
   final String language;
+  final api.BookingApiService bookingService;
+  final VoidCallback onReload;
 
-  const _BookingCard({required this.booking, required this.language});
+  const _BookingCard({
+    required this.booking,
+    required this.language,
+    required this.bookingService,
+    required this.onReload,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -253,9 +265,39 @@ class _BookingCard extends StatelessWidget {
             child: Text(language == 'ar' ? 'إلغاء' : 'Annuler'),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(context).pop();
-              // TODO: Call cancel booking API
+              final reason = reasonController.text.trim();
+              if (reason.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      language == 'ar'
+                          ? 'الرجاء إدخال سبب الإلغاء'
+                          : 'Please enter a cancellation reason',
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+              try {
+                await bookingService.cancelBooking(booking.id, reason);
+                onReload();
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        language == 'ar'
+                            ? 'فشل إلغاء الحجز: $e'
+                            : 'Failed to cancel booking: $e',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
             },
             child: Text(language == 'ar' ? 'تأكيد' : 'Confirmer'),
           ),

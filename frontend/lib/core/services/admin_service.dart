@@ -87,7 +87,7 @@ class AdminApiService {
       final body = json.encode({
         'user_id': userId,
         'status': status,
-        if (reason != null) 'reason': reason,
+        'reason': ?reason,
       });
 
       final response = await http.post(uri, headers: _getHeaders(), body: body);
@@ -157,7 +157,7 @@ class AdminApiService {
       final body = json.encode({
         'provider_id': providerId,
         'action': action,
-        if (reason != null) 'reason': reason,
+        'reason': ?reason,
       });
 
       final response = await http.post(uri, headers: _getHeaders(), body: body);
@@ -191,7 +191,7 @@ class AdminApiService {
       final body = json.encode({
         'resource_type': resourceType,
         'resource_id': resourceId,
-        if (reason != null) 'reason': reason,
+        'reason': ?reason,
       });
 
       final response = await http.post(uri, headers: _getHeaders(), body: body);

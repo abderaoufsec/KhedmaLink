@@ -2,9 +2,9 @@
 # Contains audit log model for tracking admin and privileged actions
 
 from datetime import datetime, timezone
-from uuid import UUID, uuid4
-from sqlalchemy import Column, String, DateTime, ForeignKey, Text, Enum as SQLEnum, func
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
+from uuid import uuid4
+from sqlalchemy import Column, String, DateTime, ForeignKey, Text, Enum as SQLEnum
+from app.core.database.uuid_type import FlexibleUUID as PG_UUID
 from sqlalchemy.orm import relationship
 import enum
 
@@ -81,7 +81,10 @@ class AuditLog(Base):
 
     # Timestamps
     created_at = Column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False, index=True
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+        index=True,
     )
 
     # Relationships

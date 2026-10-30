@@ -1,7 +1,7 @@
 # Dispute API endpoints for KhedmaLink backend
 # Handles dispute creation, evidence submission, responses, and resolution
 
-from typing import List, Optional
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy import select, and_, or_, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,17 +22,18 @@ from app.core.schemas.dispute import (
     DisputeEvidenceResponse,
     DisputeEvidenceListResponse,
 )
-from app.core.security.dependencies import get_current_user, require_any_role
-from app.api.v1.endpoints.admin import create_audit_log
-from app.core.models.admin import AuditActionType
+from app.core.security.dependencies import (
+    get_current_user,
+    require_any_role,
+)  # noqa: E402
+from app.api.v1.endpoints.admin import create_audit_log  # noqa: E402
+from app.core.models.admin import AuditActionType  # noqa: E402
 
 
 router = APIRouter()
 
 
-@router.post(
-    "", response_model=DisputeResponse, status_code=status.HTTP_201_CREATED
-)
+@router.post("", response_model=DisputeResponse, status_code=status.HTTP_201_CREATED)
 async def create_dispute(
     dispute_data: DisputeCreate,
     current_user: User = Depends(get_current_user),
@@ -163,7 +164,6 @@ async def get_dispute(
     Get a specific dispute
     User must be participant in the booking or admin
     """
-    from sqlalchemy import func
 
     # Get dispute
     query = (
@@ -180,9 +180,14 @@ async def get_dispute(
         )
 
     # Check if user is participant or admin
-    is_participant = str(dispute.booking.customer_id) == str(current_user.id) or str(
-        dispute.booking.provider_id
-    ) == str(current_user.id)
+    booking_query = select(Booking).where(Booking.id == dispute.booking_id)
+    booking_result = await db.execute(booking_query)
+    booking = booking_result.scalar_one_or_none()
+
+    is_participant = booking is not None and (
+        str(booking.customer_id) == str(current_user.id)
+        or str(booking.provider_id) == str(current_user.id)
+    )
     is_admin = any(role.name in ["admin", "super_admin"] for role in current_user.roles)
 
     if not is_participant and not is_admin:
@@ -346,14 +351,26 @@ async def add_evidence(
 
     db.add(new_evidence)
     await db.commit()
-    await db.refresh(new_evidence)
+    await db.refresh(
+        new_evidence,
+        attribute_names=[
+            "id",
+            "dispute_id",
+            "submitted_by",
+            "evidence_type",
+            "file_url",
+            "file_name",
+            "file_size",
+            "mime_type",
+            "description",
+            "created_at",
+        ],
+    )
 
     return new_evidence
 
 
-@router.get(
-    "/{dispute_id}/evidence", response_model=DisputeEvidenceListResponse
-)
+@router.get("/{dispute_id}/evidence", response_model=DisputeEvidenceListResponse)
 async def list_evidence(
     dispute_id: str,
     current_user: User = Depends(get_current_user),
@@ -378,9 +395,14 @@ async def list_evidence(
         )
 
     # Check if user is participant or admin
-    is_participant = str(dispute.booking.customer_id) == str(current_user.id) or str(
-        dispute.booking.provider_id
-    ) == str(current_user.id)
+    booking_query = select(Booking).where(Booking.id == dispute.booking_id)
+    booking_result = await db.execute(booking_query)
+    booking = booking_result.scalar_one_or_none()
+
+    is_participant = booking is not None and (
+        str(booking.customer_id) == str(current_user.id)
+        or str(booking.provider_id) == str(current_user.id)
+    )
     is_admin = any(role.name in ["admin", "super_admin"] for role in current_user.roles)
 
     if not is_participant and not is_admin:
@@ -396,6 +418,21 @@ async def list_evidence(
     evidence_result = await db.execute(evidence_query)
     evidence = evidence_result.scalars().all()
 
-    return DisputeEvidenceListResponse(
-        items=[DisputeEvidenceResponse.model_validate(e) for e in evidence]
-    )
+    items = []
+    for e in evidence:
+        items.append(
+            DisputeEvidenceResponse(
+                id=e.id,
+                dispute_id=e.dispute_id,
+                submitted_by=e.submitted_by,
+                evidence_type=e.evidence_type,
+                file_url=e.file_url,
+                file_name=e.file_name,
+                file_size=e.file_size,
+                mime_type=e.mime_type,
+                description=e.description,
+                created_at=e.created_at,
+            )
+        )
+
+    return DisputeEvidenceListResponse(items=items)

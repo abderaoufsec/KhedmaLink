@@ -3,29 +3,24 @@ Messaging API endpoints
 Handles CRUD operations for booking-scoped messaging and notifications
 """
 
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy import select, and_, or_
-from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime
+from typing import List, Optional  # noqa: E402
+from fastapi import APIRouter, Depends, HTTPException, status, Query  # noqa: E402
+from sqlalchemy import select  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
+from datetime import datetime  # noqa: E402
 
-from app.core.database import get_db
-from app.core.models.message import Message, MessageAttachment, Notification
-from app.core.models.booking import Booking
-from app.core.models.user import User
-from app.core.schemas.message import (
+from app.core.database import get_db  # noqa: E402
+from app.core.models.message import Message, Notification  # noqa: E402
+from app.core.models.booking import Booking  # noqa: E402
+from app.core.models.user import User  # noqa: E402
+from app.core.schemas.message import (  # noqa: E402
     MessageCreate,
     MessageUpdate,
     MessageResponse,
-    MessageAttachmentCreate,
-    MessageAttachmentResponse,
-    NotificationCreate,
     NotificationResponse,
     NotificationUpdate,
-    MessageListResponse,
-    NotificationListResponse,
 )
-from app.core.security.dependencies import get_current_user
+from app.core.security.dependencies import get_current_user  # noqa: E402
 
 # Create router for messaging endpoints
 router = APIRouter()
@@ -139,7 +134,20 @@ async def create_message(
     )
     db.add(message)
     await db.commit()
-    await db.refresh(message)
+    await db.refresh(
+        message,
+        attribute_names=[
+            "id",
+            "booking_id",
+            "sender_id",
+            "content",
+            "message_type",
+            "is_read",
+            "read_at",
+            "created_at",
+            "updated_at",
+        ],
+    )
 
     # Send notification to the other party
     recipient_id = (
@@ -153,7 +161,7 @@ async def create_message(
         notification_type="message_received",
         title_ar="رسالة جديدة",
         title_fr="Nouveau message",
-        body_ar=f"تم استلام رسالة جديدة للحجز",
+        body_ar="تم استلام رسالة جديدة للحجز",
         body_fr="Un nouveau message a été envoyé pour la réservation",
         entity_type="booking",
         entity_id=booking_id,
@@ -254,7 +262,7 @@ async def list_my_notifications(
 
     # Apply unread filter if requested
     if unread_only:
-        query = query.where(Notification.is_read == False)
+        query = query.where(Notification.is_read == False)  # noqa: E712
 
     # Apply sorting and pagination
     query = query.order_by(Notification.created_at.desc()).offset(skip).limit(limit)

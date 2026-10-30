@@ -1,26 +1,23 @@
 # Admin endpoints for KhedmaLink backend
 # Provides admin operations for user management, verification, and audit logs
 
-from typing import List, Optional
+from typing import Optional
 from uuid import UUID
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_, or_, func
+from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
-from app.core.security.dependencies import get_current_user, require_any_role
+from app.core.security.dependencies import require_any_role
 from app.core.models import (
     User,
-    Role,
     ProviderProfile,
-    VerificationCase,
     AuditLog,
     AuditActionType,
 )
-from app.core.schemas import (
-    AuditLogCreate,
+from app.core.schemas import (  # noqa: E402
     AuditLogResponse,
     AuditLogListResponse,
     UserStatusUpdate,
@@ -321,7 +318,7 @@ async def delete_content(
     """
     # Determine action type based on resource type
     if deletion.resource_type == "review":
-        from app.core.models import Review
+        from app.core.models import Review  # noqa: E402
 
         result = await db.execute(
             select(Review).where(Review.id == deletion.resource_id)
@@ -334,7 +331,7 @@ async def delete_content(
         action_type = AuditActionType.REVIEW_DELETED
         target_user_id = resource.customer_id
     elif deletion.resource_type == "request":
-        from app.core.models import ServiceRequest
+        from app.core.models import ServiceRequest  # noqa: E402
 
         result = await db.execute(
             select(ServiceRequest).where(ServiceRequest.id == deletion.resource_id)

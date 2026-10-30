@@ -13,7 +13,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen>
     with SingleTickerProviderStateMixin {
   late PageController _pageController;
-  int _currentPage = 0;
+  final int _currentPage = 0;
   static const _onboardingCompletedKey = 'onboarding_completed';
 
   @override
@@ -97,22 +97,20 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               if (_currentPage < 2)
                 TextButton(
                   onPressed: () => _nextPage(),
-                  child: Text(_currentPage == 0
-                      ? localizations.skip
-                      : localizations.next),
+                  child: Text(
+                    _currentPage == 0 ? localizations.skip : localizations.next,
+                  ),
                 ),
-              if (_currentPage < 2)
-                const SizedBox(width: 8),
+              if (_currentPage < 2) const SizedBox(width: 8),
               if (_currentPage < 2)
                 const VerticalDivider(thickness: 1, width: 16),
-              if (_currentPage < 2)
-                const SizedBox(width: 8),
+              if (_currentPage < 2) const SizedBox(width: 8),
               if (_currentPage < 2)
                 ElevatedButton(
                   onPressed: _nextPage,
-                  child: Text(_currentPage == 2
-                      ? localizations.done
-                      : localizations.next),
+                  child: Text(
+                    _currentPage == 2 ? localizations.done : localizations.next,
+                  ),
                 ),
             ],
           ),

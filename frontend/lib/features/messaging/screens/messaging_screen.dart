@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:khedmalink/core/models/message_models.dart' as models;
+import 'package:khedmalink/core/services/auth_service.dart';
 import 'package:khedmalink/core/services/messaging_service.dart' as api;
 import 'package:khedmalink/core/analytics/app_logger.dart';
 
@@ -18,10 +19,12 @@ class MessagingScreen extends StatefulWidget {
 
 class _MessagingScreenState extends State<MessagingScreen> {
   final api.MessagingApiService _messagingService = api.MessagingApiService();
+  final AuthService _authService = AuthService();
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
   List<models.Message> _messages = [];
+  String? _currentUserId;
   bool _isLoading = true;
   bool _isSending = false;
   String? _errorMessage;
@@ -31,7 +34,17 @@ class _MessagingScreenState extends State<MessagingScreen> {
   @override
   void initState() {
     super.initState();
+    _loadCurrentUserId();
     _loadMessages();
+  }
+
+  Future<void> _loadCurrentUserId() async {
+    final userId = await _authService.getUserId();
+    if (mounted) {
+      setState(() {
+        _currentUserId = userId;
+      });
+    }
   }
 
   @override
@@ -199,7 +212,11 @@ class _MessagingScreenState extends State<MessagingScreen> {
       itemCount: _messages.length,
       itemBuilder: (context, index) {
         final message = _messages[index];
-        return _MessageBubble(message: message, language: language);
+        return _MessageBubble(
+          message: message,
+          language: language,
+          currentUserId: _currentUserId,
+        );
       },
     );
   }
@@ -263,14 +280,18 @@ class _MessagingScreenState extends State<MessagingScreen> {
 class _MessageBubble extends StatelessWidget {
   final models.Message message;
   final String language;
+  final String? currentUserId;
 
-  const _MessageBubble({required this.message, required this.language});
+  const _MessageBubble({
+    required this.message,
+    required this.language,
+    this.currentUserId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Get current user ID to determine if message is from self
-    // For now, assume alternating
-    final isFromSelf = message.senderId.length % 2 == 0;
+    final isFromSelf =
+        currentUserId != null && message.senderId == currentUserId;
 
     return Align(
       alignment: isFromSelf ? Alignment.centerRight : Alignment.centerLeft,
@@ -303,7 +324,8 @@ class _MessageBubble extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 color: isFromSelf
-                    ? Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.7)
+                    ? Theme.of(context).colorScheme.onPrimary
+                          .withValues(alpha: 0.7)
                     : Theme.of(context).colorScheme.onSurfaceVariant
                           .withValues(alpha: 0.7),
               ),

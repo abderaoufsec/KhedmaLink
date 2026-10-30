@@ -3,8 +3,8 @@ API v1 package
 Contains all version 1 API endpoints
 """
 
-from fastapi import APIRouter
-from .endpoints import (
+from fastapi import APIRouter  # noqa: E402
+from .endpoints import (  # noqa: E402
     health,
     auth,
     users,

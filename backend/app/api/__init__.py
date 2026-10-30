@@ -3,9 +3,9 @@ API package for KhedmaLink backend
 Contains all API routers and endpoint configurations
 """
 
-from fastapi import APIRouter
+from fastapi import APIRouter  # noqa: E402
 
-from app.api.v1 import api_router as v1_router
+from app.api.v1 import api_router as v1_router  # noqa: E402
 
 # Create main API router
 api_router = APIRouter()

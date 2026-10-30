@@ -100,13 +100,13 @@ class ReviewApiService {
             body: jsonEncode({
               'booking_id': bookingId,
               'rating': rating,
-              if (title != null) 'title': title,
-              if (comment != null) 'comment': comment,
-              if (professionalism != null) 'professionalism': professionalism,
-              if (quality != null) 'quality': quality,
-              if (timeliness != null) 'timeliness': timeliness,
-              if (communication != null) 'communication': communication,
-              if (value != null) 'value': value,
+              'title': ?title,
+              'comment': ?comment,
+              'professionalism': ?professionalism,
+              'quality': ?quality,
+              'timeliness': ?timeliness,
+              'communication': ?communication,
+              'value': ?value,
             }),
           )
           .timeout(const Duration(seconds: 30));
@@ -233,10 +233,9 @@ class ReviewApiService {
             Uri.parse('$_baseUrl/api/v1/reviews/me/reviews/$reviewId'),
             headers: await _getAuthHeaders(),
             body: jsonEncode({
-              if (title != null) 'title': title,
-              if (comment != null) 'comment': comment,
-              if (providerResponse != null)
-                'provider_response': providerResponse,
+              'title': ?title,
+              'comment': ?comment,
+              'provider_response': ?providerResponse,
             }),
           )
           .timeout(const Duration(seconds: 30));

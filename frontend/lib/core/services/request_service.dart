@@ -132,8 +132,8 @@ class RequestApiService {
               'wilaya': wilaya,
               if (commune?.isNotEmpty == true) 'commune': commune,
               if (address?.isNotEmpty == true) 'address': address,
-              if (latitude != null) 'latitude': latitude,
-              if (longitude != null) 'longitude': longitude,
+              'latitude': ?latitude,
+              'longitude': ?longitude,
               if (preferredDate != null)
                 'preferred_date': preferredDate.toIso8601String(),
               if (preferredTimeStart?.isNotEmpty == true)
@@ -141,8 +141,8 @@ class RequestApiService {
               if (preferredTimeEnd?.isNotEmpty == true)
                 'preferred_time_end': preferredTimeEnd,
               'is_flexible': isFlexible,
-              if (budgetMin != null) 'budget_min': budgetMin,
-              if (budgetMax != null) 'budget_max': budgetMax,
+              'budget_min': ?budgetMin,
+              'budget_max': ?budgetMax,
               'currency': currency,
               'urgency': urgency,
               'is_public': isPublic,
@@ -245,7 +245,7 @@ class RequestApiService {
             Uri.parse('$_baseUrl/api/v1/requests/me/requests/$requestId'),
             headers: await _getAuthHeaders(),
             body: jsonEncode({
-              if (categoryId != null) 'category_id': categoryId,
+              'category_id': ?categoryId,
               if (titleAr?.isNotEmpty == true) 'title_ar': titleAr,
               if (titleFr?.isNotEmpty == true) 'title_fr': titleFr,
               if (descriptionAr?.isNotEmpty == true)
@@ -256,21 +256,21 @@ class RequestApiService {
               if (wilaya?.isNotEmpty == true) 'wilaya': wilaya,
               if (commune?.isNotEmpty == true) 'commune': commune,
               if (address?.isNotEmpty == true) 'address': address,
-              if (latitude != null) 'latitude': latitude,
-              if (longitude != null) 'longitude': longitude,
+              'latitude': ?latitude,
+              'longitude': ?longitude,
               if (preferredDate != null)
                 'preferred_date': preferredDate.toIso8601String(),
               if (preferredTimeStart?.isNotEmpty == true)
                 'preferred_time_start': preferredTimeStart,
               if (preferredTimeEnd?.isNotEmpty == true)
                 'preferred_time_end': preferredTimeEnd,
-              if (isFlexible != null) 'is_flexible': isFlexible,
-              if (budgetMin != null) 'budget_min': budgetMin,
-              if (budgetMax != null) 'budget_max': budgetMax,
+              'is_flexible': ?isFlexible,
+              'budget_min': ?budgetMin,
+              'budget_max': ?budgetMax,
               if (currency?.isNotEmpty == true) 'currency': currency,
-              if (status != null) 'status': status,
-              if (urgency != null) 'urgency': urgency,
-              if (isPublic != null) 'is_public': isPublic,
+              'status': ?status,
+              'urgency': ?urgency,
+              'is_public': ?isPublic,
             }),
           )
           .timeout(const Duration(seconds: 30));

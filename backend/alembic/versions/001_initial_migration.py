@@ -7,7 +7,6 @@ Revises:
 Create Date: 2025-01-22 22:00:00.000000
 
 """
-from typing import Sequence, Union
 import uuid
 
 from alembic import op

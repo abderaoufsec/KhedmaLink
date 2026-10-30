@@ -3,9 +3,9 @@ User and Role Database Models
 Defines the database models for users, roles, and user-role relationships
 """
 
-import uuid
-from datetime import datetime, timezone
-from sqlalchemy import (
+import uuid  # noqa: E402
+from datetime import datetime, timezone  # noqa: E402
+from sqlalchemy import (  # noqa: E402
     Boolean,
     Column,
     DateTime,
@@ -15,10 +15,10 @@ from sqlalchemy import (
     ForeignKey,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+from app.core.database.uuid_type import FlexibleUUID as UUID  # noqa: E402
+from sqlalchemy.orm import relationship  # noqa: E402
 
-from app.core.database import Base
+from app.core.database import Base  # noqa: E402
 
 
 # =============================================================================
@@ -78,7 +78,9 @@ class User(Base):
 
     # Timestamps
     created_at = Column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )
     updated_at = Column(
         DateTime(timezone=True),
@@ -89,7 +91,9 @@ class User(Base):
     last_login = Column(DateTime(timezone=True), nullable=True)
 
     # Relationships
-    roles = relationship("Role", secondary=user_roles, back_populates="users")
+    roles = relationship(
+        "Role", secondary=user_roles, back_populates="users", lazy="selectin"
+    )
 
     def __repr__(self) -> str:
         """String representation of the user"""
@@ -118,7 +122,9 @@ class Role(Base):
 
     # Timestamps
     created_at = Column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )
     updated_at = Column(
         DateTime(timezone=True),

@@ -27,7 +27,7 @@ def test_list_categories(client):
 
         # Should return 200 even without database (endpoint exists)
         assert response.status_code in [200, 500]
-    except Exception as e:
+    except Exception:
         # Database connection error is acceptable
         assert True
 
@@ -39,7 +39,7 @@ def test_list_categories_with_filters(client):
 
         # Should return 200 even without database (endpoint exists)
         assert response.status_code in [200, 500]
-    except Exception as e:
+    except Exception:
         # Database connection error is acceptable
         assert True
 
@@ -52,7 +52,7 @@ def test_get_category_by_id(client):
 
         # Should return 404 (not found) or 500 (database error)
         assert response.status_code in [404, 500]
-    except Exception as e:
+    except Exception:
         # Database connection error is acceptable
         assert True
 
@@ -106,7 +106,7 @@ def test_list_providers(client):
 
         # Should return 200 even without database (endpoint exists)
         assert response.status_code in [200, 500]
-    except Exception as e:
+    except Exception:
         # Database connection error is acceptable
         assert True
 
@@ -118,7 +118,7 @@ def test_list_providers_with_filters(client):
 
         # Should return 200 even without database (endpoint exists)
         assert response.status_code in [200, 500]
-    except Exception as e:
+    except Exception:
         # Database connection error is acceptable
         assert True
 
@@ -131,7 +131,7 @@ def test_list_providers_by_category(client):
 
         # Should return 200 even without database (endpoint exists)
         assert response.status_code in [200, 500]
-    except Exception as e:
+    except Exception:
         # Database connection error is acceptable
         assert True
 
@@ -144,7 +144,7 @@ def test_get_provider_profile(client):
 
         # Should return 404 (not found) or 500 (database error)
         assert response.status_code in [404, 500]
-    except Exception as e:
+    except Exception:
         # Database connection error is acceptable
         assert True
 

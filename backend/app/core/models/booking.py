@@ -3,10 +3,8 @@ Booking Database Models
 Defines the database models for bookings and booking events
 """
 
-import uuid
-from datetime import datetime
-from sqlalchemy import (
-    Boolean,
+import uuid  # noqa: E402
+from sqlalchemy import (  # noqa: E402
     Column,
     DateTime,
     Enum,
@@ -17,10 +15,10 @@ from sqlalchemy import (
     ForeignKey,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+from app.core.database.uuid_type import FlexibleUUID as UUID  # noqa: E402
+from sqlalchemy.orm import relationship  # noqa: E402
 
-from app.core.database import Base
+from app.core.database import Base  # noqa: E402
 
 
 # =============================================================================

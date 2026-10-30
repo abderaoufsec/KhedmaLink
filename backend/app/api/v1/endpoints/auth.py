@@ -3,25 +3,23 @@ Authentication endpoints
 Handles user registration, login, token refresh, and logout
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
-import traceback
+from fastapi import APIRouter, Depends, status  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
+import traceback  # noqa: E402
 
-from app.core.database import get_db
-from app.core.security import create_access_token
-from app.core.schemas.auth import (
+from app.core.database import get_db  # noqa: E402
+from app.core.schemas.auth import (  # noqa: E402
     UserRegister,
     UserLogin,
     TokenResponse,
     TokenRefresh,
     UserResponse,
-    UserUpdate,
-    PasswordChange,
 )
-from app.core.services.auth import AuthService
-from app.core.logging import get_logger
+from app.core.services.auth import AuthService  # noqa: E402
+from app.core.logging import get_logger  # noqa: E402
 
 logger = get_logger(__name__)
+BEARER_TOKEN_TYPE = "bearer"
 
 # Create router for auth endpoints
 router = APIRouter()
@@ -48,14 +46,15 @@ async def register(
         UserResponse: The created user
     """
     logger.info(f"Registration request received for email: {user_data.email}")
-    
+
     try:
         user = await AuthService.register_user(db, user_data)
         logger.info(f"User created successfully: {user.id}")
 
         # Load roles explicitly to avoid lazy loading issues
-        from sqlalchemy import select
-        from app.core.models.user import Role, user_roles
+        from sqlalchemy import select  # noqa: E402
+        from app.core.models.user import Role, user_roles  # noqa: E402
+
         result = await db.execute(
             select(Role).join(user_roles).where(user_roles.c.user_id == user.id)
         )
@@ -73,9 +72,9 @@ async def register(
             roles=[role.name for role in roles],
             created_at=user.created_at.isoformat(),
         )
-        logger.info(f"Response created successfully")
+        logger.info("Response created successfully")
         return response
-        
+
     except Exception as e:
         logger.error(f"Registration error: {str(e)}")
         logger.error(f"Traceback: {traceback.format_exc()}")
@@ -105,7 +104,7 @@ async def login(
     return TokenResponse(
         access_token=tokens["access_token"],
         refresh_token=tokens["refresh_token"],
-        token_type="bearer",
+        token_type=BEARER_TOKEN_TYPE,
         expires_in=30 * 60,  # 30 minutes in seconds
     )
 
@@ -132,7 +131,7 @@ async def refresh_token(
     return TokenResponse(
         access_token=tokens["access_token"],
         refresh_token=tokens["refresh_token"],
-        token_type="bearer",
+        token_type=BEARER_TOKEN_TYPE,
         expires_in=30 * 60,  # 30 minutes in seconds
     )
 

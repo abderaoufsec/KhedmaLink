@@ -3,17 +3,17 @@ Database Configuration and Session Management
 Handles database connections, sessions, and lifecycle management
 """
 
-from typing import AsyncGenerator
-from sqlalchemy.ext.asyncio import (
+from typing import AsyncGenerator  # noqa: E402
+from sqlalchemy.ext.asyncio import (  # noqa: E402
     AsyncSession,
     create_async_engine,
     async_sessionmaker,
 )
-from sqlalchemy.orm import declarative_base
-from sqlalchemy import text
+from sqlalchemy.orm import declarative_base  # noqa: E402
+from sqlalchemy import text  # noqa: E402
 
-from app.core.config import settings
-from app.core.logging import get_logger
+from app.core.config import settings  # noqa: E402
+from app.core.logging import get_logger  # noqa: E402
 
 logger = get_logger(__name__)
 
@@ -24,6 +24,8 @@ logger = get_logger(__name__)
 # Check if using SQLite (which doesn't support connection pooling)
 is_sqlite = "sqlite" in settings.get_database_url().lower()
 
+import os as _os  # noqa: E402
+
 # Create async engine with appropriate configuration
 if is_sqlite:
     # SQLite doesn't support connection pooling
@@ -31,6 +33,16 @@ if is_sqlite:
         settings.get_database_url(),
         echo=settings.DEBUG,  # Log SQL queries in debug mode
         future=True,
+    )
+elif _os.environ.get("TESTING", "").lower() in ("1", "true", "yes"):
+    # Testing mode: use NullPool to avoid event loop issues
+    from sqlalchemy.pool import NullPool  # noqa: E402
+
+    engine = create_async_engine(
+        settings.get_database_url(),
+        echo=settings.DEBUG,
+        future=True,
+        poolclass=NullPool,
     )
 else:
     # PostgreSQL with connection pooling

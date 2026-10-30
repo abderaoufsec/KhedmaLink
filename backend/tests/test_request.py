@@ -89,7 +89,7 @@ def test_list_public_requests(client):
 
         # Should return 200 even without database (endpoint exists)
         assert response.status_code in [200, 500]
-    except Exception as e:
+    except Exception:
         # Database connection error is acceptable
         assert True
 
@@ -103,7 +103,7 @@ def test_list_public_requests_with_filters(client):
 
         # Should return 200 even without database (endpoint exists)
         assert response.status_code in [200, 500]
-    except Exception as e:
+    except Exception:
         # Database connection error is acceptable
         assert True
 
@@ -116,7 +116,7 @@ def test_get_public_request(client):
 
         # Should return 404 (not found) or 500 (database error)
         assert response.status_code in [404, 500]
-    except Exception as e:
+    except Exception:
         # Database connection error is acceptable
         assert True
 

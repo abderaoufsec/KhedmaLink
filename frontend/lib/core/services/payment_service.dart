@@ -47,7 +47,7 @@ class PaymentApiService {
       final body = json.encode({
         'booking_id': bookingId,
         'payment_method': paymentMethod.toJson(),
-        if (externalPaymentId != null) 'external_payment_id': externalPaymentId,
+        'external_payment_id': ?externalPaymentId,
       });
 
       final response = await http.post(uri, headers: _getHeaders(), body: body);

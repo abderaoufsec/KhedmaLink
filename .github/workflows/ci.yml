@@ -235,6 +235,15 @@ jobs:
         run: |
           cd backend
           alembic current
+
+      # Step 6: Run PostgreSQL integration tests
+      - name: Run PostgreSQL integration tests
+        env:
+          DATABASE_URL: postgresql+asyncpg://test_user:test_password@localhost:5432/test_db
+          TESTING: "1"
+        run: |
+          cd backend
+          python -m pytest tests_pg -v
           alembic history
 
   # =============================================================================

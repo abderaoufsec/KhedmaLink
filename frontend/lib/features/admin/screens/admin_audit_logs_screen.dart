@@ -134,8 +134,33 @@ class _AdminAuditLogsScreenState extends State<AdminAuditLogsScreen> {
           ],
         ),
         onTap: () {
-          // TODO: Show detailed audit log
           AppLogger.info('Audit log tapped: ${log.id}');
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(log.actionType.getDisplayName(language)),
+              content: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(log.description),
+                    const SizedBox(height: 8),
+                    Text(
+                      log.createdAt.toLocal().toString().split('.')[0],
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(language == 'ar' ? 'إغلاق' : 'Fermer'),
+                ),
+              ],
+            ),
+          );
         },
       ),
     );

@@ -95,7 +95,7 @@ khedmalink/
 
 This project follows a strict milestone-based development approach. Each milestone must be completed and verified before starting the next one.
 
-**Current Milestone:** M0 - Repository & Engineering Charter
+**Current Status:** P0/P1 implementation baseline complete — backend verification restored, frontend release-clean, and PostgreSQL integration tests run in CI. See [P0/P1 verification](docs/P0_P1_VERIFICATION.md) for the exact checks and deferred hardening work.
 
 **Planned Milestones:**
 - M0: Repository & Engineering Charter
@@ -142,8 +142,8 @@ See `docs/KhedmaLink_Full_Project_Documentation.md` for detailed milestone speci
 ## Contributing
 
 This project is built following strict engineering principles. See:
-- `docs/CONTRIBUTING.md` (to be created)
-- `docs/BRANCH_CONVENTIONS.md` (to be created)
+- [Contributing](docs/CONTRIBUTING.md)
+- [Branch conventions](docs/BRANCH_CONVENTIONS.md)
 
 ## License
 

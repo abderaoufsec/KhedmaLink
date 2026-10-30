@@ -3,26 +3,25 @@ Quote API endpoints
 Handles CRUD operations for provider quotes and quote acceptance
 """
 
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy import select, and_, or_
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List, Optional  # noqa: E402
+from fastapi import APIRouter, Depends, HTTPException, status, Query  # noqa: E402
+from sqlalchemy import select, and_  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
 
-from app.core.database import get_db
-from app.core.models.quote import Quote, RequestMatch
-from app.core.models.request import ServiceRequest
-from app.core.models.user import User
-from app.core.models.booking import Booking
-from app.core.schemas.quote import (
+from app.core.database import get_db  # noqa: E402
+from app.core.models.quote import Quote, RequestMatch  # noqa: E402
+from app.core.models.request import ServiceRequest  # noqa: E402
+from app.core.models.user import User  # noqa: E402
+from app.core.models.booking import Booking  # noqa: E402
+from app.core.schemas.quote import (  # noqa: E402
     QuoteCreate,
     QuoteUpdate,
     QuoteResponse,
     QuotePublic,
-    RequestMatchCreate,
     RequestMatchResponse,
 )
-from app.api.v1.endpoints.messages import _create_notification
-from app.core.security.dependencies import get_current_user, require_provider
+from app.api.v1.endpoints.messages import _create_notification  # noqa: E402
+from app.core.security.dependencies import get_current_user  # noqa: E402
 
 # Create router for quote endpoints
 router = APIRouter()
@@ -226,15 +225,15 @@ async def update_quote(
 
     # Set timestamps based on status
     if quote_data.status == "submitted" and quote.submitted_at is None:
-        from datetime import datetime
+        from datetime import datetime  # noqa: E402
 
         quote.submitted_at = datetime.utcnow()
     if quote_data.status == "rejected" and quote.rejected_at is None:
-        from datetime import datetime
+        from datetime import datetime  # noqa: E402
 
         quote.rejected_at = datetime.utcnow()
     if quote_data.status == "accepted" and quote.accepted_at is None:
-        from datetime import datetime
+        from datetime import datetime  # noqa: E402
 
         quote.accepted_at = datetime.utcnow()
 
@@ -391,7 +390,7 @@ async def accept_quote(
         )
 
     # Accept the quote
-    from datetime import datetime
+    from datetime import datetime  # noqa: E402
 
     quote.status = "accepted"
     quote.accepted_at = datetime.utcnow()
@@ -445,7 +444,7 @@ async def accept_quote(
         notification_type="quote_accepted",
         title_ar="تم قبول عرضك",
         title_fr="Votre devis a été accepté",
-        body_ar=f"تم قبول عرضك على طلب الخدمة",
+        body_ar="تم قبول عرضك على طلب الخدمة",
         body_fr="Votre devis a été accepté pour la demande de service",
         entity_type="quote",
         entity_id=quote_id,

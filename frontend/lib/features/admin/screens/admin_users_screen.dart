@@ -131,8 +131,28 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           ],
         ),
         onTap: () {
-          // TODO: Navigate to user detail screen
           AppLogger.info('User tapped: ${user.email}');
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(user.fullName ?? user.email),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Email: ${user.email}'),
+                  Text('Status: ${user.getStatusDisplay(language)}'),
+                  if (user.isVerified) const Text('Verified: Yes'),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(language == 'ar' ? 'إغلاق' : 'Fermer'),
+                ),
+              ],
+            ),
+          );
         },
       ),
     );

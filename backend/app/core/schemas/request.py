@@ -1,11 +1,13 @@
+from uuid import UUID
+
 """
 Pydantic schemas for service request operations
 Contains request and response models for service requests and attachments
 """
 
-from typing import Optional, List
-from pydantic import BaseModel, Field, field_validator, ConfigDict
-from datetime import datetime
+from typing import Any, Optional  # noqa: E402
+from pydantic import BaseModel, Field, field_validator, ConfigDict  # noqa: E402
+from datetime import datetime  # noqa: E402
 
 
 # =============================================================================
@@ -19,7 +21,7 @@ class ServiceRequestBase(BaseModel):
     Contains common fields for service request requests and responses
     """
 
-    category_id: str = Field(..., description="Category ID")
+    category_id: UUID = Field(..., description="Category ID")
     title_ar: str = Field(..., max_length=255, description="Request title in Arabic")
     title_fr: str = Field(..., max_length=255, description="Request title in French")
     description_ar: str = Field(..., description="Request description in Arabic")
@@ -102,7 +104,7 @@ class ServiceRequestUpdate(BaseModel):
     All fields are optional to allow partial updates
     """
 
-    category_id: Optional[str] = None
+    category_id: Optional[UUID] = None
     title_ar: Optional[str] = Field(None, max_length=255)
     title_fr: Optional[str] = Field(None, max_length=255)
     description_ar: Optional[str] = None
@@ -180,12 +182,12 @@ class ServiceRequestResponse(ServiceRequestBase):
     Returns service request information including ID and timestamps
     """
 
-    id: str = Field(..., description="Service request ID")
-    customer_id: str = Field(..., description="Customer user ID")
+    id: UUID = Field(..., description="Service request ID")
+    customer_id: UUID = Field(..., description="Customer user ID")
     status: str = Field(..., description="Request status")
-    created_at: str = Field(..., description="Request creation timestamp")
-    updated_at: Optional[str] = Field(None, description="Request last update timestamp")
-    closed_at: Optional[str] = Field(None, description="Request closure timestamp")
+    created_at: Any = Field(..., description="Request creation timestamp")
+    updated_at: Any = Field(None, description="Request last update timestamp")
+    closed_at: Any = Field(None, description="Request closure timestamp")
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -196,8 +198,8 @@ class ServiceRequestPublic(BaseModel):
     Returns limited information visible to providers
     """
 
-    id: str = Field(..., description="Service request ID")
-    category_id: str = Field(..., description="Category ID")
+    id: UUID = Field(..., description="Service request ID")
+    category_id: UUID = Field(..., description="Category ID")
     title_ar: str = Field(..., description="Request title in Arabic")
     title_fr: str = Field(..., description="Request title in French")
     description_ar: str = Field(..., description="Request description in Arabic")
@@ -215,7 +217,7 @@ class ServiceRequestPublic(BaseModel):
     budget_max: Optional[float] = Field(None, description="Maximum budget")
     currency: str = Field(..., description="Currency code")
     urgency: str = Field(..., description="Urgency level")
-    created_at: str = Field(..., description="Request creation timestamp")
+    created_at: Any = Field(..., description="Request creation timestamp")
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -271,12 +273,12 @@ class RequestAttachmentResponse(RequestAttachmentBase):
     Returns request attachment information including ID and timestamps
     """
 
-    id: str = Field(..., description="Attachment ID")
-    request_id: str = Field(..., description="Service request ID")
+    id: UUID = Field(..., description="Attachment ID")
+    request_id: UUID = Field(..., description="Service request ID")
     uploaded_by: Optional[str] = Field(
         None, description="User ID who uploaded the file"
     )
     upload_status: str = Field(..., description="Upload status")
-    created_at: str = Field(..., description="Attachment creation timestamp")
+    created_at: Any = Field(..., description="Attachment creation timestamp")
 
     model_config = ConfigDict(from_attributes=True)

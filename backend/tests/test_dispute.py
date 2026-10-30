@@ -3,10 +3,10 @@ Tests for dispute endpoints
 Tests dispute creation, evidence submission, responses, and resolution
 """
 
-import pytest
-from fastapi.testclient import TestClient
+import pytest  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
 
-from app.main import app
+from app.main import app  # noqa: E402
 
 
 @pytest.fixture

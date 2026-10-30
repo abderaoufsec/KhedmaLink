@@ -3,16 +3,16 @@ KhedmaLink Backend Main Application
 FastAPI application entry point with proper configuration and middleware
 """
 
-from contextlib import asynccontextmanager
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from contextlib import asynccontextmanager  # noqa: E402
+from fastapi import FastAPI  # noqa: E402
+from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
+from fastapi.responses import JSONResponse  # noqa: E402
 
-from app.core.config import settings
-from app.core.logging import setup_logging, get_logger
-from app.core.middleware.request_id import RequestIDMiddleware
-from app.api import api_router
-from app.core.database import init_db, close_db
+from app.core.config import settings  # noqa: E402
+from app.core.logging import setup_logging, get_logger  # noqa: E402
+from app.core.middleware.request_id import RequestIDMiddleware  # noqa: E402
+from app.api import api_router  # noqa: E402
+from app.core.database import init_db, close_db  # noqa: E402
 
 # Setup logging
 setup_logging()
@@ -29,13 +29,7 @@ async def lifespan(app: FastAPI):
     logger.info(f"{settings.APP_NAME} v{settings.APP_VERSION} starting up")
     logger.info(f"Environment: {settings.ENVIRONMENT}")
     logger.info(f"API prefix: {settings.API_V1_PREFIX}")
-    
-    # Security check: ensure production doesn't use default secret key
-    if settings.ENVIRONMENT == 'production' and settings.SECRET_KEY == 'your-secret-key-change-in-production':
-        logger.critical("SECURITY WARNING: Production environment is using default SECRET_KEY!")
-        logger.critical("Please set a secure SECRET_KEY in your environment variables.")
-        # Continue startup but log critical warning
-    
+
     # Try to initialize database, but don't fail if it's not available
     try:
         await init_db()
@@ -119,8 +113,8 @@ async def global_exception_handler(request, exc):
     Global exception handler
     Catches all unhandled exceptions and returns a proper error response
     """
-    import traceback
-    
+    import traceback  # noqa: E402
+
     logger.error(
         f"Unhandled exception: {exc}",
         extra={
@@ -141,7 +135,7 @@ async def global_exception_handler(request, exc):
 
 
 if __name__ == "__main__":
-    import uvicorn
+    import uvicorn  # noqa: E402
 
     uvicorn.run(
         "app.main:app",

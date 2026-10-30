@@ -3,11 +3,15 @@ Authentication tests
 Tests for authentication endpoints, token generation, and role-based access control
 """
 
-import pytest
-from fastapi.testclient import TestClient
+import pytest  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
 
-from app.main import app
-from app.core.security import get_password_hash, create_access_token, verify_token
+from app.main import app  # noqa: E402
+from app.core.security import (
+    get_password_hash,
+    create_access_token,
+    verify_token,
+)  # noqa: E402
 
 
 @pytest.fixture
@@ -211,7 +215,7 @@ def test_protected_route_with_malformed_token(client):
 
 def test_password_hashing():
     """Test password hashing and verification"""
-    from app.core.security import get_password_hash, verify_password
+    from app.core.security import verify_password  # noqa: E402
 
     password = "TestPass123"  # Short password within bcrypt 72-byte limit
     hashed = get_password_hash(password)
@@ -224,7 +228,7 @@ def test_password_hashing():
 
 def test_password_hashing_consistency():
     """Test that password hashing is consistent"""
-    from app.core.security import get_password_hash, verify_password
+    from app.core.security import verify_password  # noqa: E402
 
     password = "TestPass123"  # Short password within bcrypt 72-byte limit
     hashed1 = get_password_hash(password)
@@ -309,7 +313,7 @@ def test_password_change_requires_auth(client):
 
 def test_user_register_schema_validation():
     """Test UserRegister schema validation"""
-    from app.core.schemas.auth import UserRegister
+    from app.core.schemas.auth import UserRegister  # noqa: E402
 
     # Valid data
     valid_data = {
@@ -334,7 +338,7 @@ def test_user_register_schema_validation():
 
 def test_user_login_schema_validation():
     """Test UserLogin schema validation"""
-    from app.core.schemas.auth import UserLogin
+    from app.core.schemas.auth import UserLogin  # noqa: E402
 
     valid_data = {
         "email": "test@example.com",

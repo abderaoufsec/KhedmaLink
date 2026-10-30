@@ -1,10 +1,12 @@
+from uuid import UUID
+
 """
 Pydantic schemas for provider and category operations
 Contains request and response models for categories, provider profiles, services, areas, and availability
 """
 
-from typing import Optional, List
-from pydantic import BaseModel, Field, field_validator, ConfigDict
+from typing import Any, Optional  # noqa: E402
+from pydantic import BaseModel, Field, field_validator, ConfigDict  # noqa: E402
 
 
 # =============================================================================
@@ -63,11 +65,9 @@ class CategoryResponse(CategoryBase):
     Returns category information including ID and timestamps
     """
 
-    id: str = Field(..., description="Category ID")
-    created_at: str = Field(..., description="Category creation timestamp")
-    updated_at: Optional[str] = Field(
-        None, description="Category last update timestamp"
-    )
+    id: UUID = Field(..., description="Category ID")
+    created_at: Any = Field(..., description="Category creation timestamp")
+    updated_at: Any = Field(None, description="Category last update timestamp")
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -138,8 +138,8 @@ class ProviderProfileResponse(ProviderProfileBase):
     Returns provider profile information including verification status and ratings
     """
 
-    id: str = Field(..., description="Provider profile ID")
-    user_id: str = Field(..., description="Associated user ID")
+    id: UUID = Field(..., description="Provider profile ID")
+    user_id: UUID = Field(..., description="Associated user ID")
     phone_verified: bool = Field(..., description="Phone verification status")
     email_verified: bool = Field(..., description="Email verification status")
     verification_status: str = Field(..., description="Verification status")
@@ -149,8 +149,8 @@ class ProviderProfileResponse(ProviderProfileBase):
     rating_average: float = Field(..., description="Average rating")
     rating_count: int = Field(..., description="Number of ratings")
     completed_jobs: int = Field(..., description="Number of completed jobs")
-    created_at: str = Field(..., description="Profile creation timestamp")
-    updated_at: Optional[str] = Field(None, description="Profile last update timestamp")
+    created_at: Any = Field(..., description="Profile creation timestamp")
+    updated_at: Any = Field(None, description="Profile last update timestamp")
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -161,7 +161,7 @@ class ProviderProfilePublic(BaseModel):
     Returns limited information visible to customers
     """
 
-    id: str = Field(..., description="Provider profile ID")
+    id: UUID = Field(..., description="Provider profile ID")
     business_name: Optional[str] = Field(None, description="Provider business name")
     business_description_ar: Optional[str] = Field(
         None, description="Business description in Arabic"
@@ -192,7 +192,7 @@ class ProviderServiceBase(BaseModel):
     Contains common fields for provider service requests and responses
     """
 
-    category_id: str = Field(..., description="Category ID")
+    category_id: UUID = Field(..., description="Category ID")
     title_ar: str = Field(..., max_length=255, description="Service title in Arabic")
     title_fr: str = Field(..., max_length=255, description="Service title in French")
     description_ar: Optional[str] = Field(
@@ -240,10 +240,10 @@ class ProviderServiceResponse(ProviderServiceBase):
     Returns provider service information including ID and timestamps
     """
 
-    id: str = Field(..., description="Provider service ID")
-    provider_id: str = Field(..., description="Provider profile ID")
-    created_at: str = Field(..., description="Service creation timestamp")
-    updated_at: Optional[str] = Field(None, description="Service last update timestamp")
+    id: UUID = Field(..., description="Provider service ID")
+    provider_id: UUID = Field(..., description="Provider profile ID")
+    created_at: Any = Field(..., description="Service creation timestamp")
+    updated_at: Any = Field(None, description="Service last update timestamp")
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -310,12 +310,10 @@ class ServiceAreaResponse(ServiceAreaBase):
     Returns service area information including ID and timestamps
     """
 
-    id: str = Field(..., description="Service area ID")
-    provider_id: str = Field(..., description="Provider profile ID")
-    created_at: str = Field(..., description="Service area creation timestamp")
-    updated_at: Optional[str] = Field(
-        None, description="Service area last update timestamp"
-    )
+    id: UUID = Field(..., description="Service area ID")
+    provider_id: UUID = Field(..., description="Provider profile ID")
+    created_at: Any = Field(..., description="Service area creation timestamp")
+    updated_at: Any = Field(None, description="Service area last update timestamp")
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -387,12 +385,10 @@ class AvailabilityRuleResponse(AvailabilityRuleBase):
     Returns availability rule information including ID and timestamps
     """
 
-    id: str = Field(..., description="Availability rule ID")
-    provider_id: str = Field(..., description="Provider profile ID")
-    created_at: str = Field(..., description="Availability rule creation timestamp")
-    updated_at: Optional[str] = Field(
-        None, description="Availability rule last update timestamp"
-    )
+    id: UUID = Field(..., description="Availability rule ID")
+    provider_id: UUID = Field(..., description="Provider profile ID")
+    created_at: Any = Field(..., description="Availability rule creation timestamp")
+    updated_at: Any = Field(None, description="Availability rule last update timestamp")
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -429,19 +425,17 @@ class VerificationCaseResponse(VerificationCaseBase):
     Returns verification case information including status and review details
     """
 
-    id: str = Field(..., description="Verification case ID")
-    provider_id: str = Field(..., description="Provider profile ID")
+    id: UUID = Field(..., description="Verification case ID")
+    provider_id: UUID = Field(..., description="Provider profile ID")
     status: str = Field(..., description="Verification status")
     reviewed_by: Optional[str] = Field(
         None, description="ID of admin who reviewed the case"
     )
-    reviewed_at: Optional[str] = Field(None, description="Review timestamp")
+    reviewed_at: Any = Field(None, description="Review timestamp")
     rejection_reason: Optional[str] = Field(None, description="Reason for rejection")
     admin_notes: Optional[str] = Field(None, description="Admin notes")
-    created_at: str = Field(..., description="Verification case creation timestamp")
-    updated_at: Optional[str] = Field(
-        None, description="Verification case last update timestamp"
-    )
+    created_at: Any = Field(..., description="Verification case creation timestamp")
+    updated_at: Any = Field(None, description="Verification case last update timestamp")
 
     model_config = ConfigDict(from_attributes=True)
 

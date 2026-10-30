@@ -1,18 +1,12 @@
+from uuid import UUID
+
 # Payment schemas for KhedmaLink backend
 # Pydantic schemas for payment operations
 
-from pydantic import BaseModel, Field, validator
-from typing import Optional, List
-from datetime import datetime
+from pydantic import BaseModel, Field
+from typing import Any, Optional, List
 from decimal import Decimal
 from enum import Enum
-
-from app.core.models.payment import (
-    PaymentMethod,
-    PaymentStatus,
-    TransactionType,
-    PayoutStatus,
-)
 
 
 # =============================================================================
@@ -42,7 +36,7 @@ class PaymentStatusEnum(str, Enum):
 class PaymentCreate(BaseModel):
     """Schema for creating a payment"""
 
-    booking_id: str = Field(..., description="ID of the booking to pay for")
+    booking_id: UUID = Field(..., description="ID of the booking to pay for")
     payment_method: PaymentMethodEnum = Field(
         default=PaymentMethodEnum.CASH,
         description="Payment method (cash, manual, or card)",
@@ -79,10 +73,10 @@ class PaymentUpdate(BaseModel):
 class PaymentResponse(BaseModel):
     """Schema for payment response"""
 
-    id: str
-    booking_id: str
-    customer_id: str
-    provider_id: str
+    id: UUID
+    booking_id: UUID
+    customer_id: UUID
+    provider_id: UUID
     amount: Decimal
     currency: str
     commission_rate: Decimal
@@ -91,9 +85,9 @@ class PaymentResponse(BaseModel):
     payment_method: PaymentMethodEnum
     status: PaymentStatusEnum
     external_payment_id: Optional[str]
-    created_at: datetime
-    updated_at: datetime
-    completed_at: Optional[datetime]
+    created_at: Any
+    updated_at: Any
+    completed_at: Any
 
     class Config:
         from_attributes = True
@@ -129,7 +123,7 @@ class TransactionCreate(BaseModel):
     )
     amount: Decimal = Field(..., gt=0, description="Transaction amount")
     currency: str = Field(default="DZD", description="Currency code")
-    external_transaction_id: Optional[str] = Field(
+    external_transaction_id: Optional[UUID] = Field(
         None, description="External transaction ID from PSP"
     )
     transaction_metadata: Optional[str] = Field(
@@ -149,14 +143,14 @@ class TransactionCreate(BaseModel):
 class TransactionResponse(BaseModel):
     """Schema for transaction response"""
 
-    id: str
-    payment_id: str
+    id: UUID
+    payment_id: UUID
     transaction_type: TransactionTypeEnum
     amount: Decimal
     currency: str
-    external_transaction_id: Optional[str]
+    external_transaction_id: Optional[UUID]
     transaction_metadata: Optional[str]
-    created_at: datetime
+    created_at: Any
 
     class Config:
         from_attributes = True
@@ -188,7 +182,7 @@ class PayoutCreate(BaseModel):
     payout_method: str = Field(
         default="cash", description="Payout method (cash, bank transfer, etc.)"
     )
-    external_payout_id: Optional[str] = Field(
+    external_payout_id: Optional[UUID] = Field(
         None, description="External payout ID from PSP"
     )
     notes: Optional[str] = Field(None, description="Additional notes for the payout")
@@ -206,7 +200,7 @@ class PayoutUpdate(BaseModel):
     """Schema for updating a payout"""
 
     status: Optional[PayoutStatusEnum] = Field(None, description="New payout status")
-    external_payout_id: Optional[str] = Field(
+    external_payout_id: Optional[UUID] = Field(
         None, description="External payout ID from PSP"
     )
     notes: Optional[str] = Field(None, description="Additional notes for the payout")
@@ -222,18 +216,18 @@ class PayoutUpdate(BaseModel):
 class PayoutResponse(BaseModel):
     """Schema for payout response"""
 
-    id: str
-    payment_id: str
-    provider_id: str
+    id: UUID
+    payment_id: UUID
+    provider_id: UUID
     amount: Decimal
     currency: str
     payout_method: str
     status: PayoutStatusEnum
-    external_payout_id: Optional[str]
+    external_payout_id: Optional[UUID]
     notes: Optional[str]
-    created_at: datetime
-    updated_at: datetime
-    completed_at: Optional[datetime]
+    created_at: Any
+    updated_at: Any
+    completed_at: Any
 
     class Config:
         from_attributes = True
@@ -255,7 +249,7 @@ class RefundCreate(BaseModel):
 
     amount: Decimal = Field(..., gt=0, description="Refund amount")
     reason: str = Field(..., min_length=1, description="Reason for refund")
-    external_transaction_id: Optional[str] = Field(
+    external_transaction_id: Optional[UUID] = Field(
         None, description="External transaction ID from PSP"
     )
 
@@ -271,10 +265,10 @@ class RefundCreate(BaseModel):
 class RefundResponse(BaseModel):
     """Schema for refund response"""
 
-    payment_id: str
+    payment_id: UUID
     refund_amount: Decimal
     refund_status: PaymentStatusEnum
-    transaction_id: str
+    transaction_id: UUID
 
     class Config:
         from_attributes = True

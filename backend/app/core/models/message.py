@@ -3,9 +3,8 @@ Messaging Database Models
 Defines the database models for messages, message attachments, and notifications
 """
 
-import uuid
-from datetime import datetime
-from sqlalchemy import (
+import uuid  # noqa: E402
+from sqlalchemy import (  # noqa: E402
     Boolean,
     Column,
     DateTime,
@@ -13,14 +12,13 @@ from sqlalchemy import (
     String,
     Text,
     Integer,
-    Float,
     ForeignKey,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+from app.core.database.uuid_type import FlexibleUUID as UUID  # noqa: E402
+from sqlalchemy.orm import relationship  # noqa: E402
 
-from app.core.database import Base
+from app.core.database import Base  # noqa: E402
 
 
 # =============================================================================
@@ -88,8 +86,8 @@ class Message(Base):
     )
 
     # Relationships
-    booking = relationship("Booking", backref="messages")
-    sender = relationship("User", backref="sent_messages")
+    booking = relationship("Booking", backref="messages", lazy="selectin")
+    sender = relationship("User", backref="sent_messages", lazy="selectin")
     attachments = relationship(
         "MessageAttachment", back_populates="message", cascade="all, delete-orphan"
     )

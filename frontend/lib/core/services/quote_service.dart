@@ -112,8 +112,7 @@ class QuoteApiService {
               if (description?.isNotEmpty == true) 'description': description,
               'estimated_price': estimatedPrice,
               'currency': currency,
-              if (estimatedDuration != null)
-                'estimated_duration': estimatedDuration,
+              'estimated_duration': ?estimatedDuration,
               if (estimatedDurationUnit?.isNotEmpty == true)
                 'estimated_duration_unit': estimatedDurationUnit,
               if (availableDate != null)
@@ -210,10 +209,9 @@ class QuoteApiService {
             headers: await _getAuthHeaders(),
             body: jsonEncode({
               if (description?.isNotEmpty == true) 'description': description,
-              if (estimatedPrice != null) 'estimated_price': estimatedPrice,
+              'estimated_price': ?estimatedPrice,
               if (currency?.isNotEmpty == true) 'currency': currency,
-              if (estimatedDuration != null)
-                'estimated_duration': estimatedDuration,
+              'estimated_duration': ?estimatedDuration,
               if (estimatedDurationUnit?.isNotEmpty == true)
                 'estimated_duration_unit': estimatedDurationUnit,
               if (availableDate != null)
@@ -222,7 +220,7 @@ class QuoteApiService {
                 'available_time_start': availableTimeStart,
               if (availableTimeEnd?.isNotEmpty == true)
                 'available_time_end': availableTimeEnd,
-              if (status != null) 'status': status,
+              'status': ?status,
             }),
           )
           .timeout(const Duration(seconds: 30));

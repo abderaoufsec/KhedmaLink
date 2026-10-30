@@ -1,11 +1,13 @@
+from uuid import UUID
+
 """
 Pydantic schemas for review operations
 Contains request and response models for reviews
 """
 
-from typing import Optional, List
-from pydantic import BaseModel, Field, field_validator, ConfigDict
-from datetime import datetime
+from typing import Any, Optional, List  # noqa: E402
+from pydantic import BaseModel, Field, ConfigDict  # noqa: E402
+from datetime import datetime  # noqa: E402
 
 
 # =============================================================================
@@ -41,7 +43,7 @@ class ReviewCreate(ReviewBase):
     Used when a customer reviews a completed booking
     """
 
-    booking_id: str = Field(..., description="Booking ID")
+    booking_id: Optional[UUID] = Field(None, description="Booking ID")
 
 
 class ReviewUpdate(BaseModel):
@@ -63,16 +65,16 @@ class ReviewResponse(ReviewBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: str = Field(..., description="Review ID")
-    booking_id: str = Field(..., description="Booking ID")
-    customer_id: str = Field(..., description="Customer user ID")
-    provider_id: str = Field(..., description="Provider user ID")
+    id: UUID = Field(..., description="Review ID")
+    booking_id: Optional[UUID] = Field(None, description="Booking ID")
+    customer_id: UUID = Field(..., description="Customer user ID")
+    provider_id: UUID = Field(..., description="Provider user ID")
     provider_response: Optional[str] = Field(None, description="Provider response")
     provider_response_at: Optional[datetime] = Field(
         None, description="Provider response timestamp"
     )
-    created_at: datetime = Field(..., description="Creation timestamp")
-    updated_at: datetime = Field(..., description="Last update timestamp")
+    created_at: Any = Field(..., description="Creation timestamp")
+    updated_at: Any = Field(..., description="Last update timestamp")
 
 
 # =============================================================================

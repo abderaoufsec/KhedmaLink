@@ -3,10 +3,10 @@ Tests for admin operations endpoints
 Tests admin-only endpoints for user management, verification, and audit logs
 """
 
-import pytest
-from fastapi.testclient import TestClient
+import pytest  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
 
-from app.main import app
+from app.main import app  # noqa: E402
 
 
 @pytest.fixture

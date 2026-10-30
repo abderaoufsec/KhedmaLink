@@ -3,11 +3,10 @@ Application Settings Configuration
 Manages all environment variables and application configuration using Pydantic Settings
 """
 
-import os
-from pathlib import Path
-from typing import List, Union
-from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pathlib import Path  # noqa: E402
+from typing import List  # noqa: E402
+from pydantic import Field, field_validator, model_validator  # noqa: E402
+from pydantic_settings import BaseSettings, SettingsConfigDict  # noqa: E402
 
 
 def _env_path() -> str:
@@ -49,7 +48,7 @@ class Settings(BaseSettings):
     # SERVER SETTINGS
     # =============================================================================
 
-    HOST: str = Field(default="0.0.0.0", description="Server host")
+    HOST: str = Field(default="127.0.0.1", description="Server host")
     PORT: int = Field(default=8000, description="Server port")
 
     # =============================================================================
@@ -71,7 +70,7 @@ class Settings(BaseSettings):
     # CORS SETTINGS
     # =============================================================================
 
-    @field_validator('CORS_ORIGINS', mode='before')
+    @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
     def parse_cors_origins(cls, v):
         """Parse CORS origins from comma-separated string or list"""
@@ -103,6 +102,19 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(
         default=30, description="Access token expiration"
     )
+
+    @model_validator(mode="after")
+    def validate_production_secret(self) -> "Settings":
+        """Refuse predictable or too-short JWT secrets in production."""
+        insecure_default = self.SECRET_KEY.startswith("your-secret-key")
+        if self.ENVIRONMENT.lower() == "production" and (
+            insecure_default or len(self.SECRET_KEY) < 32
+        ):
+            raise ValueError(
+                "SECRET_KEY must be a non-default value of at least 32 characters "
+                "when ENVIRONMENT=production"
+            )
+        return self
 
     # =============================================================================
     # LOGGING SETTINGS

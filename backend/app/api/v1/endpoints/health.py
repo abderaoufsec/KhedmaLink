@@ -3,11 +3,11 @@ Health check endpoints
 Provides health check and system status endpoints
 """
 
-from fastapi import APIRouter
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter  # noqa: E402
+from fastapi.responses import JSONResponse  # noqa: E402
 
-from app.core.config import settings
-from app.core.logging import get_logger
+from app.core.config import settings  # noqa: E402
+from app.core.logging import get_logger  # noqa: E402
 
 logger = get_logger(__name__)
 

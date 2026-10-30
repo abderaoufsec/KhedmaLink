@@ -130,8 +130,31 @@ class _DisputeListScreenState extends State<DisputeListScreen> {
           color: _getStatusColor(dispute.status),
         ),
         onTap: () {
-          // TODO: Navigate to dispute detail
           AppLogger.info('Dispute tapped: ${dispute.id}');
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(dispute.title),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${language == 'ar' ? 'النوع' : 'Type'}: ${dispute.disputeType.getDisplayName(language)}',
+                  ),
+                  Text(
+                    '${language == 'ar' ? 'الحالة' : 'Status'}: ${dispute.status.getDisplayName(language)}',
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(language == 'ar' ? 'إغلاق' : 'Fermer'),
+                ),
+              ],
+            ),
+          );
         },
       ),
     );

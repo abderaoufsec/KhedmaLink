@@ -1,24 +1,22 @@
 # Payment models for KhedmaLink backend
 # Handles payment abstraction, transactions, commission calculation, and payouts
 
+from app.core.database.uuid_type import FlexibleUUID as UUID
 from sqlalchemy import (
     Column,
     String,
-    UUID,
     Numeric,
     DateTime,
     ForeignKey,
     Enum as SQLEnum,
     Text,
-    Integer,
-    func,
 )
-from sqlalchemy.orm import relationship
-from datetime import datetime, timezone
-import enum
-import uuid
+from sqlalchemy.orm import relationship  # noqa: E402
+from datetime import datetime, timezone  # noqa: E402
+import enum  # noqa: E402
+import uuid  # noqa: E402
 
-from app.core.database import Base
+from app.core.database import Base  # noqa: E402
 
 
 class PaymentMethod(str, enum.Enum):
@@ -116,11 +114,18 @@ class Payment(Base):
     external_payment_id = Column(String(255), nullable=True)  # PSP payment ID
 
     # Timestamps
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
-    updated_at = Column(
-        DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )
-    completed_at = Column(DateTime, nullable=True)
+    updated_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
+    completed_at = Column(DateTime(timezone=True), nullable=True)
 
     # Relationships
     booking = relationship("Booking", back_populates="payment")
@@ -167,10 +172,16 @@ class Transaction(Base):
     external_transaction_id = Column(String(255), nullable=True)  # PSP transaction ID
 
     # Transaction metadata
-    transaction_metadata = Column(Text, nullable=True)  # JSON metadata for additional info
+    transaction_metadata = Column(
+        Text, nullable=True
+    )  # JSON metadata for additional info
 
     # Timestamps
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
 
     # Relationships
     payment = relationship("Payment", back_populates="transactions")
@@ -221,11 +232,18 @@ class Payout(Base):
     notes = Column(Text, nullable=True)
 
     # Timestamps
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
-    updated_at = Column(
-        DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )
-    completed_at = Column(DateTime, nullable=True)
+    updated_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
+    completed_at = Column(DateTime(timezone=True), nullable=True)
 
     # Relationships
     payment = relationship("Payment", back_populates="payouts")

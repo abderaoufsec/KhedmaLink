@@ -3,13 +3,13 @@ Object ownership check utilities
 Provides functions to verify resource ownership for authorization
 """
 
-from typing import Optional, Type
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from fastapi import HTTPException, status
+from typing import Type  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
+from sqlalchemy import select  # noqa: E402
+from fastapi import HTTPException, status  # noqa: E402
 
-from app.core.models.user import User
-from app.core.logging import get_logger
+from app.core.models.user import User  # noqa: E402
+from app.core.logging import get_logger  # noqa: E402
 
 logger = get_logger(__name__)
 

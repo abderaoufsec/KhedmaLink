@@ -3,29 +3,23 @@ Booking API endpoints
 Handles CRUD operations for bookings and booking state transitions
 """
 
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy import select, and_, or_
-from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime
+from typing import List, Optional  # noqa: E402
+from fastapi import APIRouter, Depends, HTTPException, status, Query  # noqa: E402
+from sqlalchemy import select, or_  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
+from datetime import datetime  # noqa: E402
 
-from app.core.database import get_db
-from app.core.models.booking import Booking, BookingEvent
-from app.core.models.quote import Quote
-from app.core.models.request import ServiceRequest
-from app.core.models.user import User
-from app.core.schemas.booking import (
-    BookingCreate,
-    BookingUpdate,
+from app.core.database import get_db  # noqa: E402
+from app.core.models.booking import Booking, BookingEvent  # noqa: E402
+from app.core.models.user import User  # noqa: E402
+from app.core.schemas.booking import (  # noqa: E402
     BookingResponse,
     BookingCancel,
     BookingComplete,
     BookingEventResponse,
-    BookingListResponse,
 )
-from app.api.v1.endpoints.messages import _create_notification
-from app.core.security.dependencies import get_current_user
-from app.core.security.ownership import check_ownership, require_ownership
+from app.api.v1.endpoints.messages import _create_notification  # noqa: E402
+from app.core.security.dependencies import get_current_user  # noqa: E402
 
 # Create router for booking endpoints
 router = APIRouter()
@@ -40,7 +34,7 @@ VALID_TRANSITIONS = {
     "draft": ["pending", "cancelled"],
     "pending": ["quoted", "cancelled"],
     "quoted": ["accepted", "cancelled"],
-    "accepted": ["scheduled", "cancelled"],
+    "accepted": ["scheduled", "in_progress", "cancelled"],
     "scheduled": ["in_progress", "cancelled"],
     "in_progress": ["completed", "disputed"],
     "completed": [],  # Terminal state
@@ -272,7 +266,7 @@ async def cancel_booking(
         notification_type="booking_cancelled",
         title_ar="تم إلغاء الحجز",
         title_fr="Réservation annulée",
-        body_ar=f"تم إلغاء الحجز",
+        body_ar="تم إلغاء الحجز",
         body_fr="La réservation a été annulée",
         entity_type="booking",
         entity_id=booking_id,
@@ -355,7 +349,7 @@ async def start_booking(
         notification_type="booking_started",
         title_ar="بدأ العمل على حجزك",
         title_fr="Le travail a commencé sur votre réservation",
-        body_ar=f"بدأ مقدم الخدمة العمل على حجزك",
+        body_ar="بدأ مقدم الخدمة العمل على حجزك",
         body_fr="Le prestataire a commencé le travail sur votre réservation",
         entity_type="booking",
         entity_id=booking_id,
@@ -443,7 +437,7 @@ async def complete_booking(
         notification_type="booking_completed",
         title_ar="اكتمل حجزك",
         title_fr="Votre réservation est terminée",
-        body_ar=f"اكتمل العمل على حجزك بنجاح",
+        body_ar="اكتمل العمل على حجزك بنجاح",
         body_fr="Le travail sur votre réservation est terminé avec succès",
         entity_type="booking",
         entity_id=booking_id,

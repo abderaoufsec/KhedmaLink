@@ -1,9 +1,8 @@
 # Dispute schemas for KhedmaLink backend
 # Contains Pydantic schemas for dispute operations and evidence
 
-from datetime import datetime
 from uuid import UUID
-from typing import Optional, List
+from typing import Any, Optional, List
 from pydantic import BaseModel, Field
 from enum import Enum
 
@@ -72,9 +71,9 @@ class DisputeResponse(BaseModel):
     description: str
     resolution: Optional[str]
     resolved_by: Optional[UUID]
-    resolved_at: Optional[datetime]
-    created_at: datetime
-    updated_at: datetime
+    resolved_at: Any
+    created_at: Any
+    updated_at: Any
 
     class Config:
         from_attributes = True
@@ -122,7 +121,7 @@ class DisputeEvidenceResponse(BaseModel):
     file_size: Optional[str]
     mime_type: Optional[str]
     description: Optional[str]
-    created_at: datetime
+    created_at: Any
 
     class Config:
         from_attributes = True

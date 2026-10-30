@@ -57,14 +57,8 @@ class _HomeScreenState extends State<HomeScreen>
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-              const PopupMenuItem<String>(
-                value: 'ar',
-                child: Text('العربية'),
-              ),
-              const PopupMenuItem<String>(
-                value: 'fr',
-                child: Text('Français'),
-              ),
+              const PopupMenuItem<String>(value: 'ar', child: Text('العربية')),
+              const PopupMenuItem<String>(value: 'fr', child: Text('Français')),
             ],
           ),
         ],

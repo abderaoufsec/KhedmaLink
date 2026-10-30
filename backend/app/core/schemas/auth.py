@@ -3,8 +3,16 @@ Pydantic schemas for authentication
 Contains request and response models for auth endpoints
 """
 
-from typing import Optional, List
-from pydantic import BaseModel, EmailStr, Field, field_validator, ConfigDict
+from typing import Any, List, Optional
+from uuid import UUID
+
+from pydantic import (
+    BaseModel,
+    EmailStr,
+    Field,
+    field_validator,
+    ConfigDict,
+)
 
 
 # =============================================================================
@@ -76,7 +84,7 @@ class UserResponse(BaseModel):
     Schema for user response
     """
 
-    id: str = Field(..., description="User ID")
+    id: UUID = Field(..., description="User ID")
     email: str = Field(..., description="User email")
     full_name: Optional[str] = Field(None, description="User full name")
     phone: Optional[str] = Field(None, description="User phone number")
@@ -84,7 +92,7 @@ class UserResponse(BaseModel):
     is_verified: bool = Field(..., description="User verification status")
     status: str = Field(..., description="User account status")
     roles: List[str] = Field(default_factory=list, description="User roles")
-    created_at: str = Field(..., description="User creation timestamp")
+    created_at: Any = Field(..., description="User creation timestamp")
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -131,7 +139,7 @@ class RoleResponse(BaseModel):
     Schema for role response
     """
 
-    id: str = Field(..., description="Role ID")
+    id: UUID = Field(..., description="Role ID")
     name: str = Field(..., description="Role name")
     description: Optional[str] = Field(None, description="Role description")
 
@@ -143,7 +151,7 @@ class RoleAssignment(BaseModel):
     Schema for role assignment request
     """
 
-    role_id: str = Field(..., description="Role ID to assign")
+    role_id: UUID = Field(..., description="Role ID to assign")
 
 
 class VerificationRequest(BaseModel):

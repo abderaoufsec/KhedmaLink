@@ -3,12 +3,11 @@ Request ID Middleware
 Adds unique request IDs to all requests for better tracing and debugging
 """
 
-import uuid
-from fastapi import Request
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import Response
+import uuid  # noqa: E402
+from fastapi import Request  # noqa: E402
+from starlette.middleware.base import BaseHTTPMiddleware  # noqa: E402
 
-from app.core.logging import get_logger
+from app.core.logging import get_logger  # noqa: E402
 
 logger = get_logger(__name__)
 

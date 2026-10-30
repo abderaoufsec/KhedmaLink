@@ -109,8 +109,30 @@ class _ProviderProfileManagementScreenState
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                // TODO: Create profile
+              onPressed: () async {
+                try {
+                  final profile = await _providerService
+                      .createProviderProfile();
+                  if (mounted) {
+                    setState(() {
+                      _profile = profile;
+                    });
+                  }
+                } catch (e) {
+                  AppLogger.error('Create profile error: $e');
+                  if (mounted && context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          language == 'ar'
+                              ? 'فشل إنشاء الملف الشخصي: $e'
+                              : 'Failed to create profile: $e',
+                        ),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
               },
               child: Text(
                 language == 'ar' ? 'إنشاء ملف شخصي' : 'Créer un profil',

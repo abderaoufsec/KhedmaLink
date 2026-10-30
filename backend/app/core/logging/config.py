@@ -3,12 +3,11 @@ Logging Configuration
 Sets up structured logging with request IDs and proper formatting
 """
 
-import logging
-import sys
-from typing import Any
-from loguru import logger
+import sys  # noqa: E402
+from typing import Any  # noqa: E402
+from loguru import logger  # noqa: E402
 
-from app.core.config import settings
+from app.core.config import settings  # noqa: E402
 
 
 def setup_logging() -> None:

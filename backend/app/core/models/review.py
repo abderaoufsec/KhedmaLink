@@ -3,24 +3,20 @@ Review Database Models
 Defines the database models for reviews and provider reputation
 """
 
-import uuid
-from datetime import datetime
-from sqlalchemy import (
-    Boolean,
+import uuid  # noqa: E402
+from sqlalchemy import (  # noqa: E402
     Column,
     DateTime,
-    Enum,
     String,
     Text,
     Integer,
-    Float,
     ForeignKey,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+from app.core.database.uuid_type import FlexibleUUID as UUID  # noqa: E402
+from sqlalchemy.orm import relationship  # noqa: E402
 
-from app.core.database import Base
+from app.core.database import Base  # noqa: E402
 
 
 # =============================================================================

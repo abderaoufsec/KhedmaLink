@@ -3,18 +3,10 @@ Tests for messaging and notifications endpoints
 Tests booking-scoped messaging and notification functionality
 """
 
-import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+import pytest  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
 
-from app.main import app
-from app.core.models.message import Message, Notification
-from app.core.models.booking import Booking
-from app.core.models.quote import Quote
-from app.core.models.request import ServiceRequest
-from app.core.models.user import User
-from app.core.models.provider import ProviderProfile, Category
+from app.main import app  # noqa: E402
 
 
 # =============================================================================

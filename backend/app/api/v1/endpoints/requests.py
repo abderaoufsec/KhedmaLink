@@ -3,15 +3,15 @@ Service Request API endpoints
 Handles CRUD operations for customer service requests and attachments
 """
 
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy import select, and_, or_
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List, Optional  # noqa: E402
+from fastapi import APIRouter, Depends, HTTPException, status, Query  # noqa: E402
+from sqlalchemy import select, and_  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
 
-from app.core.database import get_db
-from app.core.models.request import ServiceRequest, RequestAttachment
-from app.core.models.user import User
-from app.core.schemas.request import (
+from app.core.database import get_db  # noqa: E402
+from app.core.models.request import ServiceRequest, RequestAttachment  # noqa: E402
+from app.core.models.user import User  # noqa: E402
+from app.core.schemas.request import (  # noqa: E402
     ServiceRequestCreate,
     ServiceRequestUpdate,
     ServiceRequestResponse,
@@ -19,7 +19,7 @@ from app.core.schemas.request import (
     RequestAttachmentCreate,
     RequestAttachmentResponse,
 )
-from app.core.security.dependencies import get_current_user
+from app.core.security.dependencies import get_current_user  # noqa: E402
 
 # Create router for request endpoints
 router = APIRouter()
@@ -96,7 +96,7 @@ async def create_service_request(
         )
 
     # Check if category exists
-    from app.core.models.provider import Category
+    from app.core.models.provider import Category  # noqa: E402
 
     category_query = select(Category).where(Category.id == request_data.category_id)
     category_result = await db.execute(category_query)
@@ -117,6 +117,7 @@ async def create_service_request(
     await db.commit()
     await db.refresh(new_request)
 
+    # Convert to response-compatible format
     return new_request
 
 
@@ -212,7 +213,7 @@ async def update_service_request(
 
     # Set closed_at timestamp if status is being set to closed
     if request_data.status == "closed" and request.closed_at is None:
-        from datetime import datetime
+        from datetime import datetime  # noqa: E402
 
         request.closed_at = datetime.utcnow()
 
@@ -299,7 +300,7 @@ async def list_public_requests(
     """
     # Build base query
     query = select(ServiceRequest).where(
-        and_(ServiceRequest.is_public == True, ServiceRequest.status == "open")
+        and_(ServiceRequest.is_public, ServiceRequest.status == "open")
     )
 
     # Apply filters
@@ -345,7 +346,7 @@ async def get_public_request(
     query = select(ServiceRequest).where(
         and_(
             ServiceRequest.id == request_id,
-            ServiceRequest.is_public == True,
+            ServiceRequest.is_public,
             ServiceRequest.status == "open",
         )
     )

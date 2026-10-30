@@ -75,8 +75,61 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
           if (_request?.status == 'open')
             IconButton(
               icon: const Icon(Icons.edit),
-              onPressed: () {
-                // TODO: Implement edit functionality
+              onPressed: () async {
+                final titleController = TextEditingController(
+                  text: _request?.titleAr ?? '',
+                );
+                final result = await showDialog<String>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(
+                      language == 'ar' ? 'تعديل الطلب' : 'Edit Request',
+                    ),
+                    content: TextField(
+                      controller: titleController,
+                      decoration: InputDecoration(
+                        labelText: language == 'ar' ? 'العنوان' : 'Title',
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(language == 'ar' ? 'إلغاء' : 'Cancel'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () =>
+                            Navigator.of(context).pop(titleController.text),
+                        child: Text(language == 'ar' ? 'حفظ' : 'Save'),
+                      ),
+                    ],
+                  ),
+                );
+                if (result != null && result.trim().isNotEmpty) {
+                  try {
+                    final updated = await _requestService.updateServiceRequest(
+                      widget.requestId,
+                      titleAr: result.trim(),
+                    );
+                    if (mounted) {
+                      setState(() {
+                        _request = updated;
+                      });
+                    }
+                  } catch (e) {
+                    if (mounted && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            language == 'ar'
+                                ? 'فشل تحديث الطلب: $e'
+                                : 'Failed to update request: $e',
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  }
+                }
               },
             ),
         ],

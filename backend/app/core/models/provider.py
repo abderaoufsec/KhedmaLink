@@ -3,9 +3,8 @@ Provider and Category Database Models
 Defines the database models for categories, provider profiles, services, areas, and availability
 """
 
-import uuid
-from datetime import datetime
-from sqlalchemy import (
+import uuid  # noqa: E402
+from sqlalchemy import (  # noqa: E402
     Boolean,
     Column,
     DateTime,
@@ -18,10 +17,10 @@ from sqlalchemy import (
     func,
     Index,
 )
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+from app.core.database.uuid_type import FlexibleUUID as UUID  # noqa: E402
+from sqlalchemy.orm import relationship  # noqa: E402
 
-from app.core.database import Base
+from app.core.database import Base  # noqa: E402
 
 
 # =============================================================================
@@ -56,7 +55,12 @@ class Category(Base):
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=True)
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=True,
+    )
 
     # Relationships
     provider_services = relationship("ProviderService", back_populates="category")
@@ -138,7 +142,12 @@ class ProviderProfile(Base):
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=True)
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=True,
+    )
 
     # Relationships
     user = relationship("User", backref="provider_profile")
@@ -207,7 +216,12 @@ class ProviderService(Base):
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=True)
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=True,
+    )
 
     # Relationships
     provider = relationship("ProviderProfile", back_populates="services")
@@ -267,7 +281,12 @@ class ServiceArea(Base):
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=True)
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=True,
+    )
 
     # Relationships
     provider = relationship("ProviderProfile", back_populates="service_areas")
@@ -313,7 +332,12 @@ class AvailabilityRule(Base):
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=True)
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=True,
+    )
 
     # Relationships
     provider = relationship("ProviderProfile", back_populates="availability_rules")
@@ -385,7 +409,12 @@ class VerificationCase(Base):
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=True)
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=True,
+    )
 
     # Relationships
     provider = relationship("ProviderProfile", back_populates="verification_cases")

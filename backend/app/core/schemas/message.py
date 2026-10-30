@@ -1,11 +1,12 @@
+from uuid import UUID
+
 """
 Pydantic schemas for messaging and notifications operations
 Contains request and response models for messages, attachments, and notifications
 """
 
-from typing import Optional, List
-from pydantic import BaseModel, Field, field_validator, ConfigDict
-from datetime import datetime
+from typing import Any, Optional, List  # noqa: E402
+from pydantic import BaseModel, Field, ConfigDict  # noqa: E402
 
 
 # =============================================================================
@@ -19,7 +20,7 @@ class MessageBase(BaseModel):
     Contains common fields for message requests and responses
     """
 
-    booking_id: str = Field(..., description="Booking ID")
+    booking_id: Optional[UUID] = Field(None, description="Booking ID")
     content: str = Field(
         ..., min_length=1, max_length=5000, description="Message content"
     )
@@ -45,12 +46,12 @@ class MessageResponse(MessageBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: str = Field(..., description="Message ID")
-    sender_id: str = Field(..., description="Sender user ID")
+    id: UUID = Field(..., description="Message ID")
+    sender_id: UUID = Field(..., description="Sender user ID")
     is_read: bool = Field(..., description="Read status")
-    read_at: Optional[datetime] = Field(None, description="Read timestamp")
-    created_at: datetime = Field(..., description="Creation timestamp")
-    updated_at: datetime = Field(..., description="Last update timestamp")
+    read_at: Any = Field(None, description="Read timestamp")
+    created_at: Any = Field(..., description="Creation timestamp")
+    updated_at: Any = Field(..., description="Last update timestamp")
 
 
 class MessageUpdate(BaseModel):
@@ -73,7 +74,7 @@ class MessageAttachmentBase(BaseModel):
     Contains common fields for message attachments
     """
 
-    message_id: str = Field(..., description="Message ID")
+    message_id: UUID = Field(..., description="Message ID")
     file_name: str = Field(..., max_length=255, description="File name")
     file_url: str = Field(..., description="File URL (S3 or storage)")
     file_size: int = Field(..., gt=0, description="File size in bytes")
@@ -97,9 +98,9 @@ class MessageAttachmentResponse(MessageAttachmentBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: str = Field(..., description="Attachment ID")
+    id: UUID = Field(..., description="Attachment ID")
     upload_status: str = Field(..., description="Upload status")
-    created_at: datetime = Field(..., description="Creation timestamp")
+    created_at: Any = Field(..., description="Creation timestamp")
 
 
 # =============================================================================
@@ -121,7 +122,7 @@ class NotificationBase(BaseModel):
     entity_type: Optional[str] = Field(
         None, max_length=50, description="Related entity type"
     )
-    entity_id: Optional[str] = Field(None, description="Related entity ID")
+    entity_id: Optional[UUID] = Field(None, description="Related entity ID")
 
 
 class NotificationCreate(NotificationBase):
@@ -130,7 +131,7 @@ class NotificationCreate(NotificationBase):
     Used by the system to generate notifications
     """
 
-    user_id: str = Field(..., description="Recipient user ID")
+    user_id: UUID = Field(..., description="Recipient user ID")
 
 
 class NotificationResponse(NotificationBase):
@@ -141,11 +142,11 @@ class NotificationResponse(NotificationBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: str = Field(..., description="Notification ID")
-    user_id: str = Field(..., description="Recipient user ID")
+    id: UUID = Field(..., description="Notification ID")
+    user_id: UUID = Field(..., description="Recipient user ID")
     is_read: bool = Field(..., description="Read status")
-    read_at: Optional[datetime] = Field(None, description="Read timestamp")
-    created_at: datetime = Field(..., description="Creation timestamp")
+    read_at: Any = Field(None, description="Read timestamp")
+    created_at: Any = Field(..., description="Creation timestamp")
 
 
 class NotificationUpdate(BaseModel):

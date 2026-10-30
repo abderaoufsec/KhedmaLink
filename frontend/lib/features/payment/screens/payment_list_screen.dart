@@ -133,8 +133,34 @@ class _PaymentListScreenState extends State<PaymentListScreen> {
           color: _getStatusColor(payment.status),
         ),
         onTap: () {
-          // TODO: Navigate to payment detail
           AppLogger.info('Payment tapped: ${payment.id}');
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(payment.formattedAmount),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${language == 'ar' ? 'الطريقة' : 'Method'}: ${payment.paymentMethod.getDisplayName(language)}',
+                  ),
+                  Text(
+                    '${language == 'ar' ? 'الحالة' : 'Status'}: ${payment.status.getDisplayName(language)}',
+                  ),
+                  Text(
+                    '${language == 'ar' ? 'العمولة' : 'Commission'}: ${payment.formattedCommissionAmount}',
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(language == 'ar' ? 'إغلاق' : 'Fermer'),
+                ),
+              ],
+            ),
+          );
         },
       ),
     );

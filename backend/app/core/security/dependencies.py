@@ -3,17 +3,16 @@ Authentication dependencies for FastAPI routes
 Provides dependency functions for protecting routes with JWT authentication
 """
 
-import uuid
-from typing import Optional
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+import uuid  # noqa: E402
+from fastapi import Depends, HTTPException, status  # noqa: E402
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
+from sqlalchemy import select  # noqa: E402
 
-from app.core.database import get_db
-from app.core.security import verify_token
-from app.core.models.user import User, Role, user_roles
-from app.core.logging import get_logger
+from app.core.database import get_db  # noqa: E402
+from app.core.security import verify_token  # noqa: E402
+from app.core.models.user import User, Role, user_roles  # noqa: E402
+from app.core.logging import get_logger  # noqa: E402
 
 logger = get_logger(__name__)
 

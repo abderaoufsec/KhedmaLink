@@ -3,15 +3,19 @@ Category API endpoints
 Handles CRUD operations for service categories
 """
 
-from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List  # noqa: E402
+from fastapi import APIRouter, Depends, HTTPException, status  # noqa: E402
+from sqlalchemy import select  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
 
-from app.core.database import get_db
-from app.core.models.provider import Category
-from app.core.schemas.provider import CategoryCreate, CategoryUpdate, CategoryResponse
-from app.core.security.dependencies import require_admin
+from app.core.database import get_db  # noqa: E402
+from app.core.models.provider import Category  # noqa: E402
+from app.core.schemas.provider import (
+    CategoryCreate,
+    CategoryUpdate,
+    CategoryResponse,
+)  # noqa: E402
+from app.core.security.dependencies import require_admin  # noqa: E402
 
 # Create router for category endpoints
 router = APIRouter()
@@ -42,7 +46,7 @@ async def list_categories(
     query = select(Category)
 
     if active_only:
-        query = query.where(Category.is_active == True)
+        query = query.where(Category.is_active)
 
     # Apply sorting and pagination
     query = query.order_by(Category.sort_order).offset(skip).limit(limit)

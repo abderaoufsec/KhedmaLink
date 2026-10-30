@@ -5,18 +5,20 @@ instance. Point the application at a throwaway SQLite database before any app
 module is imported, create the schema from the ORM metadata, and seed roles.
 """
 
-import asyncio
-import os
-import tempfile
-import uuid
-from datetime import datetime, timezone
-from pathlib import Path
+import asyncio  # noqa: E402
+import os  # noqa: E402
+import tempfile  # noqa: E402
+import uuid  # noqa: E402
+from datetime import datetime, timezone  # noqa: E402
+from pathlib import Path  # noqa: E402
 
 TEST_DB_PATH = Path(tempfile.gettempdir()) / "khedmalink_pytest.db"
 if TEST_DB_PATH.exists():
     TEST_DB_PATH.unlink()
 
-os.environ["DATABASE_URL"] = f"sqlite+aiosqlite:///{TEST_DB_PATH.as_posix()}"
+# Allow overriding DATABASE_URL for PostgreSQL integration tests
+if "DATABASE_URL" not in os.environ or "sqlite" in os.environ.get("DATABASE_URL", ""):
+    os.environ["DATABASE_URL"] = f"sqlite+aiosqlite:///{TEST_DB_PATH.as_posix()}"
 
 import pytest  # noqa: E402
 

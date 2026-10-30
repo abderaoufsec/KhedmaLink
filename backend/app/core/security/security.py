@@ -3,12 +3,14 @@ Security utilities for KhedmaLink backend
 Contains password hashing, JWT token generation, and authentication helpers
 """
 
-from datetime import datetime, timedelta, timezone
-from typing import Optional, Union
-from jose import JWTError, jwt
-from passlib.context import CryptContext
+from datetime import datetime, timedelta, timezone  # noqa: E402
+from typing import Optional  # noqa: E402
+from jose import JWTError, jwt  # noqa: E402
+from passlib.context import CryptContext  # noqa: E402
 
-from app.core.config import settings
+from app.core.config import settings  # noqa: E402
+
+REFRESH_TOKEN_TYPE = "refresh"
 
 # =============================================================================
 # PASSWORD HASHING
@@ -70,7 +72,9 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
 
-    to_encode.update({"exp": expire, "iat": datetime.now(timezone.utc), "type": "access"})
+    to_encode.update(
+        {"exp": expire, "iat": datetime.now(timezone.utc), "type": "access"}
+    )
 
     encoded_jwt = jwt.encode(
         to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
@@ -140,7 +144,7 @@ def create_refresh_token(data: dict) -> str:
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + timedelta(days=7)  # 7 days for refresh token
     to_encode.update(
-        {"exp": expire, "iat": datetime.now(timezone.utc), "type": "refresh"}
+        {"exp": expire, "iat": datetime.now(timezone.utc), "type": REFRESH_TOKEN_TYPE}
     )
 
     encoded_jwt = jwt.encode(
@@ -166,7 +170,7 @@ def verify_refresh_token(token: str) -> Optional[str]:
 
     # Verify it's a refresh token
     token_type = payload.get("type")
-    if token_type != "refresh":
+    if token_type != REFRESH_TOKEN_TYPE:
         return None
 
     user_id: str = payload.get("sub")

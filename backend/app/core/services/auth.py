@@ -3,22 +3,27 @@ Authentication service layer
 Handles business logic for user registration, login, and authentication
 """
 
-from datetime import datetime, timezone
-from typing import Optional
-from uuid import UUID
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, insert
-from fastapi import HTTPException, status
+from datetime import datetime, timezone  # noqa: E402
+from typing import Optional  # noqa: E402
+from uuid import UUID  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
+from sqlalchemy import select, insert  # noqa: E402
+from fastapi import HTTPException, status  # noqa: E402
 
-from app.core.models.user import User, Role, user_roles
-from app.core.security import (
+from app.core.models.user import User, Role, user_roles  # noqa: E402
+from app.core.security import (  # noqa: E402
     get_password_hash,
     verify_password,
     create_access_token,
     create_refresh_token,
 )
-from app.core.schemas.auth import UserRegister, UserLogin, UserUpdate, PasswordChange
-from app.core.logging import get_logger
+from app.core.schemas.auth import (
+    UserRegister,
+    UserLogin,
+    UserUpdate,
+    PasswordChange,
+)  # noqa: E402
+from app.core.logging import get_logger  # noqa: E402
 
 logger = get_logger(__name__)
 
@@ -44,7 +49,7 @@ class AuthService:
             HTTPException: If email or phone already exists
         """
         logger.info(f"Starting registration for email: {user_data.email}")
-        
+
         # Check if email already exists
         result = await db.execute(select(User).where(User.email == user_data.email))
         existing_user = result.scalar_one_or_none()
@@ -88,7 +93,7 @@ class AuthService:
         db.add(new_user)
         await db.commit()
         await db.refresh(new_user)
-        
+
         logger.info(f"User created with ID: {new_user.id}")
 
         # Assign default customer role
@@ -190,7 +195,8 @@ class AuthService:
         """
         # Get user roles explicitly to avoid lazy loading issues
         if db:
-            from app.core.models.user import Role, user_roles
+            from app.core.models.user import Role, user_roles  # noqa: E402
+
             result = await db.execute(
                 select(Role).join(user_roles).where(user_roles.c.user_id == user.id)
             )
@@ -236,7 +242,7 @@ class AuthService:
         Raises:
             HTTPException: If refresh token is invalid
         """
-        from app.core.security import verify_refresh_token
+        from app.core.security import verify_refresh_token  # noqa: E402
 
         user_id = verify_refresh_token(refresh_token)
 

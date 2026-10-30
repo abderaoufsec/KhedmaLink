@@ -179,9 +179,11 @@ class AppLocalizations {
       'onboardingTitle1': 'Bienvenue sur KhedmaLink',
       'onboardingSubtitle1': 'Vous met en relation avec les meilleurs prestataires de votre région',
       'onboardingTitle2': 'Services de confiance',
-      'onboardingSubtitle2': 'Nous assurons la qualité du service et la satisfaction client',
+      'onboardingSubtitle2':
+          'Nous assurons la qualité du service et la satisfaction client',
       'onboardingTitle3': 'Commencez maintenant',
-      'onboardingSubtitle3': 'Découvrez les services et réservez votre rendez-vous facilement',
+      'onboardingSubtitle3':
+          'Découvrez les services et réservez votre rendez-vous facilement',
       // Placeholder
       'notImplemented': 'Cette fonctionnalité n\'est pas encore implémentée',
     },

@@ -1,11 +1,13 @@
+from uuid import UUID
+
 """
 Pydantic schemas for booking operations
 Contains request and response models for bookings and booking events
 """
 
-from typing import Optional, List
-from pydantic import BaseModel, Field, field_validator, ConfigDict
-from datetime import datetime
+from typing import Any, Optional, List  # noqa: E402
+from pydantic import BaseModel, Field, ConfigDict  # noqa: E402
+from datetime import datetime  # noqa: E402
 
 
 # =============================================================================
@@ -19,10 +21,10 @@ class BookingBase(BaseModel):
     Contains common fields for booking requests and responses
     """
 
-    request_id: str = Field(..., description="Service request ID")
-    quote_id: str = Field(..., description="Accepted quote ID")
-    customer_id: str = Field(..., description="Customer user ID")
-    provider_id: str = Field(..., description="Provider user ID")
+    request_id: UUID = Field(..., description="Service request ID")
+    quote_id: UUID = Field(..., description="Accepted quote ID")
+    customer_id: UUID = Field(..., description="Customer user ID")
+    provider_id: UUID = Field(..., description="Provider user ID")
     scheduled_date: Optional[datetime] = Field(
         None, description="Scheduled date for service"
     )
@@ -90,15 +92,15 @@ class BookingResponse(BookingBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: str = Field(..., description="Booking ID")
+    id: UUID = Field(..., description="Booking ID")
     status: str = Field(..., description="Booking status")
-    cancelled_at: Optional[datetime] = Field(None, description="Cancellation timestamp")
+    cancelled_at: Any = Field(None, description="Cancellation timestamp")
     cancelled_by: Optional[str] = Field(None, description="User ID who cancelled")
     cancellation_reason: Optional[str] = Field(None, description="Cancellation reason")
-    completed_at: Optional[datetime] = Field(None, description="Completion timestamp")
+    completed_at: Any = Field(None, description="Completion timestamp")
     completion_notes: Optional[str] = Field(None, description="Completion notes")
-    created_at: datetime = Field(..., description="Creation timestamp")
-    updated_at: datetime = Field(..., description="Last update timestamp")
+    created_at: Any = Field(..., description="Creation timestamp")
+    updated_at: Any = Field(..., description="Last update timestamp")
 
 
 class BookingCancel(BaseModel):
@@ -134,7 +136,7 @@ class BookingEventBase(BaseModel):
     Contains common fields for booking events
     """
 
-    booking_id: str = Field(..., description="Booking ID")
+    booking_id: UUID = Field(..., description="Booking ID")
     event_type: str = Field(..., description="Event type")
     old_status: Optional[str] = Field(None, description="Previous status")
     new_status: Optional[str] = Field(None, description="New status")
@@ -152,11 +154,11 @@ class BookingEventResponse(BookingEventBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: str = Field(..., description="Event ID")
+    id: UUID = Field(..., description="Event ID")
     triggered_by: Optional[str] = Field(
         None, description="User ID who triggered the event"
     )
-    created_at: datetime = Field(..., description="Event timestamp")
+    created_at: Any = Field(..., description="Event timestamp")
 
 
 # =============================================================================

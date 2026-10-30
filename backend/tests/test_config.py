@@ -4,7 +4,10 @@ Tests application settings and configuration loading
 """
 
 import pytest
-from app.core.config import settings
+from pydantic import ValidationError
+
+from app.core.config.settings import Settings
+from app.core.config import settings  # noqa: E402
 
 
 def test_app_name():
@@ -53,6 +56,26 @@ def test_secret_key():
     """Test that secret key is configured"""
     assert settings.SECRET_KEY is not None
     assert len(settings.SECRET_KEY) > 0
+
+
+def test_production_rejects_default_secret_key():
+    """Production must not start with the documented development secret."""
+    with pytest.raises(ValidationError, match="SECRET_KEY must be"):
+        Settings(
+            _env_file=None,
+            ENVIRONMENT="production",
+            SECRET_KEY="your-secret-key-change-in-production",
+        )
+
+
+def test_production_accepts_strong_secret_key():
+    """A non-default production secret of sufficient length is accepted."""
+    settings = Settings(
+        _env_file=None,
+        ENVIRONMENT="production",
+        SECRET_KEY="correct-horse-battery-staple-for-production-2026",
+    )
+    assert settings.ENVIRONMENT == "production"
 
 
 def test_jwt_settings():

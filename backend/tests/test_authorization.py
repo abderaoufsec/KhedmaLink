@@ -3,10 +3,10 @@ Authorization tests
 Tests for role-based access control and protected endpoints
 """
 
-import pytest
-from fastapi.testclient import TestClient
+import pytest  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
 
-from app.main import app
+from app.main import app  # noqa: E402
 
 
 @pytest.fixture
@@ -41,7 +41,7 @@ def test_admin_endpoint_without_admin_token(client):
             "full_name": "Regular User",
         },
     )
-    
+
     # Get the user's token
     if register_response.status_code == 201:
         login_response = client.post(
@@ -51,17 +51,17 @@ def test_admin_endpoint_without_admin_token(client):
                 "password": "TestPass123",
             },
         )
-        
+
         if login_response.status_code == 200:
             token = login_response.json().get("access_token")
-            
+
             # Try to access admin endpoint with regular user token
             # Note: If endpoint doesn't exist (404), that's expected for now
             admin_response = client.get(
                 "/api/v1/admin/users",
                 headers={"Authorization": f"Bearer {token}"},
             )
-            
+
             # Should return 403 (forbidden) because user is not admin
             # Or 404 if endpoint doesn't exist yet
             assert admin_response.status_code in [403, 404]
@@ -78,7 +78,7 @@ def test_regular_user_cannot_access_provider_endpoints(client):
             "full_name": "Customer User",
         },
     )
-    
+
     if register_response.status_code == 201:
         login_response = client.post(
             "/api/v1/auth/login",
@@ -87,17 +87,17 @@ def test_regular_user_cannot_access_provider_endpoints(client):
                 "password": "TestPass123",
             },
         )
-        
+
         if login_response.status_code == 200:
             token = login_response.json().get("access_token")
-            
+
             # Try to access provider profile endpoint
             # Note: If endpoint doesn't exist (404), that's expected for now
             provider_response = client.get(
                 "/api/v1/provider/profile",
                 headers={"Authorization": f"Bearer {token}"},
             )
-            
+
             # Should return 403 (forbidden) because user is not provider
             # Or 404 if endpoint doesn't exist yet
             assert provider_response.status_code in [403, 404]

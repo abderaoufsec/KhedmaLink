@@ -3,7 +3,7 @@ Tests for booking endpoints and state transitions
 Tests booking lifecycle, state validation, and authorization
 """
 
-import pytest
+import pytest  # noqa: E402
 
 
 # =============================================================================
@@ -56,7 +56,7 @@ def test_list_booking_events_unauthorized():
 def test_booking_cancel_schema_validation():
     """Test that booking cancel requires a reason"""
     # This test validates the schema, not the endpoint
-    from app.core.schemas.booking import BookingCancel
+    from app.core.schemas.booking import BookingCancel  # noqa: E402
 
     # Valid cancellation
     cancel_data = BookingCancel(cancellation_reason="Changed my mind")
@@ -69,7 +69,7 @@ def test_booking_cancel_schema_validation():
 
 def test_booking_complete_schema_validation():
     """Test that booking complete schema works"""
-    from app.core.schemas.booking import BookingComplete
+    from app.core.schemas.booking import BookingComplete  # noqa: E402
 
     # Valid completion with notes
     complete_data = BookingComplete(completion_notes="Job completed successfully")
@@ -82,35 +82,35 @@ def test_booking_complete_schema_validation():
 
 def test_booking_price_validation():
     """Test that booking price must be positive"""
-    from app.core.schemas.booking import BookingCreate
-    from pydantic import ValidationError
+    from app.core.schemas.booking import BookingCreate  # noqa: E402
+    from pydantic import ValidationError  # noqa: E402
 
     # Invalid price (zero)
     with pytest.raises(ValidationError):
         BookingCreate(
-            request_id="test-id",
-            quote_id="test-id",
-            customer_id="test-id",
-            provider_id="test-id",
+            request_id="123e4567-e89b-12d3-a456-426614174000",
+            quote_id="123e4567-e89b-12d3-a456-426614174000",
+            customer_id="123e4567-e89b-12d3-a456-426614174000",
+            provider_id="123e4567-e89b-12d3-a456-426614174000",
             agreed_price=0,
         )
 
     # Invalid price (negative)
     with pytest.raises(ValidationError):
         BookingCreate(
-            request_id="test-id",
-            quote_id="test-id",
-            customer_id="test-id",
-            provider_id="test-id",
+            request_id="123e4567-e89b-12d3-a456-426614174000",
+            quote_id="123e4567-e89b-12d3-a456-426614174000",
+            customer_id="123e4567-e89b-12d3-a456-426614174000",
+            provider_id="123e4567-e89b-12d3-a456-426614174000",
             agreed_price=-100,
         )
 
     # Valid price
     booking = BookingCreate(
-        request_id="test-id",
-        quote_id="test-id",
-        customer_id="test-id",
-        provider_id="test-id",
+        request_id="123e4567-e89b-12d3-a456-426614174000",
+        quote_id="123e4567-e89b-12d3-a456-426614174000",
+        customer_id="123e4567-e89b-12d3-a456-426614174000",
+        provider_id="123e4567-e89b-12d3-a456-426614174000",
         agreed_price=1000,
     )
     assert booking.agreed_price == 1000
@@ -118,16 +118,16 @@ def test_booking_price_validation():
 
 def test_booking_coordinate_validation():
     """Test that booking coordinates are validated"""
-    from app.core.schemas.booking import BookingCreate
-    from pydantic import ValidationError
+    from app.core.schemas.booking import BookingCreate  # noqa: E402
+    from pydantic import ValidationError  # noqa: E402
 
     # Invalid latitude (out of range)
     with pytest.raises(ValidationError):
         BookingCreate(
-            request_id="test-id",
-            quote_id="test-id",
-            customer_id="test-id",
-            provider_id="test-id",
+            request_id="123e4567-e89b-12d3-a456-426614174000",
+            quote_id="123e4567-e89b-12d3-a456-426614174000",
+            customer_id="123e4567-e89b-12d3-a456-426614174000",
+            provider_id="123e4567-e89b-12d3-a456-426614174000",
             agreed_price=1000,
             latitude=91,
         )
@@ -135,20 +135,20 @@ def test_booking_coordinate_validation():
     # Invalid longitude (out of range)
     with pytest.raises(ValidationError):
         BookingCreate(
-            request_id="test-id",
-            quote_id="test-id",
-            customer_id="test-id",
-            provider_id="test-id",
+            request_id="123e4567-e89b-12d3-a456-426614174000",
+            quote_id="123e4567-e89b-12d3-a456-426614174000",
+            customer_id="123e4567-e89b-12d3-a456-426614174000",
+            provider_id="123e4567-e89b-12d3-a456-426614174000",
             agreed_price=1000,
             longitude=181,
         )
 
     # Valid coordinates
     booking = BookingCreate(
-        request_id="test-id",
-        quote_id="test-id",
-        customer_id="test-id",
-        provider_id="test-id",
+        request_id="123e4567-e89b-12d3-a456-426614174000",
+        quote_id="123e4567-e89b-12d3-a456-426614174000",
+        customer_id="123e4567-e89b-12d3-a456-426614174000",
+        provider_id="123e4567-e89b-12d3-a456-426614174000",
         agreed_price=1000,
         latitude=36.8,
         longitude=3.0,
@@ -282,18 +282,18 @@ def test_validate_state_transition_same_status():
 
 def test_booking_event_creation():
     """Test that booking events can be created"""
-    from app.core.schemas.booking import BookingEventResponse
+    from app.core.schemas.booking import BookingEventResponse  # noqa: E402
 
     # This is a schema test, not a full integration test
     event_data = BookingEventResponse(
-        id="test-id",
-        booking_id="test-booking-id",
+        id="123e4567-e89b-12d3-a456-426614174000",
+        booking_id="123e4567-e89b-12d3-a456-426614174001",
         event_type="created",
         old_status=None,
         new_status="accepted",
         notes="Booking created from quote acceptance",
         metadata=None,
-        triggered_by="test-user-id",
+        triggered_by="123e4567-e89b-12d3-a456-426614174002",
         created_at="2026-09-22T00:00:00Z",
     )
     assert event_data.event_type == "created"

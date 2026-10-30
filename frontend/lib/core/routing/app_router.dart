@@ -61,7 +61,8 @@ class AppRouter {
 
       // Onboarding gate: first-launch check (shown before login on first ever run)
       final prefs = await SharedPreferences.getInstance();
-      final onboardingCompleted = prefs.getBool('onboarding_completed') ?? false;
+      final onboardingCompleted =
+          prefs.getBool('onboarding_completed') ?? false;
 
       if (!onboardingCompleted && currentRoute != '/onboarding') {
         return '/onboarding';
@@ -344,40 +345,4 @@ class AppRouter {
       ),
     ],
   );
-}
-
-/// Placeholder screen for routes not yet implemented
-///
-/// This screen is used for features that are intentionally not yet implemented.
-/// Status: NOT IMPLEMENTED - This is a placeholder, not a bug.
-class _PlaceholderScreen extends StatelessWidget {
-  final String routeName;
-
-  const _PlaceholderScreen(this.routeName);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(routeName)),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.construction, size: 64, color: Colors.grey[400]),
-            const SizedBox(height: 16),
-            Text(
-              '$routeName Screen',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'NOT IMPLEMENTED - This feature is not yet available',
-              style: Theme.of(context).textTheme.bodyMedium
-                  ?.copyWith(color: Colors.grey[600]),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

@@ -19,7 +19,9 @@ void main() async {
   // Read saved locale from shared preferences (default to Arabic)
   final prefs = await SharedPreferences.getInstance();
   final localeString = prefs.getString('locale') ?? 'ar';
-  final savedLocale = localeString == 'ar' ? const Locale('ar') : const Locale('fr');
+  final savedLocale = localeString == 'ar'
+      ? const Locale('ar')
+      : const Locale('fr');
 
   // Run the app with configured settings
   runApp(KhedmaLinkApp(locale: savedLocale));

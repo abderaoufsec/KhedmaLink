@@ -1,9 +1,8 @@
 # Admin schemas for KhedmaLink backend
 # Contains Pydantic schemas for admin operations and audit logs
 
-from datetime import datetime
 from uuid import UUID
-from typing import Optional, List
+from typing import Any, Optional, List
 from pydantic import BaseModel, Field
 from enum import Enum
 
@@ -68,7 +67,7 @@ class AuditLogResponse(BaseModel):
     changes: Optional[str]
     ip_address: Optional[str]
     user_agent: Optional[str]
-    created_at: datetime
+    created_at: Any
 
     class Config:
         from_attributes = True
@@ -99,7 +98,7 @@ class UserStatusResponse(BaseModel):
     id: UUID
     email: str
     status: str
-    updated_at: datetime
+    updated_at: Any
 
     class Config:
         from_attributes = True
@@ -120,7 +119,7 @@ class VerificationActionResponse(BaseModel):
 
     provider_id: UUID
     verification_status: str
-    updated_at: datetime
+    updated_at: Any
 
     class Config:
         from_attributes = True
@@ -158,8 +157,8 @@ class UserListItem(BaseModel):
     status: str
     is_active: bool
     is_verified: bool
-    created_at: datetime
-    last_login: Optional[datetime]
+    created_at: Any
+    last_login: Any
 
     class Config:
         from_attributes = True
@@ -183,8 +182,8 @@ class ProviderVerificationQueueItem(BaseModel):
     business_type: Optional[str]
     verification_status: str
     verification_level: str
-    submitted_at: Optional[datetime]
-    created_at: datetime
+    submitted_at: Any
+    created_at: Any
 
     class Config:
         from_attributes = True

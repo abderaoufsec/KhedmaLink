@@ -213,7 +213,7 @@ class BookingApiService {
               '$_baseUrl/api/v1/bookings/me/bookings/$bookingId/complete',
             ),
             headers: await _getAuthHeaders(),
-            body: jsonEncode({if (notes != null) 'completion_notes': notes}),
+            body: jsonEncode({'completion_notes': ?notes}),
           )
           .timeout(const Duration(seconds: 30));
 

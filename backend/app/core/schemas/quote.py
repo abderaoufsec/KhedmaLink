@@ -1,11 +1,13 @@
+from uuid import UUID
+
 """
 Pydantic schemas for quote operations
 Contains request and response models for quotes and request matches
 """
 
-from typing import Optional, List
-from pydantic import BaseModel, Field, field_validator, ConfigDict
-from datetime import datetime
+from typing import Any, Optional  # noqa: E402
+from pydantic import BaseModel, Field, field_validator, ConfigDict  # noqa: E402
+from datetime import datetime  # noqa: E402
 
 
 # =============================================================================
@@ -19,7 +21,7 @@ class QuoteBase(BaseModel):
     Contains common fields for quote requests and responses
     """
 
-    request_id: str = Field(..., description="Service request ID")
+    request_id: UUID = Field(..., description="Service request ID")
     description: Optional[str] = Field(None, description="Quote description/details")
     estimated_price: float = Field(..., gt=0, description="Estimated price")
     currency: str = Field(default="DZD", max_length=3, description="Currency code")
@@ -160,15 +162,15 @@ class QuoteResponse(QuoteBase):
     Returns quote information including ID, provider ID, and timestamps
     """
 
-    id: str = Field(..., description="Quote ID")
-    provider_id: str = Field(..., description="Provider user ID")
+    id: UUID = Field(..., description="Quote ID")
+    provider_id: UUID = Field(..., description="Provider user ID")
     status: str = Field(..., description="Quote status")
     rejection_reason: Optional[str] = Field(None, description="Reason for rejection")
-    rejected_at: Optional[str] = Field(None, description="Rejection timestamp")
-    created_at: str = Field(..., description="Quote creation timestamp")
-    updated_at: Optional[str] = Field(None, description="Quote last update timestamp")
-    submitted_at: Optional[str] = Field(None, description="Quote submission timestamp")
-    accepted_at: Optional[str] = Field(None, description="Quote acceptance timestamp")
+    rejected_at: Any = Field(None, description="Rejection timestamp")
+    created_at: Any = Field(..., description="Quote creation timestamp")
+    updated_at: Any = Field(None, description="Quote last update timestamp")
+    submitted_at: Any = Field(None, description="Quote submission timestamp")
+    accepted_at: Any = Field(None, description="Quote acceptance timestamp")
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -179,9 +181,9 @@ class QuotePublic(BaseModel):
     Returns limited information visible to customers
     """
 
-    id: str = Field(..., description="Quote ID")
-    request_id: str = Field(..., description="Service request ID")
-    provider_id: str = Field(..., description="Provider user ID")
+    id: UUID = Field(..., description="Quote ID")
+    request_id: UUID = Field(..., description="Service request ID")
+    provider_id: UUID = Field(..., description="Provider user ID")
     description: Optional[str] = Field(None, description="Quote description")
     estimated_price: float = Field(..., description="Estimated price")
     currency: str = Field(..., description="Currency code")
@@ -193,7 +195,7 @@ class QuotePublic(BaseModel):
     )
     available_time_end: Optional[str] = Field(None, description="Available end time")
     status: str = Field(..., description="Quote status")
-    created_at: str = Field(..., description="Quote creation timestamp")
+    created_at: Any = Field(..., description="Quote creation timestamp")
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -209,8 +211,8 @@ class RequestMatchBase(BaseModel):
     Contains common fields for request match requests and responses
     """
 
-    request_id: str = Field(..., description="Service request ID")
-    provider_id: str = Field(..., description="Provider user ID")
+    request_id: UUID = Field(..., description="Service request ID")
+    provider_id: UUID = Field(..., description="Provider user ID")
     match_score: Optional[float] = Field(
         None, ge=0, le=100, description="Match score (0-100)"
     )
@@ -234,9 +236,9 @@ class RequestMatchResponse(RequestMatchBase):
     Returns request match information including ID and timestamps
     """
 
-    id: str = Field(..., description="Request match ID")
+    id: UUID = Field(..., description="Request match ID")
     status: str = Field(..., description="Match status")
-    created_at: str = Field(..., description="Match creation timestamp")
-    updated_at: Optional[str] = Field(None, description="Match last update timestamp")
+    created_at: Any = Field(..., description="Match creation timestamp")
+    updated_at: Any = Field(None, description="Match last update timestamp")
 
     model_config = ConfigDict(from_attributes=True)

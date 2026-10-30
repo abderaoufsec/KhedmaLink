@@ -3,15 +3,15 @@ User profile endpoints
 Handles user profile management and current user information
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends, status  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
 
-from app.core.database import get_db
-from app.core.security import get_current_user
-from app.core.schemas.auth import UserResponse, UserUpdate, PasswordChange
-from app.core.services.auth import AuthService
-from app.core.models.user import User
-from app.core.logging import get_logger
+from app.core.database import get_db  # noqa: E402
+from app.core.security import get_current_user  # noqa: E402
+from app.core.schemas.auth import UserResponse, UserUpdate, PasswordChange  # noqa: E402
+from app.core.services.auth import AuthService  # noqa: E402
+from app.core.models.user import User  # noqa: E402
+from app.core.logging import get_logger  # noqa: E402
 
 logger = get_logger(__name__)
 

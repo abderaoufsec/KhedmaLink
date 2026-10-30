@@ -7,8 +7,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.core.models.review import Review
-from app.core.models.booking import Booking
 
 # =============================================================================
 # FIXTURES

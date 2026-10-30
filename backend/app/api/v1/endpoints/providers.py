@@ -3,21 +3,21 @@ Provider Profile API endpoints
 Handles CRUD operations for provider profiles, services, areas, and availability
 """
 
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy import select, and_, or_
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List, Optional  # noqa: E402
+from fastapi import APIRouter, Depends, HTTPException, status, Query  # noqa: E402
+from sqlalchemy import select, and_  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
 
-from app.core.database import get_db
-from app.core.models.provider import (
+from app.core.database import get_db  # noqa: E402
+from app.core.models.provider import (  # noqa: E402
     ProviderProfile,
     ProviderService,
     ServiceArea,
     AvailabilityRule,
     Category,
 )
-from app.core.models.user import User
-from app.core.schemas.provider import (
+from app.core.models.user import User  # noqa: E402
+from app.core.schemas.provider import (  # noqa: E402
     ProviderProfileCreate,
     ProviderProfileUpdate,
     ProviderProfileResponse,
@@ -32,12 +32,10 @@ from app.core.schemas.provider import (
     AvailabilityRuleUpdate,
     AvailabilityRuleResponse,
 )
-from app.core.security.dependencies import (
-    get_current_user,
+from app.core.security.dependencies import (  # noqa: E402
     require_provider,
-    require_admin,
 )
-from app.api.v1.endpoints.reviews import calculate_provider_reputation
+from app.api.v1.endpoints.reviews import calculate_provider_reputation  # noqa: E402
 
 # Create router for provider endpoints
 router = APIRouter()
@@ -75,14 +73,14 @@ async def list_providers(
     Returns a list of public provider profiles
     """
     # Build base query
-    query = select(ProviderProfile).where(ProviderProfile.is_public == True)
+    query = select(ProviderProfile).where(ProviderProfile.is_public)
 
     # Apply filters
     if verified_only:
         query = query.where(ProviderProfile.verification_status == "approved")
 
     if available_only:
-        query = query.where(ProviderProfile.is_available == True)
+        query = query.where(ProviderProfile.is_available)
 
     if city:
         query = query.where(ProviderProfile.city == city)
@@ -852,7 +850,7 @@ async def get_provider_profile(
     """
     # Query for provider profile
     query = select(ProviderProfile).where(
-        and_(ProviderProfile.id == provider_id, ProviderProfile.is_public == True)
+        and_(ProviderProfile.id == provider_id, ProviderProfile.is_public)
     )
     result = await db.execute(query)
     provider = result.scalar_one_or_none()
