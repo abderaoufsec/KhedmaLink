@@ -5,6 +5,8 @@ import '../config/app_config.dart';
 import '../services/auth_service.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
+import '../../features/home/home_screen.dart';
+import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/provider/screens/categories_list_screen.dart';
 import '../../features/provider/screens/providers_list_screen.dart';
 import '../../features/provider/screens/provider_detail_screen.dart';
@@ -58,7 +60,7 @@ class AppRouter {
       final isAuthenticated = await authService.isAuthenticated();
 
       // Public routes that don't require authentication
-      final publicRoutes = ['/login', '/register'];
+      final publicRoutes = ['/login', '/register', '/onboarding'];
 
       if (!isAuthenticated && !publicRoutes.contains(state.uri.toString())) {
         return '/login';
@@ -117,14 +119,14 @@ class AppRouter {
       GoRoute(
         path: '/home',
         name: 'home',
-        builder: (context, state) => const _PlaceholderScreen('Home'),
+        builder: (context, state) => const HomeScreen(),
       ),
 
-      // Onboarding route (protected)
+      // Onboarding route (public - first-launch gate)
       GoRoute(
         path: '/onboarding',
         name: 'onboarding',
-        builder: (context, state) => const _PlaceholderScreen('Onboarding'),
+        builder: (context, state) => const OnboardingScreen(),
       ),
 
       // Categories list (protected)
